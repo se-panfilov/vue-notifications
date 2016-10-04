@@ -1,0 +1,1 @@
+require('lib/vue-notifications.js');
