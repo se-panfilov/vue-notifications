@@ -1,7 +1,7 @@
 'use strict';
 
 const SRC = 'src';
-const DEST = 'lib';
+const DEST = 'dist';
 const PROJECT_NAME = 'vue-notifications';
 const TESTS_SRC = 'test';
 
