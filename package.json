@@ -2,13 +2,20 @@
   "name": "vue-notifications",
   "version": "0.0.1",
   "description": "Vuejs notifications",
-  "main": "index.js",
-  "scripts": {},
+  "main": "dist/vue-notifications.js",
+  "scripts": {
+    "start": "gulp",
+    "build": "gulp make",
+    "update": "ncu -a && npm update",
+    "upgrade": "npm upgrade",
+    "test": "echo \"who needs tests when you put asserts everywhere\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/se-panfilov/vue-notifications.git"
   },
   "keywords": [
+    "vue",
     "notifications",
     "vuejs",
     "vue.js",
@@ -26,7 +33,10 @@
     "babel-cli": "^6.16.0",
     "babel-plugin-transform-es3-member-expression-literals": "^6.8.0",
     "babel-plugin-transform-es3-property-literals": "^6.8.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-latest": "^6.16.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "eslint": "^3.7.1",
     "gulp": "^3.9.1",
@@ -42,6 +52,11 @@
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.10",
     "require-dir": "^0.3.0",
-    "run-sequence": "^1.2.2"
-  }
+    "run-sequence": "^1.2.2",
+    "source": "0.0.3",
+    "through2": "^2.0.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {}
 }

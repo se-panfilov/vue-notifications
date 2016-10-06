@@ -13,7 +13,6 @@ const babel = require('gulp-babel');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
-const through = require('through2');
 const babelify = require('babelify');
 const fs = require("fs");
 const path = require("path");

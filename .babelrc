@@ -1,9 +1,10 @@
 {
-    "presets": [
-        "latest"
-    ],
-    "plugins": [
-        "transform-es3-property-literals",
-        "transform-es3-member-expression-literals"
-    ]
+  "presets": [
+    "latest"
+  ],
+  "plugins": [
+    "transform-es3-property-literals",
+    "transform-es3-member-expression-literals",
+    "transform-runtime"
+  ]
 }
