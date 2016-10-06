@@ -6,16 +6,17 @@ const PROJECT_NAME = 'vue-notifications';
 const TESTS_SRC = 'test';
 
 const config = {
-    dest: DEST,
-    projectName: PROJECT_NAME,
-    js: {
-        src: [
-            SRC + '/**/*.js'
-        ]
-    },
-    tests: {
-        src: [TESTS_SRC]
-    }
+  SRC: SRC,
+  dest: DEST,
+  projectName: PROJECT_NAME,
+  js: {
+    src: [
+      SRC + '/**/*.js'
+    ]
+  },
+  tests: {
+    src: [TESTS_SRC]
+  }
 };
 
 module.exports = config;
