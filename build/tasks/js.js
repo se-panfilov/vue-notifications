@@ -16,10 +16,9 @@ const buffer = require('vinyl-buffer');
 const babelify = require('babelify');
 const fs = require("fs");
 const path = require("path");
+const webpack = require('webpack-stream');
 
 gulp.task('js', () => {
-
-
   function getSrcFiles () {
     const normalizedPath = path.join(__dirname, '../../' + config.SRC);
     const arr = [];
@@ -32,33 +31,37 @@ gulp.task('js', () => {
     return arr;
   }
 
-  return browserify({
-    entries: getSrcFiles(),
-    extensions: ['.js'],
-    debug: true
-  })
-    .transform(babelify)
-    .bundle()
-    .pipe(plumber({
-      errorHandler: notify.onError(err => {
-        return {
-          title: 'Build JS',
-          message: err
-        };
-      })
-    }))
-    .pipe(source(config.projectName + '.js'))
-    .pipe(buffer())
-    // .pipe(sourcemaps.init())
-    // .pipe(concat(config.projectName + '.js'))
-    // .pipe(babel())
+  // return browserify({
+  //   entries: getSrcFiles(),
+  //   extensions: ['.js'],
+  //   debug: true
+  // })
+  //   .transform(babelify)
+  //   .bundle()
+  //   .pipe(plumber({
+  //     errorHandler: notify.onError(err => {
+  //       return {
+  //         title: 'Build JS',
+  //         message: err.message
+  //       };
+  //     })
+  //   }))
+  //   .pipe(source('dist/' + config.projectName + '.js'))
+  //   .pipe(buffer())
+
+
+  // .pipe(sourcemaps.init())
+  // .pipe(concat(config.projectName + '.js'))
+  // .pipe(babel())
+  return gulp.src(config.js.src)
+    .pipe(webpack(require('../webpack.config.js')))
+    .pipe(rename({ basename: config.projectName }))
     .pipe(gulp.dest(config.dest))
-    .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(uglify())
-    .pipe(rename({ basename: config.projectName + '.min' }))
-    .pipe(gulp.dest(config.dest))
-    .pipe(sourcemaps.write('.'))
+    // .pipe(sourcemaps.init({ loadMaps: true }))
+    // .pipe(uglify())
+    // .pipe(rename({ basename: config.projectName + '.min' }))
+    // .pipe(gulp.dest(config.dest))
+    // .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.dest))
     ;
 });
-
