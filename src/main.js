@@ -22,7 +22,7 @@ function showMessage (msg, style) {
 }
 
 const install = (Vue, options) => {
-  // override(Vue, 'notifications')
+  override(Vue, 'notifications')
 
   if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled)
 
@@ -43,10 +43,37 @@ const install = (Vue, options) => {
   }
 
   STATE.installed = true
+
+  var p = Vue.prototype;
+  p.__callHook = p._callHook;
+  p._callHook = function (hook) {
+    if (hook == 'created') {
+      var self = this;
+
+      const notifications = this.$options['notifications']
+      for (var k in notifications) {
+        if (notifications.hasOwnProperty(k)) {
+          console.info(notifications[k])
+          // TODO (S.Panfilov)add methods here - show(), blink(), block(), etc
+        }
+      }
+
+      // On every object use the $sync function to get the value
+      // _.each(this.$options['notifications'], function (rxFunc, key) {
+      //   console.info(rxFunc)
+      //   console.log(key)
+      // });
+    }
+    this.__callHook(hook);
+  }
+
+  // setInterval(() => {
+  //   console.info(Vue['notifications'])
+  // }, 3000)
 }
 
-if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(VueNotifications)
-}
+// if (typeof window !== 'undefined' && window.Vue) {
+//   window.Vue.use(VueNotifications)
+// }
 
 export default install

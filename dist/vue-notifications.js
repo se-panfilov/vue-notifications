@@ -88,7 +88,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	var install = function install(Vue, options) {
-	  // override(Vue, 'notifications')
+	  (0, _override2['default'])(Vue, 'notifications');
 
 	  if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled);
 
@@ -109,11 +109,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  STATE.installed = true;
+
+	  var p = Vue.prototype;
+	  p.__callHook = p._callHook;
+	  p._callHook = function (hook) {
+	    if (hook == 'created') {
+	      var self = this;
+
+	      var notifications = this.$options['notifications'];
+	      for (var k in notifications) {
+	        if (notifications.hasOwnProperty(k)) {
+	          console.info(notifications[k]);
+	          // TODO (S.Panfilov)add methods here - show(), blink(), block(), etc
+	        }
+	      }
+
+	      // On every object use the $sync function to get the value
+	      // _.each(this.$options['notifications'], function (rxFunc, key) {
+	      //   console.info(rxFunc)
+	      //   console.log(key)
+	      // });
+	    }
+	    this.__callHook(hook);
+	  };
+
+	  // setInterval(() => {
+	  //   console.info(Vue['notifications'])
+	  // }, 3000)
 	};
 
-	if (typeof window !== 'undefined' && window.Vue) {
-	  window.Vue.use(VueNotifications);
-	}
+	// if (typeof window !== 'undefined' && window.Vue) {
+	//   window.Vue.use(VueNotifications)
+	// }
 
 	exports['default'] = install;
 
@@ -137,8 +164,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Vue.prototype._init = function () {
 	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-	    options.init = options.init ? customInit.concat(options.init) : customInit;
-	    _init.call(_this, options);
+	    options.init = options.init ? [customInit].concat(options.init) : customInit;
+	    _init.call(this, options);
 	  };
 
 	  Vue.prototype._destroy = function () {
