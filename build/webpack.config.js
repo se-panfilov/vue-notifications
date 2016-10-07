@@ -10,8 +10,8 @@ module.exports = {
     // path: path.resolve(__dirname, '../dist'),
     path: path.join(__dirname, '../dist'),
     filename: config.projectName.projectName + '.js',
-    // library: to.pascal(config.projectName.projectName),
-    library: 'VueNotifications',
+    library: to.pascal(config.projectName),
+    // library: 'VueNotifications',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
