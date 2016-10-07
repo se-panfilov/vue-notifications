@@ -22,7 +22,7 @@ function showMessage (msg, style) {
 }
 
 const install = (Vue, options) => {
-  override(Vue, 'notifications')
+  // override(Vue, 'notifications')
 
   if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled)
 

@@ -88,7 +88,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	var install = function install(Vue, options) {
-	  (0, _override2['default'])(Vue, 'notifications');
+	  // override(Vue, 'notifications')
 
 	  if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled);
 
