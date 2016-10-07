@@ -17,6 +17,7 @@ const babelify = require('babelify');
 const fs = require("fs");
 const path = require("path");
 const webpack = require('webpack-stream');
+const to = require('to-case')
 
 gulp.task('js', () => {
   function getSrcFiles () {
@@ -24,7 +25,6 @@ gulp.task('js', () => {
     const arr = [];
 
     fs.readdirSync(normalizedPath).forEach(file => {
-      console.info(normalizedPath)
       arr.push(normalizedPath + '/' + file);
     });
 
@@ -34,7 +34,9 @@ gulp.task('js', () => {
   // return browserify({
   //   entries: getSrcFiles(),
   //   extensions: ['.js'],
-  //   debug: true
+  //   debug: true,
+  //   standalone: to.pascal(config.projectName),
+  //   read: false
   // })
   //   .transform(babelify)
   //   .bundle()
@@ -46,16 +48,21 @@ gulp.task('js', () => {
   //       };
   //     })
   //   }))
-  //   .pipe(source('dist/' + config.projectName + '.js'))
+  //   .pipe(source(config.projectName + '.js'))
   //   .pipe(buffer())
+  //   .pipe(rename({ basename: config.projectName }))
+  //   .pipe(gulp.dest(config.dest))
+  // .pipe(sourcemaps.init({ loadMaps: true }))
+  // .pipe(uglify())
+  // .pipe(rename({ basename: config.projectName + '.min' }))
+  // .pipe(gulp.dest(config.dest))
+  // .pipe(sourcemaps.write('.'))
 
 
-  // .pipe(sourcemaps.init())
+  return gulp.src('./src/main.js')
   // .pipe(concat(config.projectName + '.js'))
   // .pipe(babel())
-  return gulp.src(config.js.src)
     .pipe(webpack(require('../webpack.config.js')))
-    .pipe(babel())
     .pipe(rename({ basename: config.projectName }))
     .pipe(gulp.dest(config.dest))
     .pipe(sourcemaps.init({ loadMaps: true }))

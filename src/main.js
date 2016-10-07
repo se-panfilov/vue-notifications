@@ -1,3 +1,5 @@
+import override from './override'
+
 const STYLE = {
   error: '-error',
   warn: '-warn',
@@ -9,7 +11,7 @@ const STATE = {
   installed: false
 }
 const MESSAGES = {
-  alreadyInstalled: 'VueNotifications plugin already installed'
+  alreadyInstalled: 'VueNotifications: plugin already installed'
 }
 
 function showMessage (msg, style) {
@@ -19,27 +21,32 @@ function showMessage (msg, style) {
   if (style === STYLE.success) return console.info(msg)
 }
 
-exports.install = (Vue, options) => {
+const install = (Vue, options) => {
+  override(Vue, 'notifications')
+
   if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled)
-    STATE.installed = true
 
-    Vue.prototype.$successMsg = (msg) => {
-      showMessage(msg, STYLE.success)
-    }
+  Vue.successMsg = (msg) => {
+    showMessage(msg, STYLE.success)
+  }
 
-    Vue.prototype.$infoMsg = (msg) => {
-      showMessage(msg, STYLE.success)
-    }
+  Vue.prototype.$infoMsg = (msg) => {
+    showMessage(msg, STYLE.success)
+  }
 
-    Vue.prototype.$errorMsg = (msg) => {
-      showMessage(msg, STYLE.success)
-    }
+  Vue.prototype.$errorMsg = (msg) => {
+    showMessage(msg, STYLE.success)
+  }
 
-    Vue.prototype.$warnMsg = (msg) => {
-      showMessage(msg, STYLE.success)
-    }
+  Vue.prototype.$warnMsg = (msg) => {
+    showMessage(msg, STYLE.success)
+  }
+
+  STATE.installed = true
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueNotifications)
 }
+
+export default install

@@ -4,8 +4,10 @@ const config = require('./config');
 const to = require('to-case')
 
 module.exports = {
-  // devtool: true,
+  debug: true,
+  // devtool: 'source-map',
   entry: './src/main.js',
+  // target: 'web',
   output: {
     // path: path.resolve(__dirname, '../dist'),
     path: path.join(__dirname, '../dist'),
@@ -15,13 +17,13 @@ module.exports = {
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
-  // resolve: {
-  //   extensions: ['', '.js'],
-  //   fallback: [ path.join(__dirname, '../node_modules') ],
-  //   alias: {
-  //     'src': path.resolve(__dirname, '../src')
-  //   }
-  // },
+  resolve: {
+    extensions: ['', '.js'],
+    fallback: [ path.join(__dirname, '../node_modules') ],
+    alias: {
+      'src': path.resolve(__dirname, '../src')
+    }
+  },
   // resolveLoader: {
   //   fallback: [ path.join(__dirname, '../node_modules') ]
   // },
@@ -31,9 +33,14 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
-        include: './',
-        exclude: /node_modules/
+        // path: './src/',
+        // include: './',
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel', // 'babel-loader' is also a valid name to reference
+        query: {
+          presets: ['es2015'],
+          plugins: ['transform-runtime']
+        }
       }
     ]
   },

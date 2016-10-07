@@ -52,53 +52,118 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	const STYLE = {
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _override = __webpack_require__(1);
+
+	var _override2 = _interopRequireDefault(_override);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var STYLE = {
 	  error: '-error',
 	  warn: '-warn',
 	  info: '-info',
 	  success: '-success'
-	}
+	};
 
-	const STATE = {
+	var STATE = {
 	  installed: false
+	};
+	var MESSAGES = {
+	  alreadyInstalled: 'VueNotifications: plugin already installed'
+	};
+
+	function showMessage(msg, style) {
+	  if (style === STYLE.error) return console.error(msg);
+	  if (style === STYLE.warn) return console.warn(msg);
+	  if (style === STYLE.info) return console.log(msg);
+	  if (style === STYLE.success) return console.info(msg);
 	}
-	const MESSAGES = {
-	  alreadyInstalled: 'VueNotifications plugin already installed'
-	}
 
-	function showMessage (msg, style) {
-	  if (style === STYLE.error) return console.error(msg)
-	  if (style === STYLE.warn) return console.warn(msg)
-	  if (style === STYLE.info) return console.log(msg)
-	  if (style === STYLE.success) return console.info(msg)
-	}
+	var install = function install(Vue, options) {
+	  (0, _override2['default'])(Vue, 'notifications');
 
-	exports.install = (Vue, options) => {
-	  if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled)
-	    STATE.installed = true
+	  if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled);
 
-	    Vue.prototype.$successMsg = (msg) => {
-	      showMessage(msg, STYLE.success)
-	    }
+	  Vue.successMsg = function (msg) {
+	    showMessage(msg, STYLE.success);
+	  };
 
-	    Vue.prototype.$infoMsg = (msg) => {
-	      showMessage(msg, STYLE.success)
-	    }
+	  Vue.prototype.$infoMsg = function (msg) {
+	    showMessage(msg, STYLE.success);
+	  };
 
-	    Vue.prototype.$errorMsg = (msg) => {
-	      showMessage(msg, STYLE.success)
-	    }
+	  Vue.prototype.$errorMsg = function (msg) {
+	    showMessage(msg, STYLE.success);
+	  };
 
-	    Vue.prototype.$warnMsg = (msg) => {
-	      showMessage(msg, STYLE.success)
-	    }
-	}
+	  Vue.prototype.$warnMsg = function (msg) {
+	    showMessage(msg, STYLE.success);
+	  };
+
+	  STATE.installed = true;
+	};
 
 	if (typeof window !== 'undefined' && window.Vue) {
-	  window.Vue.use(VueNotifications)
+	  window.Vue.use(VueNotifications);
 	}
+
+	exports['default'] = install;
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = function (Vue, key) {
+	  var _this = this,
+	      _arguments = arguments;
+
+	  var _init = Vue.prototype._init;
+	  var _destroy = Vue.prototype._destroy;
+
+	  Vue.prototype._init = function () {
+	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+	    options.init = options.init ? customInit.concat(options.init) : customInit;
+	    _init.call(_this, options);
+	  };
+
+	  Vue.prototype._destroy = function () {
+	    // if (this[key]) {
+	    //   this[key] = undefined
+	    //   delete this[key]
+	    // }
+
+	    _destroy.apply(_this, _arguments);
+	  };
+
+	  function customInit() {
+	    if (this[key]) throw console.error("Override: property \"" + key + "\" is already defined");
+	    this[key] = {};
+
+	    var options = this.$options;
+	    var keyOption = options[key];
+
+	    if (keyOption) {
+	      this[key] = keyOption;
+	    } else if (options.parent && options.parent[key]) {
+	      this[key] = options.parent[key];
+	    }
+	  }
+	};
 
 /***/ }
 /******/ ])
