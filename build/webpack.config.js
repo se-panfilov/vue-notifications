@@ -49,6 +49,8 @@ const to = require('to-case')
 
 module.exports = {
   entry: './src/main.js',
+  // devtool: 'source-map',
+  // devtool: '#inline-source-map',
   output: {
     path: path.join(__dirname, '../dist'),
     filename: config.projectName.projectName + '.js',
