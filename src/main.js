@@ -1,5 +1,8 @@
 import override from './override'
 
+const PLUGIN_NAME = 'VueNotifications';
+const PROPERTY_NAME = 'notifications';
+
 const STYLE = {
   error: '-error',
   warn: '-warn',
@@ -11,7 +14,7 @@ const STATE = {
   installed: false
 }
 const MESSAGES = {
-  alreadyInstalled: 'VueNotifications: plugin already installed'
+  alreadyInstalled: `${PLUGIN_NAME}: plugin already installed`
 }
 
 function showMessage (msg, style) {
@@ -21,8 +24,8 @@ function showMessage (msg, style) {
   if (style === STYLE.success) return console.info(msg)
 }
 
-const install = (Vue, options) => {
-  override(Vue, 'notifications')
+const install = (Vue, options = {}) => {
+  override(Vue, PROPERTY_NAME)
 
   if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled)
 
@@ -50,7 +53,7 @@ const install = (Vue, options) => {
     if (hook == 'created') {
       var self = this;
 
-      const notifications = this.$options['notifications']
+      const notifications = this.$options[PROPERTY_NAME]
       for (var k in notifications) {
         if (notifications.hasOwnProperty(k)) {
           console.info(notifications[k])

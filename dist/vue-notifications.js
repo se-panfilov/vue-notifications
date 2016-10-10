@@ -66,6 +66,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+	var PLUGIN_NAME = 'VueNotifications';
+	var PROPERTY_NAME = 'notifications';
+
 	var STYLE = {
 	  error: '-error',
 	  warn: '-warn',
@@ -77,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  installed: false
 	};
 	var MESSAGES = {
-	  alreadyInstalled: 'VueNotifications: plugin already installed'
+	  alreadyInstalled: PLUGIN_NAME + ': plugin already installed'
 	};
 
 	function showMessage(msg, style) {
@@ -87,8 +90,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (style === STYLE.success) return console.info(msg);
 	}
 
-	var install = function install(Vue, options) {
-	  (0, _override2['default'])(Vue, 'notifications');
+	var install = function install(Vue) {
+	  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	  (0, _override2['default'])(Vue, PROPERTY_NAME);
 
 	  if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled);
 
@@ -116,7 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (hook == 'created') {
 	      var self = this;
 
-	      var notifications = this.$options['notifications'];
+	      var notifications = this.$options[PROPERTY_NAME];
 	      for (var k in notifications) {
 	        if (notifications.hasOwnProperty(k)) {
 	          console.info(notifications[k]);
