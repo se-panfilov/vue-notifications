@@ -12,16 +12,11 @@ const STYLE = {
 }
 
 const STATE = {
-  installed: false,
-  supportedVersions: {
-    evangelion: 1,
-    ghostInTheShell: 2
-  },
   /**
    * @param  {Object} Vue
    */
   getVersion (Vue) {
-    const version =  Vue.version.match(/(\d+)/g)
+    const version = Vue.version.match(/(\d+)/g)
     return {
       major: version[0],
       regular: version[1],
@@ -35,6 +30,11 @@ const STATE = {
   isVueVersion (Vue, majorNum) {
     return this.getVersion(Vue).major == majorNum
   }
+}
+
+const VUE_VERSION = {
+  evangelion: 1,
+  ghostInTheShell: 2
 }
 
 const MESSAGES = {
@@ -119,94 +119,98 @@ function getAllNotifications (instance) {
  * @param  {Function} Vue
  * @param  {Object} options
  */
-const install = (Vue, options = {}) => {
-  override(Vue, PROPERTY_NAME)
+const VueNotifications = {
+  installed: false,
+  install (Vue, options = {}) {
+    // override(Vue, PROPERTY_NAME)
 
-  if (STATE.installed) throw console.error(MESSAGES.alreadyInstalled)
+    if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
 
-  // Vue.successMsg = msg => showMessage(msg, STYLE.success)
-  // Vue.prototype.$infoMsg = msg => showMessage(msg, STYLE.success)
-  // Vue.prototype.$errorMsg = msg => showMessage(msg, STYLE.success)
-  // Vue.prototype.$warnMsg = msg => showMessage(msg, STYLE.success)
+    // Vue.successMsg = msg => showMessage(msg, STYLE.success)
+    // Vue.prototype.$infoMsg = msg => showMessage(msg, STYLE.success)
+    // Vue.prototype.$errorMsg = msg => showMessage(msg, STYLE.success)
+    // Vue.prototype.$warnMsg = msg => showMessage(msg, STYLE.success)
 
-  // patchNotifications(Vue.prototype)
-  // var p = Vue.prototype;
-  // p.__callHook = p._callHook;
-  // p._callHook = function (hook) {
-  //   if (hook == 'created') {
-  //     var self = this;
-  //
-  //     // const notifications = this.$options[PROPERTY_NAME]
-  //     const notifications = this.$options['notifications']
-  //     console.info(notifications)
-  //     Object.values(notifications).map((v,k) => {
-  //       console.info(123)
-  //     })
-  //   }
-  //   this.__callHook(hook);
-  // }
+    // patchNotifications(Vue.prototype)
+    // var p = Vue.prototype;
+    // p.__callHook = p._callHook;
+    // p._callHook = function (hook) {
+    //   if (hook == 'created') {
+    //     var self = this;
+    //
+    //     // const notifications = this.$options[PROPERTY_NAME]
+    //     const notifications = this.$options['notifications']
+    //     console.info(notifications)
+    //     Object.values(notifications).map((v,k) => {
+    //       console.info(123)
+    //     })
+    //   }
+    //   this.__callHook(hook);
+    // }
 
-  // var p = Vue.prototype;
-  // p.__callHook = p._callHook;
-  // p._callHook = patchNotifications
+    // var p = Vue.prototype;
+    // p.__callHook = p._callHook;
+    // p._callHook = patchNotifications
 
-  function init (update) {
-    let notifications = this.$options[PROPERTY_NAME]
-    if (!notifications) return
+    function init () {
+      console.info('init')
+      let notifications = this.$options[PROPERTY_NAME]
+      if (!notifications) return
 
-    Object.keys(notifications).map(key => {
-      console.info(key)
-      let prop = notifications[key]
-      if (!prop) return
-      // let obj = (typeof prop === 'function') ? notifications[key].bind(this)() : notifications[key]
-      // if (key === 'title') {
-      //   util[key](obj)
-      //   return
+      Object.keys(notifications).map(key => {
+        console.info(key)
+        let prop = notifications[key]
+        if (!prop) return
+        // let obj = (typeof prop === 'function') ? notifications[key].bind(this)() : notifications[key]
+        // if (key === 'title') {
+        //   util[key](obj)
+        //   return
+        // }
+        // util.handle(obj, key, 'head', update)
+      })
+
+      this.$emit(EVENTS.initiated)
+    }
+
+    const mixin = {
+      // destroyed () {
+      //   // destroy(this.$options.head)
+      // },
+      // events: {
+      //   // updateHead () {
+      //   //   init.bind(this)(true)
+      //   //   util.update()
+      //   // }
       // }
-      // util.handle(obj, key, 'head', update)
-    })
-
-    this.$emit(EVENTS.initiated)
-  }
-
-  const mixin = {
-    destroyed () {
-      // destroy(this.$options.head)
-    },
-    events: {
-      // updateHead () {
-      //   init.bind(this)(true)
-      //   util.update()
-      // }
     }
-  }
 
-  console.info(STATE.getVersion(Vue))
-
-  // v1
-  if (STATE.isVueVersion(Vue, STATE.supportedVersions.evangelion)) {
-    console.info('eva')
-    mixin.ready = () => {
-      init.bind(this)()
+    // v1
+    if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
+      console.info('eva')
+      mixin.ready = () => {
+        console.info(Vue)
+        init.bind(this)
+        // init.bind(Vue)()
+      }
     }
+
+    //v2
+    // if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
+    //   console.info('ghost')
+    //   mixin.mounted = () => {
+    //     init.bind(this)()
+    //   }
+    // }
+
+    Vue.mixin(mixin)
+
+    this.installed = true;
+    // this.$emit(EVENTS.installed)
   }
-
-  //v2
-  if (STATE.isVueVersion(Vue, STATE.supportedVersions.ghostInTheShell)) {
-    console.info('ghost')
-    mixin.mounted = () => {
-      init.bind(this)()
-    }
-  }
-
-  Vue.mixin(mixin)
-
-  STATE.installed = true;
-  // this.$emit(EVENTS.installed)
 }
 
-// if (typeof window !== 'undefined' && window.Vue) {
-//   window.Vue.use(VueNotifications)
-// }
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(VueNotifications)
+}
 
-export default install
+export default VueNotifications
