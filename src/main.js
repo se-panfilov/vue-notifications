@@ -109,20 +109,19 @@ function getAllNotifications (instance) {
   if (!instance) return {}
   var obj = instance.$options[PROPERTY_NAME]
   if (!obj) return {}
-  console.info(obj)
   return obj
   // return Object.values(obj)
 }
 
-/**
- * Plugin | vue-notifications
- * @param  {Function} Vue
- * @param  {Object} options
- */
 const VueNotifications = {
   installed: false,
+  /**
+   * Plugin | vue-notifications
+   * @param  {Function} Vue
+   * @param  {Object} options
+   */
   install (Vue, options = {}) {
-    // override(Vue, PROPERTY_NAME)
+    override(Vue, PROPERTY_NAME)
 
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
 
@@ -153,12 +152,11 @@ const VueNotifications = {
     // p._callHook = patchNotifications
 
     function init () {
-      console.info('init')
       let notifications = this.$options[PROPERTY_NAME]
       if (!notifications) return
 
       Object.keys(notifications).map(key => {
-        console.info(key)
+        // console.info(key)
         let prop = notifications[key]
         if (!prop) return
         // let obj = (typeof prop === 'function') ? notifications[key].bind(this)() : notifications[key]
@@ -172,39 +170,63 @@ const VueNotifications = {
       this.$emit(EVENTS.initiated)
     }
 
-    const mixin = {
-      // destroyed () {
-      //   // destroy(this.$options.head)
-      // },
-      // events: {
-      //   // updateHead () {
-      //   //   init.bind(this)(true)
-      //   //   util.update()
-      //   // }
-      // }
+    function getMethods () {
+      const notifications = this.$options[PROPERTY_NAME]
+      const result = {}
+      if (!notifications) return
+
+      Object.keys(notifications).forEach(key => {
+        let prop = notifications[key]
+        /**
+         * @param  {Object} config
+         */
+        result[key] = function (config) {
+          config = config || notifications[prop]
+        }
+        // result[prop] = Notification
+      })
+
+      return result
     }
+
+    const mixin = {
+      destroyed () {
+        // destroy(this.$options.head)
+      },
+      events: {
+        // updateHead () {
+        //   init.bind(this)(true)
+        //   util.update()
+        // }
+      },
+      methods: {}
+    }
+
 
     // v1
     if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
       console.info('eva')
-      mixin.ready = () => {
-        console.info(Vue)
-        init.bind(this)
-        // init.bind(Vue)()
+      mixin.ready = function () {
+        mixin.methods = getMethods.bind(this)()
+        console.log('Methods')
+        console.info(mixin.methods)
+        init.bind(this)()
       }
     }
 
     //v2
-    // if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
-    //   console.info('ghost')
-    //   mixin.mounted = () => {
-    //     init.bind(this)()
-    //   }
-    // }
+    if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
+      console.info('ghost')
+      mixin.mounted = function () {
+        init.bind(this)()
+      }
+    }
 
+    console.log('Mixin:')
+    console.info(mixin)
     Vue.mixin(mixin)
 
-    this.installed = true;
+    this.installed = true
     // this.$emit(EVENTS.installed)
   }
 }

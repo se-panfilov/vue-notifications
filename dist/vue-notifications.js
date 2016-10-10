@@ -196,24 +196,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (!instance) return {};
 	  var obj = instance.$options[PROPERTY_NAME];
 	  if (!obj) return {};
-	  console.info(obj);
 	  return obj;
 	  // return Object.values(obj)
 	}
 
-	/**
-	 * Plugin | vue-notifications
-	 * @param  {Function} Vue
-	 * @param  {Object} options
-	 */
 	var VueNotifications = {
 	  installed: false,
+	  /**
+	   * Plugin | vue-notifications
+	   * @param  {Function} Vue
+	   * @param  {Object} options
+	   */
 	  install: function install(Vue) {
-	    var _this = this;
-
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	    // override(Vue, PROPERTY_NAME)
+	    (0, _override2['default'])(Vue, PROPERTY_NAME);
 
 	    if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
 
@@ -244,12 +241,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // p._callHook = patchNotifications
 
 	    function init() {
-	      console.info('init');
 	      var notifications = this.$options[PROPERTY_NAME];
 	      if (!notifications) return;
 
 	      (0, _keys2['default'])(notifications).map(function (key) {
-	        console.info(key);
+	        // console.info(key)
 	        var prop = notifications[key];
 	        if (!prop) return;
 	        // let obj = (typeof prop === 'function') ? notifications[key].bind(this)() : notifications[key]
@@ -263,36 +259,60 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.$emit(EVENTS.initiated);
 	    }
 
-	    var mixin = {}
-	    // destroyed () {
-	    //   // destroy(this.$options.head)
-	    // },
-	    // events: {
-	    //   // updateHead () {
-	    //   //   init.bind(this)(true)
-	    //   //   util.update()
-	    //   // }
-	    // }
+	    function getMethods() {
+	      var notifications = this.$options[PROPERTY_NAME];
+	      var result = {};
+	      if (!notifications) return;
 
+	      (0, _keys2['default'])(notifications).forEach(function (key) {
+	        var prop = notifications[key];
+	        /**
+	         * @param  {Object} config
+	         */
+	        result[key] = function (config) {
+	          config = config || notifications[prop];
+	        };
+	        // result[prop] = Notification
+	      });
+
+	      return result;
+	    }
+
+	    var mixin = {
+	      destroyed: function destroyed() {
+	        // destroy(this.$options.head)
+	      },
+
+	      events: {
+	        // updateHead () {
+	        //   init.bind(this)(true)
+	        //   util.update()
+	        // }
+	      },
+	      methods: {}
+	    };
 
 	    // v1
-	    ;if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
+	    if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
 	      console.info('eva');
 	      mixin.ready = function () {
-	        console.info(Vue);
-	        init.bind(_this);
-	        // init.bind(Vue)()
+	        mixin.methods = getMethods.bind(this)();
+	        console.log('Methods');
+	        console.info(mixin.methods);
+	        init.bind(this)();
 	      };
 	    }
 
 	    //v2
-	    // if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
-	    //   console.info('ghost')
-	    //   mixin.mounted = () => {
-	    //     init.bind(this)()
-	    //   }
-	    // }
+	    if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
+	      console.info('ghost');
+	      mixin.mounted = function () {
+	        init.bind(this)();
+	      };
+	    }
 
+	    console.log('Mixin:');
+	    console.info(mixin);
 	    Vue.mixin(mixin);
 
 	    this.installed = true;
@@ -608,38 +628,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	exports["default"] = function (Vue, key) {
-	  // const _init = Vue.prototype._init
-	  // const _destroy = Vue.prototype._destroy
-	  //
-	  // Vue.prototype._init = function (options = {}) {
-	  //   options.init = options.init
-	  //   ? [customInit].concat(options.init)
-	  //    : customInit
-	  //   _init.call(this, options)
-	  // }
-	  //
-	  // Vue.prototype._destroy = () => {
-	  //   // if (this[key]) {
-	  //   //   this[key] = undefined
-	  //   //   delete this[key]
-	  //   // }
-	  //
-	  //   _destroy.apply(this, arguments)
-	  // }
-	  //
-	  // function customInit () {
-	  //   if (this[key]) throw console.error(`Override: property "${key}" is already defined`)
-	  //   this[key] = {}
-	  //
-	  //   const options = this.$options
-	  //   const keyOption = options[key]
-	  //
-	  //   if (keyOption) {
-	  //     this[key] = keyOption
-	  //   } else if (options.parent && options.parent[key]) {
-	  //     this[key] = options.parent[key]
-	  //   }
-	  // }
+	  var _this = this,
+	      _arguments = arguments;
+
+	  var _init = Vue.prototype._init;
+	  var _destroy = Vue.prototype._destroy;
+
+	  Vue.prototype._init = function () {
+	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+	    options.init = options.init ? [customInit].concat(options.init) : customInit;
+	    _init.call(this, options);
+	  };
+
+	  Vue.prototype._destroy = function () {
+	    // if (this[key]) {
+	    //   this[key] = undefined
+	    //   delete this[key]
+	    // }
+
+	    _destroy.apply(_this, _arguments);
+	  };
+
+	  function customInit() {
+	    if (this[key]) throw console.error("Override: property \"" + key + "\" is already defined");
+	    this[key] = {};
+
+	    var options = this.$options;
+	    var keyOption = options[key];
+
+	    if (keyOption) {
+	      this[key] = keyOption;
+	    } else if (options.parent && options.parent[key]) {
+	      this[key] = options.parent[key];
+	    }
+	  }
 	};
 
 /***/ }
