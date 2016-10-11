@@ -87,7 +87,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var MESSAGES = {
-	  alreadyInstalled: PLUGIN_NAME + ': plugin already installed'
+	  alreadyInstalled: PLUGIN_NAME + ': plugin already installed',
+	  methodNameConflict: PLUGIN_NAME + ': names conflict - '
 	};
 
 	var EVENTS = {
@@ -96,6 +97,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * @param  {Object} Vue
+	 * @return {Object}
 	 */
 	function getVersion(Vue) {
 	  var version = Vue.version.match(/(\d+)/g);
@@ -107,14 +109,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * @param  {String} title
 	 * @param  {String} msg
 	 * @param  {String} type
+	 * @param  {Number} timeOut
 	 */
 	function showMessage(title, msg, type, timeOut) {
-	  if (type === TYPE.error) return console.error(msg);
-	  if (type === TYPE.warn) return console.warn(msg);
-	  if (type === TYPE.info) return console.log(msg);
-	  if (type === TYPE.success) return console.info(msg);
+	  if (type === TYPE.error) return console.error('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
+	  if (type === TYPE.warn) return console.warn('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
+	  if (type === TYPE.info) return console.log('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
+	  if (type === TYPE.success) return console.info('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
 	}
 
 	var VueNotifications = {
@@ -124,6 +128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Plugin | vue-notifications
 	   * @param  {Function} Vue
 	   * @param  {Object} options
+	   * @this VueNotifications
 	   */
 	  install: function install(Vue) {
 	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -133,22 +138,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
 
 	    function _initVueNotificationPlugin() {
-	      var _this = this;
-
+	      console.warn(this);
 	      var notifications = this.$options[PROPERTY_NAME];
 	      if (!notifications) return;
 
-	      (0, _keys2['default'])(notifications).forEach(function (v, i) {
-	        _this.$options.methods[v] = getMethod(v);
-	      });
+	      (0, _keys2['default'])(notifications).forEach(setMethod.bind(this));
 
 	      this.$emit(EVENTS.initiated);
 	    }
 
 	    /**
 	     * @param  {String} configName
+	     * @param  {Number} index
+	     * @param  {Array} arr
 	     */
-	    function getMethod(configName) {
+	    function setMethod(name, index, arr) {
+	      if (this.$options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name);
+	      this.$options.methods[name] = makeMethod(name);
+	    }
+
+	    /**
+	     * @param  {String} configName
+	     * @return {Function}
+	     */
+	    function makeMethod(configName) {
 	      return function (config) {
 	        config = config || this.$options[PROPERTY_NAME][configName];
 	        showMessage(config.title, config.message, config.type, config.timeOut);
