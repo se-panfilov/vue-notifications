@@ -100,18 +100,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	function getVersion(Vue) {
 	  var version = Vue.version.match(/(\d+)/g);
 	  return {
-	    major: version[0],
-	    regular: version[1],
-	    minor: version[2]
+	    major: +version[0],
+	    regular: +version[1],
+	    minor: +version[2]
 	  };
-	}
-
-	/**
-	 * @param  {Object} Vue
-	 * @param  {Number} majorNum
-	 */
-	function isVueVersion(Vue, majorNum) {
-	  return this.getVersion(Vue).major == majorNum;
 	}
 
 	/**
@@ -140,7 +132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
 
-	    function init() {
+	    function _initVueNotificationPlugin() {
 	      var _this = this;
 
 	      var notifications = this.$options[PROPERTY_NAME];
@@ -153,6 +145,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.$emit(EVENTS.initiated);
 	    }
 
+	    /**
+	     * @param  {String} configName
+	     */
 	    function getMethod(configName) {
 	      return function (config) {
 	        config = config || this.$options[PROPERTY_NAME][configName];
@@ -161,19 +156,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var mixin = {};
+	    var hook = void 0;
 
-	    if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
-	      mixin.init = function () {
-	        init.call(this);
-	      };
-	    }
+	    if (getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init';
+	    if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate';
 
-	    //v2
-	    if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
-	      mixin.beforeCreate = function () {
-	        init.call(this);
-	      };
-	    }
+	    mixin[hook] = function () {
+	      _initVueNotificationPlugin.call(this);
+	    };
 
 	    Vue.mixin(mixin);
 
