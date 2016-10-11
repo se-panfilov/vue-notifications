@@ -64,15 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _keys2 = _interopRequireDefault(_keys);
 
-	var _classCallCheck2 = __webpack_require__(13);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _createClass2 = __webpack_require__(14);
-
-	var _createClass3 = _interopRequireDefault(_createClass2);
-
-	var _override = __webpack_require__(18);
+	var _override = __webpack_require__(13);
 
 	var _override2 = _interopRequireDefault(_override);
 
@@ -82,33 +74,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var PACKAGE_NAME = 'vue-notifications';
 	var PROPERTY_NAME = 'notifications';
 
-	var STYLE = {
+	var TYPE = {
 	  error: 'error',
 	  warn: 'warn',
 	  info: 'info',
 	  success: 'success'
-	};
-
-	var STATE = {
-	  /**
-	   * @param  {Object} Vue
-	   */
-	  getVersion: function getVersion(Vue) {
-	    var version = Vue.version.match(/(\d+)/g);
-	    return {
-	      major: version[0],
-	      regular: version[1],
-	      minor: version[2]
-	    };
-	  },
-
-	  /**
-	   * @param  {Object} Vue
-	   * @param  {Number} majorNum
-	   */
-	  isVueVersion: function isVueVersion(Vue, majorNum) {
-	    return this.getVersion(Vue).major == majorNum;
-	  }
 	};
 
 	var VUE_VERSION = {
@@ -121,86 +91,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var EVENTS = {
-	  initiated: PACKAGE_NAME + '-initiated',
-	  installed: PACKAGE_NAME + '-installed'
+	  initiated: PACKAGE_NAME + '-initiated'
 	};
 
-	var Notification = function () {
-	  /**
-	   * @param  {Object} obj
-	   */
-	  function Notification(obj) {
-	    (0, _classCallCheck3['default'])(this, Notification);
+	/**
+	 * @param  {Object} Vue
+	 */
+	function getVersion(Vue) {
+	  var version = Vue.version.match(/(\d+)/g);
+	  return {
+	    major: version[0],
+	    regular: version[1],
+	    minor: version[2]
+	  };
+	}
 
-	    this.type = obj.type;
-	    this.isVisible = obj.isVisible;
-	    this.timeOut = obj.timeOut;
-	  }
-
-	  (0, _createClass3['default'])(Notification, [{
-	    key: 'show',
-	    value: function show() {
-	      console.log(1111);
-	    }
-	  }]);
-	  return Notification;
-	}();
+	/**
+	 * @param  {Object} Vue
+	 * @param  {Number} majorNum
+	 */
+	function isVueVersion(Vue, majorNum) {
+	  return this.getVersion(Vue).major == majorNum;
+	}
 
 	/**
 	 * @param  {String} msg
 	 * @param  {String} type
 	 */
-
-
 	function showMessage(title, msg, type, timeOut) {
-	  if (type === STYLE.error) return console.error(msg);
-	  if (type === STYLE.warn) return console.warn(msg);
-	  if (type === STYLE.info) return console.log(msg);
-	  if (type === STYLE.success) return console.info(msg);
-	}
-
-	/**
-	 * @param  {String} hook
-	 */
-	function patchNotifications(hook) {
-	  if (hook == 'created') {
-
-	    // getAllNotifications(this).map((v, k)=> {
-	    // getAllNotifications(this).forEach((v, i, arr)=> {
-	    console.info(this);
-	    var notifications = getAllNotifications(this);
-
-	    for (var k in notifications) {
-	      if (notifications.hasOwnProperty(k)) {
-	        console.log(this);
-	        console.info(this.methods);
-	      }
-	    }
-	    // => {
-	    //   console.info(v)
-	    //   console.info(i)
-	    //   console.info(arr)
-	    //   // Object.setPrototypeOf(v, Notification)
-	    //   // v.prototype = Notification
-	    //   // console.info(v.show)
-	    //   // return new Notification(v)
-	    // })
-	  }
-	  this.__callHook(hook);
-	}
-
-	/**
-	 * @param  {Object} instance
-	 */
-	function getAllNotifications(instance) {
-	  if (!instance) return {};
-	  var obj = instance.$options[PROPERTY_NAME];
-	  if (!obj) return {};
-	  return obj;
-	  // return Object.values(obj)
+	  if (type === TYPE.error) return console.error(msg);
+	  if (type === TYPE.warn) return console.warn(msg);
+	  if (type === TYPE.info) return console.log(msg);
+	  if (type === TYPE.success) return console.info(msg);
 	}
 
 	var VueNotifications = {
+	  type: TYPE,
 	  installed: false,
 	  /**
 	   * Plugin | vue-notifications
@@ -214,33 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
 
-	    // Vue.successMsg = msg => showMessage(msg, STYLE.success)
-	    // Vue.prototype.$infoMsg = msg => showMessage(msg, STYLE.success)
-	    // Vue.prototype.$errorMsg = msg => showMessage(msg, STYLE.success)
-	    // Vue.prototype.$warnMsg = msg => showMessage(msg, STYLE.success)
-
-	    // patchNotifications(Vue.prototype)
-	    // var p = Vue.prototype;
-	    // p.__callHook = p._callHook;
-	    // p._callHook = function (hook) {
-	    //   if (hook == 'created') {
-	    //     var self = this;
-	    //
-	    //     // const notifications = this.$options[PROPERTY_NAME]
-	    //     const notifications = this.$options['notifications']
-	    //     console.info(notifications)
-	    //     Object.values(notifications).map((v,k) => {
-	    //       console.info(123)
-	    //     })
-	    //   }
-	    //   this.__callHook(hook);
-	    // }
-
-	    // var p = Vue.prototype;
-	    // p.__callHook = p._callHook;
-	    // p._callHook = patchNotifications
-
-	    function _init() {
+	    function init() {
 	      var _this = this;
 
 	      var notifications = this.$options[PROPERTY_NAME];
@@ -255,50 +155,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function getMethod(configName) {
 	      return function (config) {
-	        debugger;
 	        config = config || this.$options[PROPERTY_NAME][configName];
 	        showMessage(config.title, config.message, config.type, config.timeOut);
 	      };
 	    }
 
-	    var mixin = {
-	      init: function init() {
-	        // const notifications = this.$options[PROPERTY_NAME]
-	        // if (!notifications) return
-	        //
-	        // Object.keys(notifications).forEach((v, i) => {
-	        //   this.$options.methods[v] = function () {console.log(1)}
-	        // })
-	        //
-	        // this.$options.methods.getSome = function () {console.log(1)}// getMethods ()
-	        // console.info(this.$options.methods)
-	        _init.call(this);
-	      }
-	    };
+	    var mixin = {};
 
-	    // // v1
-	    // if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
-	    //   console.info('eva')
-	    //   mixin.ready = function () {
-	    //     mixin.methods = getMethods.bind(this)()
-	    //     console.log('Methods')
-	    //     console.info(mixin.methods)
-	    //     init.bind(this)()
-	    //   }
-	    // }
-	    //
-	    // //v2
-	    // if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
-	    //   console.info('ghost')
-	    //   mixin.mounted = function () {
-	    //     init.bind(this)()
-	    //   }
-	    // }
+	    if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
+	      mixin.init = function () {
+	        init.call(this);
+	      };
+	    }
+
+	    //v2
+	    if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
+	      mixin.beforeCreate = function () {
+	        init.call(this);
+	      };
+	    }
 
 	    Vue.mixin(mixin);
 
 	    this.installed = true;
-	    // this.$emit(EVENTS.installed)
 	  }
 	};
 
@@ -514,93 +393,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 13 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	exports.__esModule = true;
-
-	exports["default"] = function (instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	};
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	exports.__esModule = true;
-
-	var _defineProperty = __webpack_require__(15);
-
-	var _defineProperty2 = _interopRequireDefault(_defineProperty);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { "default": obj };
-	}
-
-	exports["default"] = function () {
-	  function defineProperties(target, props) {
-	    for (var i = 0; i < props.length; i++) {
-	      var descriptor = props[i];
-	      descriptor.enumerable = descriptor.enumerable || false;
-	      descriptor.configurable = true;
-	      if ("value" in descriptor) descriptor.writable = true;
-	      (0, _defineProperty2["default"])(target, descriptor.key, descriptor);
-	    }
-	  }
-
-	  return function (Constructor, protoProps, staticProps) {
-	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-	    if (staticProps) defineProperties(Constructor, staticProps);
-	    return Constructor;
-	  };
-	}();
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	module.exports = { "default": __webpack_require__(16), __esModule: true };
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var $ = __webpack_require__(17);
-	module.exports = function defineProperty(it, key, desc) {
-	  return $.setDesc(it, key, desc);
-	};
-
-/***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	var $Object = Object;
-	module.exports = {
-	  create: $Object.create,
-	  getProto: $Object.getPrototypeOf,
-	  isEnum: {}.propertyIsEnumerable,
-	  getDesc: $Object.getOwnPropertyDescriptor,
-	  setDesc: $Object.defineProperty,
-	  setDescs: $Object.defineProperties,
-	  getKeys: $Object.keys,
-	  getNames: $Object.getOwnPropertyNames,
-	  getSymbols: $Object.getOwnPropertySymbols,
-	  each: [].forEach
-	};
-
-/***/ },
-/* 18 */
 /***/ function(module, exports) {
 
 	"use strict";
