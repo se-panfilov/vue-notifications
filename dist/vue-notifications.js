@@ -83,10 +83,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var PROPERTY_NAME = 'notifications';
 
 	var STYLE = {
-	  error: '-error',
-	  warn: '-warn',
-	  info: '-info',
-	  success: '-success'
+	  error: 'error',
+	  warn: 'warn',
+	  info: 'info',
+	  success: 'success'
 	};
 
 	var STATE = {
@@ -148,15 +148,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * @param  {String} msg
-	 * @param  {String} style
+	 * @param  {String} type
 	 */
 
 
-	function showMessage(msg, style) {
-	  if (style === STYLE.error) return console.error(msg);
-	  if (style === STYLE.warn) return console.warn(msg);
-	  if (style === STYLE.info) return console.log(msg);
-	  if (style === STYLE.success) return console.info(msg);
+	function showMessage(title, msg, type, timeOut) {
+	  if (type === STYLE.error) return console.error(msg);
+	  if (type === STYLE.warn) return console.warn(msg);
+	  if (type === STYLE.info) return console.log(msg);
+	  if (type === STYLE.success) return console.info(msg);
 	}
 
 	/**
@@ -240,79 +240,61 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // p.__callHook = p._callHook;
 	    // p._callHook = patchNotifications
 
-	    function init() {
+	    function _init() {
+	      var _this = this;
+
 	      var notifications = this.$options[PROPERTY_NAME];
 	      if (!notifications) return;
 
-	      (0, _keys2['default'])(notifications).map(function (key) {
-	        // console.info(key)
-	        var prop = notifications[key];
-	        if (!prop) return;
-	        // let obj = (typeof prop === 'function') ? notifications[key].bind(this)() : notifications[key]
-	        // if (key === 'title') {
-	        //   util[key](obj)
-	        //   return
-	        // }
-	        // util.handle(obj, key, 'head', update)
+	      (0, _keys2['default'])(notifications).forEach(function (v, i) {
+	        _this.$options.methods[v] = getMethod(v);
 	      });
 
 	      this.$emit(EVENTS.initiated);
 	    }
 
-	    function getMethods() {
-	      var notifications = this.$options[PROPERTY_NAME];
-	      var result = {};
-	      if (!notifications) return;
-
-	      (0, _keys2['default'])(notifications).forEach(function (key) {
-	        var prop = notifications[key];
-	        /**
-	         * @param  {Object} config
-	         */
-	        result[key] = function (config) {
-	          config = config || notifications[prop];
-	        };
-	        // result[prop] = Notification
-	      });
-
-	      return result;
+	    function getMethod(configName) {
+	      return function (config) {
+	        debugger;
+	        config = config || this.$options[PROPERTY_NAME][configName];
+	        showMessage(config.title, config.message, config.type, config.timeOut);
+	      };
 	    }
 
 	    var mixin = {
-	      destroyed: function destroyed() {
-	        // destroy(this.$options.head)
-	      },
-
-	      events: {
-	        // updateHead () {
-	        //   init.bind(this)(true)
-	        //   util.update()
-	        // }
-	      },
-	      methods: {}
+	      init: function init() {
+	        // const notifications = this.$options[PROPERTY_NAME]
+	        // if (!notifications) return
+	        //
+	        // Object.keys(notifications).forEach((v, i) => {
+	        //   this.$options.methods[v] = function () {console.log(1)}
+	        // })
+	        //
+	        // this.$options.methods.getSome = function () {console.log(1)}// getMethods ()
+	        // console.info(this.$options.methods)
+	        _init.call(this);
+	      }
 	    };
 
-	    // v1
-	    if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
-	      console.info('eva');
-	      mixin.ready = function () {
-	        mixin.methods = getMethods.bind(this)();
-	        console.log('Methods');
-	        console.info(mixin.methods);
-	        init.bind(this)();
-	      };
-	    }
+	    // // v1
+	    // if (STATE.isVueVersion(Vue, VUE_VERSION.evangelion)) {
+	    //   console.info('eva')
+	    //   mixin.ready = function () {
+	    //     mixin.methods = getMethods.bind(this)()
+	    //     console.log('Methods')
+	    //     console.info(mixin.methods)
+	    //     init.bind(this)()
+	    //   }
+	    // }
+	    //
+	    // //v2
+	    // if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
+	    //   console.info('ghost')
+	    //   mixin.mounted = function () {
+	    //     init.bind(this)()
+	    //   }
+	    // }
 
-	    //v2
-	    if (STATE.isVueVersion(Vue, VUE_VERSION.ghostInTheShell)) {
-	      console.info('ghost');
-	      mixin.mounted = function () {
-	        init.bind(this)();
-	      };
-	    }
-
-	    console.log('Mixin:');
-	    console.info(mixin);
 	    Vue.mixin(mixin);
 
 	    this.installed = true;
