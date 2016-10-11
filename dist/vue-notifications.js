@@ -113,12 +113,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {String} msg
 	 * @param  {String} type
 	 * @param  {Number} timeOut
+	 * @param  {Function} cb
 	 */
-	function showMessage(title, msg, type, timeOut) {
+	function showMessage(title, msg, type, timeOut, cb) {
 	  if (type === TYPE.error) return console.error('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
 	  if (type === TYPE.warn) return console.warn('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
 	  if (type === TYPE.info) return console.log('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
 	  if (type === TYPE.success) return console.info('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
+
+	  if (cb) cb();
 	}
 
 	var VueNotifications = {
@@ -148,7 +151,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * @param  {String} configName
+	     * @param  {String} name
 	     * @param  {Number} index
 	     * @param  {Array} arr
 	     */
