@@ -108,20 +108,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
-	/**
-	 * @param  {String} title
-	 * @param  {String} msg
-	 * @param  {String} type
-	 * @param  {Number} timeOut
-	 * @param  {Function} cb
-	 */
-	function showMessage(title, msg, type, timeOut, cb) {
-	  if (type === TYPE.error) return console.error('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
-	  if (type === TYPE.warn) return console.warn('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
-	  if (type === TYPE.info) return console.log('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
-	  if (type === TYPE.success) return console.info('Title: ' + title + ', Message: ' + msg + ', Type: ' + type + ', Timeout: ' + timeOut);
+	function showDefaultMessage(config) {
+	  var msg = 'Title: ' + config.title + ', Message: ' + config.message;
 
-	  if (cb) cb();
+	  if (config.type === TYPE.error) return console.error(msg);
+	  if (config.type === TYPE.warn) return console.warn(msg);
+	  if (config.type === TYPE.success) return console.info(msg);
+
+	  return console.log(msg);
+	}
+
+	/**
+	 * @param  {Object} config
+	 * @param  {Object} options
+	 */
+	function showMessage(config, options) {
+	  var method = options[config.type] || showDefaultMessage;
+	  method(config);
+
+	  if (config.cb) config.cb();
 	}
 
 	var VueNotifications = {
@@ -141,7 +146,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
 
 	    function _initVueNotificationPlugin() {
-	      console.warn(this);
 	      var notifications = this.$options[PROPERTY_NAME];
 	      if (!notifications) return;
 
@@ -167,7 +171,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function makeMethod(configName) {
 	      return function (config) {
 	        config = config || this.$options[PROPERTY_NAME][configName];
-	        showMessage(config.title, config.message, config.type, config.timeOut);
+	        showMessage(config, options);
 	      };
 	    }
 
