@@ -1,6 +1,6 @@
 {
   "name": "vue-notifications",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "description": "Vuejs notifications",
   "main": "dist/vue-notifications.js",
   "scripts": {
@@ -67,9 +67,7 @@
     "vinyl-source-stream": "^1.1.0",
     "webpack": "^1.13.2",
     "webpack-merge": "^0.14.1",
-    "webpack-stream": "^3.2.0"
+    "webpack-stream": "^3.2.0",
   },
-  "dependencies": {
-    "babel-runtime": "^5.8.38"
-  }
+  "dependencies": {}
 }

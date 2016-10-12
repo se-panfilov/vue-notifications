@@ -38,6 +38,9 @@ function getVersion (Vue) {
   }
 }
 
+/**
+ * @param  {Object} config
+ */
 function showDefaultMessage (config) {
   const msg = `Title: ${config.title}, Message: ${config.message}`
 

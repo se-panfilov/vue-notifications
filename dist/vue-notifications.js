@@ -108,6 +108,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	}
 
+	/**
+	 * @param  {Object} config
+	 */
 	function showDefaultMessage(config) {
 	  var msg = 'Title: ' + config.title + ', Message: ' + config.message;
 
@@ -426,10 +429,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Vue.prototype._destroy = function () {
-	    // if (this[key]) {
-	    //   this[key] = undefined
-	    //   delete this[key]
-	    // }
+	    if (_this[key]) {
+	      _this[key] = undefined;
+	      delete _this[key];
+	    }
 
 	    _destroy.apply(_this, _arguments);
 	  };

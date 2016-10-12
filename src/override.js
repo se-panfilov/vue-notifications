@@ -10,10 +10,10 @@ export default function (Vue, key) {
   }
 
   Vue.prototype._destroy = () => {
-    // if (this[key]) {
-    //   this[key] = undefined
-    //   delete this[key]
-    // }
+    if (this[key]) {
+      this[key] = undefined
+      delete this[key]
+    }
 
     _destroy.apply(this, arguments)
   }
