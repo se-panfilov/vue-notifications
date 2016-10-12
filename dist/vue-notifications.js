@@ -111,14 +111,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * @param  {String} elemType
 	 * @param  {String} elemClass
-	 * @param  {String} elemHtml
-	 * @return  {Object}
+	 * @param  {String} title
+	 * @param  {String} msg
+	 * @return  {Node}
 	 */
-	function createElement(elemType, elemClass, elemHtml) {
+	function createElement(elemType, elemClass, title, msg) {
 	  var elem = document.createElement(elemType);
 	  // elem.id = `${elemType}_${new Date().getTime()}`
 	  elem.className = elemClass;
-	  elem.innerHTML = elemHtml;
+	  elem.innerHTML = msg;
 	  elem.style = 'position: fixed; z-index: 999999; top: 12px; right: 12px;position: relative;overflow: hidden;margin: 0 0 6px;padding: 15px 15px 15px 50px;width: 300px;border-radius: 3px;background-position: 15px center;background-repeat: no-repeat;box-shadow: 0 0 12px #999; color: #fff; opacity: .8;';
 	  return elem;
 	}
@@ -126,12 +127,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	var PARENT_ELEM = document.body;
 
 	/**
-	 * @return  {Object}
+	 * @param  {String} type
+	 * @return  {String}
 	 */
-	function showNotification() {
-	  var elem = createElement('div', 'notification', 'Some message');
-	  PARENT_ELEM.appendChild(elem);
-	  return elem;
+	function getNotificationClass(type) {
+	  return 'notification -' + type.toLowerCase();
+	}
+
+	/**
+	 * @param  {String} type
+	 * @param  {String} title
+	 * @param  {String} msg
+	 * @return  {Node}
+	 */
+	function createNotification(type, title, msg) {
+	  var nodeType = 'div';
+	  var elClass = getNotificationClass(type);
+	  var elNotificationContainer = createElement(nodeType, elClass, title, msg);
+	  var elNotification = createElement(nodeType, elClass, title, msg);
+	  elNotificationContainer.appendChild(elNotification);
+	  return elNotificationContainer;
+	}
+
+	var notifications = [];
+
+	/**
+	 * @param  {Node} node
+	 */
+	function addNotification(node) {
+	  PARENT_ELEM.appendChild(node);
+	  notifications.push(node);
 	}
 
 	/**
@@ -140,17 +165,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	function showDefaultMessage(config) {
 	  var msg = 'Title: ' + config.title + ', Message: ' + config.message;
 
-	  console.info(config.timeOut);
-	  var elem = showNotification();
-	  setTimeout(function () {
-	    PARENT_ELEM.removeChild(elem);
-	  }, config.timeOut || 3000);
-	  // }, 3000)
-	  // if (config.type === TYPE.error) return console.error(msg)
-	  // if (config.type === TYPE.warn) return console.warn(msg)
-	  // if (config.type === TYPE.success) return console.info(msg)
-	  //
-	  // return console.log(msg)
+	  // const elem = showNotification()
+	  // setTimeout(() => {
+	  //   PARENT_ELEM.removeChild(elem)
+	  //   // }, config.timeOut || 3000)
+	  // }, config.timeOut || 3000)
+	  if (config.type === TYPE.error) return console.error(msg);
+	  if (config.type === TYPE.warn) return console.warn(msg);
+	  if (config.type === TYPE.success) return console.info(msg);
+
+	  return console.log(msg);
 	}
 
 	/**
