@@ -39,16 +39,50 @@ function getVersion (Vue) {
 }
 
 /**
+ * @param  {String} elemType
+ * @param  {String} elemClass
+ * @param  {String} elemHtml
+ * @return  {Object}
+ */
+function createElement (elemType, elemClass, elemHtml) {
+  let elem = document.createElement(elemType)
+  // elem.id = `${elemType}_${new Date().getTime()}`
+  elem.className = elemClass
+  elem.innerHTML = elemHtml
+  elem.style = 'position: fixed; z-index: 999999; top: 12px; right: 12px;position: relative;overflow: hidden;margin: 0 0 6px;padding: 15px 15px 15px 50px;width: 300px;border-radius: 3px;background-position: 15px center;background-repeat: no-repeat;box-shadow: 0 0 12px #999; color: #fff; opacity: .8;'
+  return elem
+}
+
+
+
+const PARENT_ELEM = document.body
+
+/**
+ * @return  {Object}
+ */
+function showNotification () {
+  const elem = createElement('div', 'notification', 'Some message')
+  PARENT_ELEM.appendChild(elem)
+  return elem
+}
+
+/**
  * @param  {Object} config
  */
 function showDefaultMessage (config) {
   const msg = `Title: ${config.title}, Message: ${config.message}`
 
-  if (config.type === TYPE.error) return console.error(msg)
-  if (config.type === TYPE.warn) return console.warn(msg)
-  if (config.type === TYPE.success) return console.info(msg)
-
-  return console.log(msg)
+  console.info(config.timeOut)
+  const elem = showNotification()
+  setTimeout(() => {
+    PARENT_ELEM.removeChild(elem)
+  }, config.timeOut || 3000)
+  // }, 3000)
+  // if (config.type === TYPE.error) return console.error(msg)
+  // if (config.type === TYPE.warn) return console.warn(msg)
+  // if (config.type === TYPE.success) return console.info(msg)
+  //
+  // return console.log(msg)
 }
 
 /**
