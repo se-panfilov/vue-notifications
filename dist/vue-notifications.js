@@ -260,15 +260,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
 	module.exports = { "default": __webpack_require__(2), __esModule: true };
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
 
 	__webpack_require__(3);
 	module.exports = __webpack_require__(9).Object.keys;
@@ -277,13 +273,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
 	// 19.1.2.14 Object.keys(O)
 	var toObject = __webpack_require__(4);
 
-	__webpack_require__(6)('keys', function ($keys) {
-	  return function keys(it) {
+	__webpack_require__(6)('keys', function($keys){
+	  return function keys(it){
 	    return $keys(toObject(it));
 	  };
 	});
@@ -292,11 +286,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
 	// 7.1.13 ToObject(argument)
 	var defined = __webpack_require__(5);
-	module.exports = function (it) {
+	module.exports = function(it){
 	  return Object(defined(it));
 	};
 
@@ -304,11 +296,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 5 */
 /***/ function(module, exports) {
 
-	"use strict";
-
 	// 7.2.1 RequireObjectCoercible(argument)
-	module.exports = function (it) {
-	  if (it == undefined) throw TypeError("Can't call method on  " + it);
+	module.exports = function(it){
+	  if(it == undefined)throw TypeError("Can't call method on  " + it);
 	  return it;
 	};
 
@@ -316,49 +306,41 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
 	// most Object methods by ES6 should accept primitives
-	var $export = __webpack_require__(7),
-	    core = __webpack_require__(9),
-	    fails = __webpack_require__(12);
-	module.exports = function (KEY, exec) {
-	  var fn = (core.Object || {})[KEY] || Object[KEY],
-	      exp = {};
+	var $export = __webpack_require__(7)
+	  , core    = __webpack_require__(9)
+	  , fails   = __webpack_require__(12);
+	module.exports = function(KEY, exec){
+	  var fn  = (core.Object || {})[KEY] || Object[KEY]
+	    , exp = {};
 	  exp[KEY] = exec(fn);
-	  $export($export.S + $export.F * fails(function () {
-	    fn(1);
-	  }), 'Object', exp);
+	  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
 	};
 
 /***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	var global    = __webpack_require__(8)
+	  , core      = __webpack_require__(9)
+	  , ctx       = __webpack_require__(10)
+	  , PROTOTYPE = 'prototype';
 
-	var global = __webpack_require__(8),
-	    core = __webpack_require__(9),
-	    ctx = __webpack_require__(10),
-	    PROTOTYPE = 'prototype';
-
-	var $export = function $export(type, name, source) {
-	  var IS_FORCED = type & $export.F,
-	      IS_GLOBAL = type & $export.G,
-	      IS_STATIC = type & $export.S,
-	      IS_PROTO = type & $export.P,
-	      IS_BIND = type & $export.B,
-	      IS_WRAP = type & $export.W,
-	      exports = IS_GLOBAL ? core : core[name] || (core[name] = {}),
-	      target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE],
-	      key,
-	      own,
-	      out;
-	  if (IS_GLOBAL) source = name;
-	  for (key in source) {
+	var $export = function(type, name, source){
+	  var IS_FORCED = type & $export.F
+	    , IS_GLOBAL = type & $export.G
+	    , IS_STATIC = type & $export.S
+	    , IS_PROTO  = type & $export.P
+	    , IS_BIND   = type & $export.B
+	    , IS_WRAP   = type & $export.W
+	    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+	    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+	    , key, own, out;
+	  if(IS_GLOBAL)source = name;
+	  for(key in source){
 	    // contains in native
 	    own = !IS_FORCED && target && key in target;
-	    if (own && key in exports) continue;
+	    if(own && key in exports)continue;
 	    // export native or passed
 	    out = own ? target[key] : source[key];
 	    // prevent global pollution for namespaces
@@ -366,22 +348,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // bind timers to global for call from export context
 	    : IS_BIND && own ? ctx(out, global)
 	    // wrap global constructors for prevent change them in library
-	    : IS_WRAP && target[key] == out ? function (C) {
-	      var F = function F(param) {
+	    : IS_WRAP && target[key] == out ? (function(C){
+	      var F = function(param){
 	        return this instanceof C ? new C(param) : C(param);
 	      };
 	      F[PROTOTYPE] = C[PROTOTYPE];
 	      return F;
-	      // make static versions for prototype methods
-	    }(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
-	    if (IS_PROTO) (exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
+	    // make static versions for prototype methods
+	    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+	    if(IS_PROTO)(exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
 	  }
 	};
 	// type bitmap
-	$export.F = 1; // forced
-	$export.G = 2; // global
-	$export.S = 4; // static
-	$export.P = 8; // proto
+	$export.F = 1;  // forced
+	$export.G = 2;  // global
+	$export.S = 4;  // static
+	$export.P = 8;  // proto
 	$export.B = 16; // bind
 	$export.W = 32; // wrap
 	module.exports = $export;
@@ -390,47 +372,39 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 8 */
 /***/ function(module, exports) {
 
-	'use strict';
-
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-	var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-	if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+	var global = module.exports = typeof window != 'undefined' && window.Math == Math
+	  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 
 /***/ },
 /* 9 */
 /***/ function(module, exports) {
 
-	'use strict';
-
-	var core = module.exports = { version: '1.2.6' };
-	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+	var core = module.exports = {version: '1.2.6'};
+	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
 	// optional / simple context binding
 	var aFunction = __webpack_require__(11);
-	module.exports = function (fn, that, length) {
+	module.exports = function(fn, that, length){
 	  aFunction(fn);
-	  if (that === undefined) return fn;
-	  switch (length) {
-	    case 1:
-	      return function (a) {
-	        return fn.call(that, a);
-	      };
-	    case 2:
-	      return function (a, b) {
-	        return fn.call(that, a, b);
-	      };
-	    case 3:
-	      return function (a, b, c) {
-	        return fn.call(that, a, b, c);
-	      };
+	  if(that === undefined)return fn;
+	  switch(length){
+	    case 1: return function(a){
+	      return fn.call(that, a);
+	    };
+	    case 2: return function(a, b){
+	      return fn.call(that, a, b);
+	    };
+	    case 3: return function(a, b, c){
+	      return fn.call(that, a, b, c);
+	    };
 	  }
-	  return function () /* ...args */{
+	  return function(/* ...args */){
 	    return fn.apply(that, arguments);
 	  };
 	};
@@ -439,10 +413,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 11 */
 /***/ function(module, exports) {
 
-	'use strict';
-
-	module.exports = function (it) {
-	  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
+	module.exports = function(it){
+	  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
 	  return it;
 	};
 
@@ -450,12 +422,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports) {
 
-	"use strict";
-
-	module.exports = function (exec) {
+	module.exports = function(exec){
 	  try {
 	    return !!exec();
-	  } catch (e) {
+	  } catch(e){
 	    return true;
 	  }
 	};
@@ -471,9 +441,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	exports["default"] = function (Vue, key) {
-	  var _this = this,
-	      _arguments = arguments;
-
 	  var _init = Vue.prototype._init;
 	  var _destroy = Vue.prototype._destroy;
 
@@ -485,12 +452,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 
 	  Vue.prototype._destroy = function () {
-	    if (_this[key]) {
-	      _this[key] = undefined;
-	      delete _this[key];
+	    if (this[key]) {
+	      this[key] = undefined;
+	      delete this[key];
 	    }
 
-	    _destroy.apply(_this, _arguments);
+	    _destroy.apply(this, arguments);
 	  };
 
 	  function customInit() {

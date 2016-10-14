@@ -4,12 +4,12 @@ export default function (Vue, key) {
 
   Vue.prototype._init = function (options = {}) {
     options.init = options.init
-    ? [customInit].concat(options.init)
-     : customInit
+      ? [customInit].concat(options.init)
+      : customInit
     _init.call(this, options)
   }
 
-  Vue.prototype._destroy = () => {
+  Vue.prototype._destroy = function () {
     if (this[key]) {
       this[key] = undefined
       delete this[key]
