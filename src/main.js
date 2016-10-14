@@ -21,10 +21,6 @@ const MESSAGES = {
   methodNameConflict: `${PLUGIN_NAME}: names conflict - `
 }
 
-const EVENTS = {
-  initiated: `${PACKAGE_NAME}-initiated`
-}
-
 /**
  * @param  {Object} Vue
  * @return {Object}
@@ -43,8 +39,8 @@ function getVersion (Vue) {
  */
 function showDefaultMessage (config) {
   let msg = `Message: ${config.message}`
-   msg = (config.title) ? `Title: ${config.title}, ` + msg : msg
-   msg = (config.debugMsg) ? `DebugMsg: ${config.debugMsg}, ` + msg : msg
+  msg = (config.title) ? `Title: ${config.title}, ` + msg : msg
+  msg = (config.debugMsg) ? `DebugMsg: ${config.debugMsg}, ` + msg : msg
 
   if (config.type === TYPE.error) return console.error(msg)
   if (config.type === TYPE.warn) return console.warn(msg)
@@ -78,13 +74,15 @@ const VueNotifications = {
 
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
 
-    function _initVueNotificationPlugin () {
-      const notifications = this.$options[PROPERTY_NAME]
+    /**
+     * @param  {Object} notifications
+     */
+    function _initVueNotificationPlugin (notifications) {
       if (!notifications) return
 
       Object.keys(notifications).forEach(setMethod.bind(this))
 
-      this.$emit(EVENTS.initiated)
+      this.$emit(`${PACKAGE_NAME}-initiated`)
     }
 
     /**
@@ -107,6 +105,15 @@ const VueNotifications = {
       }
     }
 
+    function addProtoMethods () {
+      Object.keys(TYPE).forEach(v => {
+        VueNotifications[TYPE[v]] = function (config) {
+          config.type = TYPE[v]
+          showMessage(config, options)
+        }
+      })
+    }
+
     const mixin = {}
     let hook
 
@@ -114,10 +121,11 @@ const VueNotifications = {
     if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate'
 
     mixin[hook] = function () {
-      _initVueNotificationPlugin.call(this)
+      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME])
     }
 
     Vue.mixin(mixin)
+    addProtoMethods()
 
     this.installed = true
   }

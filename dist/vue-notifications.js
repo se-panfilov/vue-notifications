@@ -91,10 +91,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  methodNameConflict: PLUGIN_NAME + ': names conflict - '
 	};
 
-	var EVENTS = {
-	  initiated: PACKAGE_NAME + '-initiated'
-	};
-
 	/**
 	 * @param  {Object} Vue
 	 * @return {Object}
@@ -150,13 +146,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
 
-	    function _initVueNotificationPlugin() {
-	      var notifications = this.$options[PROPERTY_NAME];
+	    /**
+	     * @param  {Object} notifications
+	     */
+	    function _initVueNotificationPlugin(notifications) {
 	      if (!notifications) return;
 
 	      (0, _keys2['default'])(notifications).forEach(setMethod.bind(this));
 
-	      this.$emit(EVENTS.initiated);
+	      this.$emit(PACKAGE_NAME + '-initiated');
 	    }
 
 	    /**
@@ -179,6 +177,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	    }
 
+	    function addProtoMethods() {
+	      (0, _keys2['default'])(TYPE).forEach(function (v) {
+	        VueNotifications[TYPE[v]] = function (config) {
+	          config.type = TYPE[v];
+	          showMessage(config, options);
+	        };
+	      });
+	    }
+
 	    var mixin = {};
 	    var hook = void 0;
 
@@ -186,10 +193,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate';
 
 	    mixin[hook] = function () {
-	      _initVueNotificationPlugin.call(this);
+	      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME]);
 	    };
 
 	    Vue.mixin(mixin);
+	    addProtoMethods();
 
 	    this.installed = true;
 	  }
