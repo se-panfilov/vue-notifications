@@ -20,48 +20,21 @@ const webpack = require('webpack-stream');
 const to = require('to-case')
 
 gulp.task('js', () => {
-  function getSrcFiles () {
-    const normalizedPath = path.join(__dirname, '../../' + config.SRC);
-    const arr = [];
-
-    fs.readdirSync(normalizedPath).forEach(file => {
-      arr.push(normalizedPath + '/' + file);
-    });
-
-    return arr;
-  }
-
-  // return browserify({
-  //   entries: getSrcFiles(),
-  //   extensions: ['.js'],
-  //   debug: true,
-  //   standalone: to.pascal(config.projectName),
-  //   read: false
-  // })
-  //   .transform(babelify)
-  //   .bundle()
+  return gulp.src('./src/main.js')
+  // return gulp.src(config.js.src)
   //   .pipe(plumber({
-  //     errorHandler: notify.onError(err => {
+  //     errorHandler: notify.onError(function (err) {
   //       return {
   //         title: 'Build JS',
   //         message: err.message
   //       };
   //     })
   //   }))
-  //   .pipe(source(config.projectName + '.js'))
-  //   .pipe(buffer())
-  //   .pipe(rename({ basename: config.projectName }))
+  //   .pipe(concat(config.projectName + '.js'))
+  //   .pipe(rename({ basename: `${config.projectName}.es6` }))
+  //   .pipe(babel({presets: ['babili']}))
+  //   .pipe(rename({ basename: `${config.projectName}.es6.min` }))
   //   .pipe(gulp.dest(config.dest))
-  // .pipe(sourcemaps.init({ loadMaps: true }))
-  // .pipe(uglify())
-  // .pipe(rename({ basename: config.projectName + '.min' }))
-  // .pipe(gulp.dest(config.dest))
-  // .pipe(sourcemaps.write('.'))
-
-
-  return gulp.src('./src/main.js')
-  // .pipe(concat(config.projectName + '.js'))
-  // .pipe(babel())
     .pipe(webpack(require('../webpack.config.js')))
     .pipe(rename({ basename: config.projectName }))
     .pipe(gulp.dest(config.dest))
