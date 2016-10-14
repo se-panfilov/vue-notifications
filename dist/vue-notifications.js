@@ -173,6 +173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	    function makeMethod(configName) {
 	      return function (config) {
+	        // TODO (S.Panfilov) add merge method
 	        config = config || this.$options[PROPERTY_NAME][configName];
 	        showMessage(config, options);
 	      };

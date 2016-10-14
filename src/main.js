@@ -1,8 +1,8 @@
 import override from './override'
 
-const PLUGIN_NAME = 'VueNotifications';
-const PACKAGE_NAME = 'vue-notifications';
-const PROPERTY_NAME = 'notifications';
+const PLUGIN_NAME = 'VueNotifications'
+const PACKAGE_NAME = 'vue-notifications'
+const PROPERTY_NAME = 'notifications'
 
 const TYPE = {
   error: 'error',
@@ -101,6 +101,7 @@ const VueNotifications = {
      */
     function makeMethod (configName) {
       return function (config) {
+        // TODO (S.Panfilov) add merge method
         config = config || this.$options[PROPERTY_NAME][configName]
         showMessage(config, options)
       }
