@@ -34,7 +34,10 @@ Vue.use(VueNotifications, options)
 ***Attention**: By default VueNotification send all messages to console. To activate non-blocking notifiction you've got to use third-party library, like toasr. I suggest you to use [mini-toastr][2] (`npm i mini-toastr --save`)
 
 ```JS
+//Include Plugin in project
 import VueNotifications from 'vue-notifications'
+//Include mini-toaster (or any other UI-notification library
+import miniToastr from 'mini-toastr'
 
 //Here we setup messages output to `mini-toastr`
 function toast ({title, message, type, timeout, cb, debugMsg}) {
@@ -50,6 +53,20 @@ const options = {
   warn: toast
 }
 
+//Activate plugin
+Vue.use(VueNotifications, options)
+
+
+///----
+//and if you would use miniToastr you have to init in in your App.vue
+import miniToastr from 'mini-toastr'
+
+//in 'ready section
+//  ...
+    ready () {
+      miniToastr.init()
+    },
+//  ...
 ```
 
 
