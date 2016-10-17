@@ -40,8 +40,7 @@ import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'
 
 //Here we setup messages output to `mini-toastr`
-function toast ({title, message, type, timeout, cb, debugMsg}) {
-  if (debugMsg) console[type](debugMsg)
+function toast ({title, message, type, timeout, cb}) {
   return miniToastr[type](message, title, timeout, cb)
 }
 
@@ -113,6 +112,53 @@ some.js:
 ```JS
   import VueNotifications from 'vue-notifications'
   VueNotifications.error({message: 'Some Error'})
+```
+
+##Options
+
+**VueNotification** can work fine with any of your custom options, but by default it would be:
+
+ - `title` - `String`, default `undefined`: Notification's title;
+ - `message` - `String`, default `undefined`: Notification's body message. Normally should be set up;
+ - `timeout` - `Number`, default `3000`: time before notifications gone;
+ -  `cb` - `Function`, defuault: `undefined`: CallBack function;
+
+####How to add custom field?
+
+Simple: `this.showLoinError({consoleMessage: 'let it be in console'})`. You've passed a custom config here (`{consoleMessage: 'let it be in console'}`) that will be merged with config from `notifications.showLoinError` and with `global config` via `Object.assign` (beware of shallow copy).
+
+As other option, you can specify as much custom fields as you want in `notifications` section:
+
+```JS
+      //...
+    notifications: {
+      showLoinError: {
+        message: 'Failed to authenticate',
+        type: 'error',
+        consoleMessage: 'let it be in console',
+        consoleMessage2: 'let it be in console too',
+        //etc
+      }
+    }
+      //...
+```
+
+And do whatever you want after that:
+
+```JS
+function toast ({title, message, type, timeout, cb, consoleMessage}) {
+  if (consoleMessage) console[type](consoleMessage) //Here we go!
+  return miniToastr[type](message, title, timeout, cb)
+}
+
+const options = {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+}
+
+Vue.use(VueNotifications, options)
 ```
 
 ###ROADMAP:
