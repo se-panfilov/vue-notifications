@@ -61,6 +61,19 @@ function showMessage (config, options) {
   if (config.cb) return config.cb()
 }
 
+/**
+ * @param {Object} type
+ * @return {undefined}
+ * */
+function addProtoMethods (type) {
+  Object.keys(type).forEach(v => {
+    VueNotifications[type[v]] = function (config) {
+      config.type = type[v]
+      return showMessage(config, options)
+    }
+  })
+}
+
 const VueNotifications = {
   type: TYPE,
   config: {
@@ -110,19 +123,6 @@ const VueNotifications = {
 
         return showMessage(newConfig, options)
       }
-    }
-
-    /**
-     * @param {Object} type
-     * @return {undefined}
-     * */
-    function addProtoMethods (type) {
-      Object.keys(type).forEach(v => {
-        VueNotifications[type[v]] = function (config) {
-          config.type = type[v]
-          return showMessage(config, options)
-        }
-      })
     }
 
     const mixin = {}

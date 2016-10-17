@@ -140,6 +140,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (config.cb) return config.cb();
 	}
 
+	/**
+	 * @param {Object} type
+	 * @return {undefined}
+	 * */
+	function addProtoMethods(type) {
+	  (0, _keys2['default'])(type).forEach(function (v) {
+	    VueNotifications[type[v]] = function (config) {
+	      config.type = type[v];
+	      return showMessage(config, options);
+	    };
+	  });
+	}
+
 	var VueNotifications = {
 	  type: TYPE,
 	  config: {
@@ -191,19 +204,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return showMessage(newConfig, options);
 	      };
-	    }
-
-	    /**
-	     * @param {Object} type
-	     * @return {undefined}
-	     * */
-	    function addProtoMethods(type) {
-	      (0, _keys2['default'])(type).forEach(function (v) {
-	        VueNotifications[type[v]] = function (config) {
-	          config.type = type[v];
-	          return showMessage(config, options);
-	        };
-	      });
 	    }
 
 	    var mixin = {};
