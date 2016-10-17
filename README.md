@@ -29,9 +29,9 @@ import VueNotifications from 'vue-notifications'
 Vue.use(VueNotifications, options)
 ```
 
-##Usage
+##Setup and configuraton
 
-***Attention**: By default VueNotification send all messages to console. To activate non-blocking notifiction you've got to use third-party library, like toasr. I suggest you to use [mini-toastr][2] (`npm i mini-toastr --save`)
+**Attention:** By default VueNotification send all messages _to console_. To activate non-blocking notifiction you've got to use third-party library, like toasr. I suggest you to use [mini-toastr][2] (`npm i mini-toastr --save`)
 
 ```JS
 //Include Plugin in project
@@ -64,11 +64,62 @@ import miniToastr from 'mini-toastr'
 //in 'ready section
 //  ...
     ready () {
-      miniToastr.init()
+      miniToastr.init(miniToastrConfig)//'miniToastrConfig' is optionl here
     },
 //  ...
 ```
 
+If you want to setup VueNotification's global configuration, you can do it simple:
+
+```JS
+VueNotifications.config.timeout = 4000
+Vue.use(VueNotifications, options)
+```
+
+##Usage
+
+You've got to specify notification config:
+
+```JS
+export default {
+    name: 'DemoView',
+    data () {
+      //...
+    },
+    computed: {
+      //...
+    },
+    methods: {
+      //...
+    },
+    notifications: {
+      showLoinError: {
+        title: 'Login Failed',
+        message: 'Failed to authenticate',
+        type: 'error'
+      }
+    },
+    vuex: {
+      //...
+    }
+  }
+```
+Now you can call `this.showLoinError()` in any place of this page (i.e. in methods, or whatever).
+
+You also can call `.success()`, `.error()` and other methods directly (for example in JavaScript files):
+
+some.js:
+
+```JS
+  import VueNotifications from 'vue-notifications'
+  VueNotifications.error({message: 'Some Error'})
+```
+
+###ROADMAP:
+
+1. Add native support for `computed` properties.
+
+##Options
 
 [1]: https://github.com/se-panfilov/vue-notifications/releases
 [2]: https://github.com/se-panfilov/mini-toastr
