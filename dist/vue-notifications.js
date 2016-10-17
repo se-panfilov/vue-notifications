@@ -74,6 +74,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var PACKAGE_NAME = 'vue-notifications';
 	var PROPERTY_NAME = 'notifications';
 
+	// TODO (S.Panfilov) add merge config
+	// TODO (S.Panfilov) add default config init (check)
+	// TODO (S.Panfilov)notification config have to be merged with default
+
 	var TYPE = {
 	  error: 'error',
 	  warn: 'warn',

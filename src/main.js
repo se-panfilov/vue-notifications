@@ -4,6 +4,10 @@ const PLUGIN_NAME = 'VueNotifications'
 const PACKAGE_NAME = 'vue-notifications'
 const PROPERTY_NAME = 'notifications'
 
+// TODO (S.Panfilov) add merge config
+// TODO (S.Panfilov) add default config init (check)
+// TODO (S.Panfilov)notification config have to be merged with default
+
 const TYPE = {
   error: 'error',
   warn: 'warn',
