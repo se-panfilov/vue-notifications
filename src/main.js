@@ -58,7 +58,7 @@ function showMessage (config, options) {
   const method = options[config.type] || showDefaultMessage
   method(config)
 
-  if (config.cb) config.cb()
+  if (config.cb) return config.cb()
 }
 
 const VueNotifications = {
@@ -81,12 +81,9 @@ const VueNotifications = {
 
     /**
      * @param  {Object} notifications
-     * @param  {Object} options
      */
-    function _initVueNotificationPlugin (notifications, options) {
+    function _initVueNotificationPlugin (notifications) {
       if (!notifications) return
-      // TODO (S.Panfilov)fix this - ability to setup default config
-      // if (options) VueNotifications.config = options
       Object.keys(notifications).forEach(setMethod.bind(this))
 
       this.$emit(`${PACKAGE_NAME}-initiated`)
@@ -111,18 +108,19 @@ const VueNotifications = {
         Object.assign(newConfig, this.$options[PROPERTY_NAME][configName])
         Object.assign(newConfig, config)
 
-        showMessage(newConfig, options)
+        return showMessage(newConfig, options)
       }
     }
 
     /**
      * @param {Object} type
+     * @return {undefined}
      * */
     function addProtoMethods (type) {
       Object.keys(type).forEach(v => {
         VueNotifications[type[v]] = function (config) {
           config.type = type[v]
-          showMessage(config, options)
+          return showMessage(config, options)
         }
       })
     }
@@ -134,7 +132,7 @@ const VueNotifications = {
     if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate'
 
     mixin[hook] = function () {
-      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME], this.$options)
+      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME])
     }
 
     Vue.mixin(mixin)

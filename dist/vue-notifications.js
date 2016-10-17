@@ -137,7 +137,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var method = options[config.type] || showDefaultMessage;
 	  method(config);
 
-	  if (config.cb) config.cb();
+	  if (config.cb) return config.cb();
 	}
 
 	var VueNotifications = {
@@ -162,12 +162,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * @param  {Object} notifications
-	     * @param  {Object} options
 	     */
-	    function _initVueNotificationPlugin(notifications, options) {
+	    function _initVueNotificationPlugin(notifications) {
 	      if (!notifications) return;
-	      // TODO (S.Panfilov)fix this - ability to setup default config
-	      // if (options) VueNotifications.config = options
 	      (0, _keys2['default'])(notifications).forEach(setMethod.bind(this));
 
 	      this.$emit(PACKAGE_NAME + '-initiated');
@@ -192,18 +189,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        (0, _assign2['default'])(newConfig, this.$options[PROPERTY_NAME][configName]);
 	        (0, _assign2['default'])(newConfig, config);
 
-	        showMessage(newConfig, options);
+	        return showMessage(newConfig, options);
 	      };
 	    }
 
 	    /**
 	     * @param {Object} type
+	     * @return {undefined}
 	     * */
 	    function addProtoMethods(type) {
 	      (0, _keys2['default'])(type).forEach(function (v) {
 	        VueNotifications[type[v]] = function (config) {
 	          config.type = type[v];
-	          showMessage(config, options);
+	          return showMessage(config, options);
 	        };
 	      });
 	    }
@@ -215,7 +213,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate';
 
 	    mixin[hook] = function () {
-	      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME], this.$options);
+	      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME]);
 	    };
 
 	    Vue.mixin(mixin);
