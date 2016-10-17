@@ -1,6 +1,6 @@
 {
   "name": "vue-notifications",
-  "version": "0.0.5",
+  "version": "0.5.0",
   "description": "Vuejs notifications",
   "main": "dist/vue-notifications.js",
   "scripts": {
