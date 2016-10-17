@@ -61,13 +61,12 @@ function showMessage (config, options) {
   if (config.cb) config.cb()
 }
 
-const defaultConfig = {
-  type: TYPE.info,
-  timeOut: 3000
-}
-
 const VueNotifications = {
   type: TYPE,
+  config: {
+    type: TYPE.info,
+    timeout: 3000
+  },
   installed: false,
   /**
    * Plugin | vue-notifications
@@ -82,9 +81,12 @@ const VueNotifications = {
 
     /**
      * @param  {Object} notifications
+     * @param  {Object} options
      */
-    function _initVueNotificationPlugin (notifications) {
+    function _initVueNotificationPlugin (notifications, options) {
       if (!notifications) return
+      // TODO (S.Panfilov)fix this - ability to setup default config
+      // if (options) VueNotifications.config = options
       Object.keys(notifications).forEach(setMethod.bind(this))
 
       this.$emit(`${PACKAGE_NAME}-initiated`)
@@ -105,9 +107,10 @@ const VueNotifications = {
     function makeMethod (configName) {
       return function (config) {
         const newConfig = {}
-        Object.assign(newConfig, defaultConfig)
+        Object.assign(newConfig, VueNotifications.config)
         Object.assign(newConfig, this.$options[PROPERTY_NAME][configName])
         Object.assign(newConfig, config)
+
         showMessage(newConfig, options)
       }
     }
@@ -131,7 +134,7 @@ const VueNotifications = {
     if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate'
 
     mixin[hook] = function () {
-      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME])
+      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME], this.$options)
     }
 
     Vue.mixin(mixin)

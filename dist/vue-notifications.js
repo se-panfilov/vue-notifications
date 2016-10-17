@@ -140,13 +140,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (config.cb) config.cb();
 	}
 
-	var defaultConfig = {
-	  type: TYPE.info,
-	  timeOut: 3000
-	};
-
 	var VueNotifications = {
 	  type: TYPE,
+	  config: {
+	    type: TYPE.info,
+	    timeout: 3000
+	  },
 	  installed: false,
 	  /**
 	   * Plugin | vue-notifications
@@ -163,9 +162,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * @param  {Object} notifications
+	     * @param  {Object} options
 	     */
-	    function _initVueNotificationPlugin(notifications) {
+	    function _initVueNotificationPlugin(notifications, options) {
 	      if (!notifications) return;
+	      // TODO (S.Panfilov)fix this - ability to setup default config
+	      // if (options) VueNotifications.config = options
 	      (0, _keys2['default'])(notifications).forEach(setMethod.bind(this));
 
 	      this.$emit(PACKAGE_NAME + '-initiated');
@@ -186,9 +188,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function makeMethod(configName) {
 	      return function (config) {
 	        var newConfig = {};
-	        (0, _assign2['default'])(newConfig, defaultConfig);
+	        (0, _assign2['default'])(newConfig, VueNotifications.config);
 	        (0, _assign2['default'])(newConfig, this.$options[PROPERTY_NAME][configName]);
 	        (0, _assign2['default'])(newConfig, config);
+
 	        showMessage(newConfig, options);
 	      };
 	    }
@@ -212,7 +215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate';
 
 	    mixin[hook] = function () {
-	      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME]);
+	      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME], this.$options);
 	    };
 
 	    Vue.mixin(mixin);
