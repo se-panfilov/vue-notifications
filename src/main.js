@@ -4,10 +4,6 @@ const PLUGIN_NAME = 'VueNotifications'
 const PACKAGE_NAME = 'vue-notifications'
 const PROPERTY_NAME = 'notifications'
 
-// TODO (S.Panfilov) add merge config
-// TODO (S.Panfilov) add default config init (check)
-// TODO (S.Panfilov)notification config have to be merged with default
-
 const TYPE = {
   error: 'error',
   warn: 'warn',
@@ -39,16 +35,17 @@ function getVersion (Vue) {
 }
 
 /**
- * @param  {Object} config
+ * @param  {String} type
+ * @param  {String} message
+ * @param  {String} title
+ * @param  {String} debugMsg
  */
-function showDefaultMessage (config) {
-  let msg = `Message: ${config.message}`
-  msg = (config.title) ? `Title: ${config.title}, ` + msg : msg
-  msg = (config.debugMsg) ? `DebugMsg: ${config.debugMsg}, ` + msg : msg
+function showDefaultMessage ({ type, message, title, debugMsg }) {
+  let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}`
 
-  if (config.type === TYPE.error) return console.error(msg)
-  if (config.type === TYPE.warn) return console.warn(msg)
-  if (config.type === TYPE.success) return console.info(msg)
+  if (type === TYPE.error) return console.error(msg)
+  if (type === TYPE.warn) return console.warn(msg)
+  if (type === TYPE.success) return console.info(msg)
 
   return console.log(msg)
 }
@@ -62,6 +59,11 @@ function showMessage (config, options) {
   method(config)
 
   if (config.cb) config.cb()
+}
+
+const defaultConfig = {
+  type: TYPE.info,
+  timeOut: 3000
 }
 
 const VueNotifications = {
@@ -83,7 +85,6 @@ const VueNotifications = {
      */
     function _initVueNotificationPlugin (notifications) {
       if (!notifications) return
-
       Object.keys(notifications).forEach(setMethod.bind(this))
 
       this.$emit(`${PACKAGE_NAME}-initiated`)
@@ -103,16 +104,21 @@ const VueNotifications = {
      */
     function makeMethod (configName) {
       return function (config) {
-        // TODO (S.Panfilov) add merge method
-        config = config || this.$options[PROPERTY_NAME][configName]
-        showMessage(config, options)
+        const newConfig = {}
+        Object.assign(newConfig, defaultConfig)
+        Object.assign(newConfig, this.$options[PROPERTY_NAME][configName])
+        Object.assign(newConfig, config)
+        showMessage(newConfig, options)
       }
     }
 
-    function addProtoMethods () {
-      Object.keys(TYPE).forEach(v => {
-        VueNotifications[TYPE[v]] = function (config) {
-          config.type = TYPE[v]
+    /**
+     * @param {Object} type
+     * */
+    function addProtoMethods (type) {
+      Object.keys(type).forEach(v => {
+        VueNotifications[type[v]] = function (config) {
+          config.type = type[v]
           showMessage(config, options)
         }
       })
@@ -129,7 +135,7 @@ const VueNotifications = {
     }
 
     Vue.mixin(mixin)
-    addProtoMethods()
+    addProtoMethods(TYPE)
 
     this.installed = true
   }
