@@ -146,11 +146,6 @@ Keep in mind that configs merging by `Object.assign` (no deep copying).
 | `timeout`  | `Number`  |  `3000` |  time before notifications gone | 
 | `cb`  |  `Function` | `undefined` |  Callback function; |
 
- - `title` - `String`, default `undefined`: Notification's title;
- - `message` - `String`, default `undefined`: Notification's body message. Normally should be set up;
- - `timeout` - `Number`, default `3000`: time before notifications gone;
- -  `cb` - `Function`, defuault: `undefined`: CallBack function;
-
 ####How to add custom field?
 
 Simple: `this.showLoinError({consoleMessage: 'let it be in console'})`. You've passed a custom config here (`{consoleMessage: 'let it be in console'}`) that will be merged with config from `notifications.showLoinError` and with `global config` via `Object.assign` (beware of shallow copy).
