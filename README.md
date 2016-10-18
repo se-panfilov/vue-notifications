@@ -1,3 +1,14 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/874e7dce623149e18807bdc0a02671c2)](https://www.codacy.com/app/se-panfilov/vue-notifications)
+[![bitHound Overall Score](https://www.bithound.io/github/se-panfilov/vue-notifications/badges/score.svg)](https://www.bithound.io/github/se-panfilov/vue-notifications) [![bitHound Code](https://www.bithound.io/github/se-panfilov/vue-notifications/badges/code.svg)](https://www.bithound.io/github/se-panfilov/vue-notifications)
+[![Code Climate](https://codeclimate.com/github/se-panfilov/vue-notifications/badges/gpa.svg)](https://codeclimate.com/github/se-panfilov/vue-notifications)
+[![Build Status](https://travis-ci.org/se-panfilov/vue-notifications.svg?branch=master)](https://travis-ci.org/se-panfilov/vue-notifications)
+[![Bower version](https://badge.fury.io/bo/vue-notifications.svg)](http://badge.fury.io/bo/vue-notifications)
+[![npm version](https://badge.fury.io/js/vue-notifications.svg)](http://badge.fury.io/js/vue-notifications)
+[![devDependency Status](https://david-dm.org/se-panfilov/vue-notifications/dev-status.svg)](https://david-dm.org/se-panfilov/vue-notifications#info=devDependencies)
+[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE)
+
+[![NPM](https://nodei.co/npm/vue-notifications.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/vue-notifications/)
+
 # vue-notifications
 
 **VueNotifications** - agnostic non-blocking notifications library, that allow you to use notifications in declaration style.
