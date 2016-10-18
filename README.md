@@ -95,7 +95,7 @@ export default {
       showLoinError: {
         title: 'Login Failed',
         message: 'Failed to authenticate',
-        type: 'error'
+        type: 'error' //Default: 'info', also you can use VueNotifications.type.error instead of 'error'
       }
     },
     vuex: {
@@ -134,7 +134,7 @@ As other option, you can specify as much custom fields as you want in `notificat
     notifications: {
       showLoinError: {
         message: 'Failed to authenticate',
-        type: 'error',
+        type: 'error', //Also you can use VueNotifications.type.error instead of 'error'
         consoleMessage: 'let it be in console',
         consoleMessage2: 'let it be in console too',
         //etc
@@ -166,6 +166,31 @@ Vue.use(VueNotifications, options)
 1. Add native support for `computed` properties.
 
 ##Options
+
+
+##License
+
+MIT License
+
+Copyright (c) 2016 Sergey Panfilov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 [1]: https://github.com/se-panfilov/vue-notifications/releases
 [2]: https://github.com/se-panfilov/mini-toastr
