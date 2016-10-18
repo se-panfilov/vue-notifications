@@ -161,12 +161,13 @@ const options = {
 Vue.use(VueNotifications, options)
 ```
 
+##Browser support.
+Not tested atm. But all modern at least.
+You can use `ES5` or `ES6` versions as well. 
+
 ###ROADMAP:
 
 1. Add native support for `computed` properties.
-
-##Options
-
 
 ##License
 
