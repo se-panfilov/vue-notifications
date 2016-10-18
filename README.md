@@ -77,7 +77,7 @@ Vue.use(VueNotifications, options)
 
 ##Usage
 
-You've got to specify notification config:
+You've got to specify notifications config:
 
 ```JS
 export default {
@@ -107,11 +107,29 @@ Now you can call `this.showLoinError()` in any place of this page (i.e. in metho
 
 You also can call `.success()`, `.error()` and other methods directly (for example in JavaScript files):
 
-some.js:
+In `some.js`:
 
 ```JS
   import VueNotifications from 'vue-notifications'
   VueNotifications.error({message: 'Some Error'})
+```
+####Overriding config.
+
+Even if you have specify config, you can ovverride it in any call simple by sending config object: `this.showLoinError({type: 'warn'})`. i.e.:
+
+```JS
+ notifications: {
+      showLoinError: {
+        message: 'Failed to authenticate',
+        type: 'error'
+      }
+    }
+
+this.showLoinError() //error message
+this.showLoinError({type: 'warn'}) //info message
+
+//Also you can send here whatever params. All would be passed down to `mini-toastr` or any other lib.
+Keep in mind that configs merging by `Object.assign` (no deep copying).
 ```
 
 ##Options
