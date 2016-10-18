@@ -1,3 +1,12 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/874e7dce623149e18807bdc0a02671c2)](https://www.codacy.com/app/se-panfilov/vue-notifications)
+[![bitHound Overall Score](https://www.bithound.io/github/se-panfilov/vue-notifications/badges/score.svg)](https://www.bithound.io/github/se-panfilov/vue-notifications) [![bitHound Code](https://www.bithound.io/github/se-panfilov/vue-notifications/badges/code.svg)](https://www.bithound.io/github/se-panfilov/vue-notifications)
+[![Code Climate](https://codeclimate.com/github/se-panfilov/vue-notifications/badges/gpa.svg)](https://codeclimate.com/github/se-panfilov/vue-notifications)
+[![Build Status](https://travis-ci.org/se-panfilov/vue-notifications.svg?branch=master)](https://travis-ci.org/se-panfilov/vue-notifications)
+[![devDependency Status](https://david-dm.org/se-panfilov/vue-notifications/dev-status.svg)](https://david-dm.org/se-panfilov/vue-notifications#info=devDependencies)
+[![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE)
+
+[![NPM](https://nodei.co/npm/vue-notifications.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/vue-notifications/)
+
 # vue-notifications
 
 **VueNotifications** - agnostic non-blocking notifications library, that allow you to use notifications in declaration style.
@@ -44,7 +53,9 @@ function toast ({title, message, type, timeout, cb}) {
   return miniToastr[type](message, title, timeout, cb)
 }
 
-//Binding for methods .success(), .error() and etc. You can specify and map your own methods here
+//Binding for methods .success(), .error() and etc. You can specify and map your own methods here.
+//Required to pipe our outout to UI library (mini-toastr in example here)
+//All not-specifyed events (types) would be piped to output in console.
 const options = {
   success: toast,
   error: toast,
@@ -53,17 +64,18 @@ const options = {
 }
 
 //Activate plugin
-Vue.use(VueNotifications, options)
+Vue.use(VueNotifications, options)// VueNotifications have auto install but if we want to specify options we've got to do it manually.
+```
 
-
-///----
-//and if you would use miniToastr you have to init in in your App.vue
-import miniToastr from 'mini-toastr'
+```JS
+//THIS ISN'T REQUIRED IF YOU DON'T USE 'mini-toastr'
+//and if you would use "miniToastr" you have to init in in your App.vue
+import miniToastr from 'mini-toastr'// don't forget to make "npm i mini-toastr --save"
 
 //in 'ready section
 //  ...
     ready () {
-      miniToastr.init(miniToastrConfig)//'miniToastrConfig' is optionl here
+      miniToastr.init()//or "miniToastr.init(miniToastrConfig)" if you want to specify configuration
     },
 //  ...
 ```
@@ -77,7 +89,7 @@ Vue.use(VueNotifications, options)
 
 ##Usage
 
-You've got to specify notification config:
+You've got to specify notifications config:
 
 ```JS
 export default {
@@ -95,7 +107,7 @@ export default {
       showLoinError: {
         title: 'Login Failed',
         message: 'Failed to authenticate',
-        type: 'error'
+        type: 'error' //Default: 'info', also you can use VueNotifications.type.error instead of 'error'
       }
     },
     vuex: {
@@ -107,21 +119,41 @@ Now you can call `this.showLoinError()` in any place of this page (i.e. in metho
 
 You also can call `.success()`, `.error()` and other methods directly (for example in JavaScript files):
 
-some.js:
+In `some.js`:
 
 ```JS
   import VueNotifications from 'vue-notifications'
   VueNotifications.error({message: 'Some Error'})
+```
+####Overriding config.
+
+Even if you have specify config, you can ovverride it in any call simple by sending config object: `this.showLoinError({type: 'warn'})`. i.e.:
+
+```JS
+ notifications: {
+      showLoinError: {
+        message: 'Failed to authenticate',
+        type: 'error'
+      }
+    }
+
+this.showLoinError() //error message
+this.showLoinError({type: 'warn'}) //info message
+
+//Also you can send here whatever params. All would be passed down to `mini-toastr` or any other lib.
+Keep in mind that configs merging by `Object.assign` (no deep copying).
 ```
 
 ##Options
 
 **VueNotification** can work fine with any of your custom options, but by default it would be:
 
- - `title` - `String`, default `undefined`: Notification's title;
- - `message` - `String`, default `undefined`: Notification's body message. Normally should be set up;
- - `timeout` - `Number`, default `3000`: time before notifications gone;
- -  `cb` - `Function`, defuault: `undefined`: CallBack function;
+| Name  | Type |  Default |  Description |
+|---|---|---|---|
+| `title`  | `String`  | `undefined`  |  Notification's title |
+| `message`  | `String`  |  `undefined` | Notification's body message. Normally should be set up;  |
+| `timeout`  | `Number`  |  `3000` |  time before notifications gone | 
+| `cb`  |  `Function` | `undefined` |  Callback function; |
 
 ####How to add custom field?
 
@@ -134,7 +166,7 @@ As other option, you can specify as much custom fields as you want in `notificat
     notifications: {
       showLoinError: {
         message: 'Failed to authenticate',
-        type: 'error',
+        type: 'error', //Also you can use VueNotifications.type.error instead of 'error'
         consoleMessage: 'let it be in console',
         consoleMessage2: 'let it be in console too',
         //etc
@@ -161,11 +193,37 @@ const options = {
 Vue.use(VueNotifications, options)
 ```
 
+##Browser support.
+Not tested atm. But all modern at least.
+You can use `ES5` or `ES6` versions as well. 
+
 ###ROADMAP:
 
 1. Add native support for `computed` properties.
 
-##Options
+##License
+
+MIT License
+
+Copyright (c) 2016 Sergey Panfilov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 [1]: https://github.com/se-panfilov/vue-notifications/releases
 [2]: https://github.com/se-panfilov/mini-toastr
