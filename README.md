@@ -54,9 +54,9 @@ const options = {
 
 //Activate plugin
 Vue.use(VueNotifications, options)
+```
 
-
-///----
+```JS
 //and if you would use miniToastr you have to init in in your App.vue
 import miniToastr from 'mini-toastr'
 
