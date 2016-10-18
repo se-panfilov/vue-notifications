@@ -44,7 +44,9 @@ function toast ({title, message, type, timeout, cb}) {
   return miniToastr[type](message, title, timeout, cb)
 }
 
-//Binding for methods .success(), .error() and etc. You can specify and map your own methods here
+//Binding for methods .success(), .error() and etc. You can specify and map your own methods here.
+//Required to pipe our outout to UI library (mini-toastr in example here)
+//All not-specifyed events (types) would be piped to output in console.
 const options = {
   success: toast,
   error: toast,
@@ -53,17 +55,18 @@ const options = {
 }
 
 //Activate plugin
-Vue.use(VueNotifications, options)
+Vue.use(VueNotifications, options)// VueNotifications have auto install but if we want to specify options we've got to do it manually.
 ```
 
 ```JS
-//and if you would use miniToastr you have to init in in your App.vue
-import miniToastr from 'mini-toastr'
+//THIS ISN'T REQUIRED IF YOU DON'T USE 'mini-toastr'
+//and if you would use "miniToastr" you have to init in in your App.vue
+import miniToastr from 'mini-toastr'// don't forget to make "npm i mini-toastr --save"
 
 //in 'ready section
 //  ...
     ready () {
-      miniToastr.init(miniToastrConfig)//'miniToastrConfig' is optionl here
+      miniToastr.init()//or "miniToastr.init(miniToastrConfig)" if you want to specify configuration
     },
 //  ...
 ```
