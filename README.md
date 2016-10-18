@@ -2,8 +2,6 @@
 [![bitHound Overall Score](https://www.bithound.io/github/se-panfilov/vue-notifications/badges/score.svg)](https://www.bithound.io/github/se-panfilov/vue-notifications) [![bitHound Code](https://www.bithound.io/github/se-panfilov/vue-notifications/badges/code.svg)](https://www.bithound.io/github/se-panfilov/vue-notifications)
 [![Code Climate](https://codeclimate.com/github/se-panfilov/vue-notifications/badges/gpa.svg)](https://codeclimate.com/github/se-panfilov/vue-notifications)
 [![Build Status](https://travis-ci.org/se-panfilov/vue-notifications.svg?branch=master)](https://travis-ci.org/se-panfilov/vue-notifications)
-[![Bower version](https://badge.fury.io/bo/vue-notifications.svg)](http://badge.fury.io/bo/vue-notifications)
-[![npm version](https://badge.fury.io/js/vue-notifications.svg)](http://badge.fury.io/js/vue-notifications)
 [![devDependency Status](https://david-dm.org/se-panfilov/vue-notifications/dev-status.svg)](https://david-dm.org/se-panfilov/vue-notifications#info=devDependencies)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE)
 
