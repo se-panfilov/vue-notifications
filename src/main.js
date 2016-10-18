@@ -62,13 +62,13 @@ function showMessage (config, options) {
 }
 
 /**
- * @param {Object} type
+ * @param {Object} typesObj
  * @return {undefined}
  * */
-function addProtoMethods (type) {
-  Object.keys(type).forEach(v => {
-    VueNotifications[type[v]] = function (config) {
-      config.type = type[v]
+function addProtoMethods (typesObj) {
+  Object.keys(typesObj).forEach(v => {
+    VueNotifications[typesObj[v]] = function (config) {
+      config.type = typesObj[v]
       return showMessage(config, options)
     }
   })
@@ -146,4 +146,18 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueNotifications)
 }
 
+
+/*START.TESTS_ONLY*/
+VueNotifications._private = {
+  addProtoMethods: addProtoMethods,
+  showDefaultMessage: showDefaultMessage,
+  getVersion: getVersion,
+  showMessage: showMessage
+};
+/*END.TESTS_ONLY*/
+
 export default VueNotifications
+
+/*START.TESTS_ONLY*/;
+// return VueNotifications;
+/*END.TESTS_ONLY*/

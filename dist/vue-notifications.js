@@ -141,13 +141,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
-	 * @param {Object} type
+	 * @param {Object} typesObj
 	 * @return {undefined}
 	 * */
-	function addProtoMethods(type) {
-	  (0, _keys2['default'])(type).forEach(function (v) {
-	    VueNotifications[type[v]] = function (config) {
-	      config.type = type[v];
+	function addProtoMethods(typesObj) {
+	  (0, _keys2['default'])(typesObj).forEach(function (v) {
+	    VueNotifications[typesObj[v]] = function (config) {
+	      config.type = typesObj[v];
 	      return showMessage(config, options);
 	    };
 	  });
@@ -227,7 +227,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  window.Vue.use(VueNotifications);
 	}
 
-	exports['default'] = VueNotifications;
+	/*START.TESTS_ONLY*/
+	VueNotifications._private = {
+	  addProtoMethods: addProtoMethods,
+	  showDefaultMessage: showDefaultMessage,
+	  getVersion: getVersion,
+	  showMessage: showMessage
+	};
+	/*END.TESTS_ONLY*/
+
+	exports['default'] = VueNotifications
+
+	/*START.TESTS_ONLY*/;
+	// return VueNotifications;
+	/*END.TESTS_ONLY*/
 
 /***/ },
 /* 1 */

@@ -18,6 +18,7 @@ const fs = require("fs");
 const path = require("path");
 const webpack = require('webpack-stream');
 const to = require('to-case')
+const stripCode = require('gulp-strip-code');
 
 gulp.task('js', () => {
   return gulp.src('./src/main.js')
@@ -35,6 +36,10 @@ gulp.task('js', () => {
   //   .pipe(babel({presets: ['babili']}))
   //   .pipe(rename({ basename: `${config.projectName}.es6.min` }))
   //   .pipe(gulp.dest(config.dest))
+    .pipe(stripCode({
+      start_comment: "START.TESTS_ONLY",
+      end_comment: "END.TESTS_ONLY"
+    }))
     .pipe(webpack(require('../webpack.config.js')))
     .pipe(rename({ basename: config.projectName }))
     .pipe(gulp.dest(config.dest))
