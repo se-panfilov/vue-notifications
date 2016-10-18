@@ -139,6 +139,13 @@ Keep in mind that configs merging by `Object.assign` (no deep copying).
 
 **VueNotification** can work fine with any of your custom options, but by default it would be:
 
+| Name  | Type |  Default |  Description |
+|---|---|---|---|
+| `title`  | `String`  | `undefined`  |  Notification's title |
+| `message`  | `String`  |  `undefined` | Notification's body message. Normally should be set up;  |
+| `timeout`  | `Number`  |  `3000` |  time before notifications gone | 
+| `cb`  |  `Function` | `undefined` |  Callback function; |
+
  - `title` - `String`, default `undefined`: Notification's title;
  - `message` - `String`, default `undefined`: Notification's body message. Normally should be set up;
  - `timeout` - `Number`, default `3000`: time before notifications gone;
