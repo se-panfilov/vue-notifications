@@ -77,6 +77,33 @@ function addProtoMethods (targetObj, typesObj) {
   })
 }
 
+/**
+ * @param  {String} name
+ * @param  {Object} options
+ * @param  {Object} pluginOptions
+ */
+function setMethod (name, options, pluginOptions) {
+  if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
+  options.methods[name] = makeMethod(name, options, pluginOptions)
+}
+
+/**
+ * @param  {String} configName
+ * @param  {Object} options
+ * @param  {Object} pluginOptions
+ * @return {Function}
+ */
+function makeMethod (configName, options, pluginOptions) {
+  return function (config) {
+    const newConfig = {}
+    Object.assign(newConfig, VueNotifications.config)
+    Object.assign(newConfig, options[PROPERTY_NAME][configName])
+    Object.assign(newConfig, config)
+
+    return showMessage(newConfig, pluginOptions)
+  }
+}
+
 const VueNotifications = {
   type: TYPE,
   config: {
@@ -87,10 +114,10 @@ const VueNotifications = {
   /**
    * Plugin | vue-notifications
    * @param  {Function} Vue
-   * @param  {Object} options
+   * @param  {Object} pluginOptions
    * @this VueNotifications
    */
-  install (Vue, options = {}) {
+  install (Vue, pluginOptions = {}) {
     override(Vue, PROPERTY_NAME)
 
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
@@ -100,32 +127,11 @@ const VueNotifications = {
      */
     function _initVueNotificationPlugin (notifications) {
       if (!notifications) return
-      Object.keys(notifications).forEach(setMethod.bind(this))
+      Object.keys(notifications).forEach(name => {
+        setMethod(name, this.$options, pluginOptions)
+      })
 
       this.$emit(`${PACKAGE_NAME}-initiated`)
-    }
-
-    /**
-     * @param  {String} name
-     */
-    function setMethod (name) {
-      if (this.$options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
-      this.$options.methods[name] = makeMethod(name)
-    }
-
-    /**
-     * @param  {String} configName
-     * @return {Function}
-     */
-    function makeMethod (configName) {
-      return function (config) {
-        const newConfig = {}
-        Object.assign(newConfig, VueNotifications.config)
-        Object.assign(newConfig, this.$options[PROPERTY_NAME][configName])
-        Object.assign(newConfig, config)
-
-        return showMessage(newConfig, options)
-      }
     }
 
     const mixin = {}
@@ -161,12 +167,9 @@ VueNotifications._private = {
   addProtoMethods: addProtoMethods,
   showDefaultMessage: showDefaultMessage,
   getVersion: getVersion,
-  showMessage: showMessage
+  showMessage: showMessage,
+  showMessasetMethodge: setMethod
 };
 /*END.TESTS_ONLY*/
 
 export default VueNotifications
-
-/*START.TESTS_ONLY*/;
-// return VueNotifications;
-/*END.TESTS_ONLY*/

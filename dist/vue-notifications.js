@@ -113,6 +113,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {String} message
 	 * @param  {String} title
 	 * @param  {String} debugMsg
+	 * @return  {String}
 	 */
 	function showDefaultMessage(_ref) {
 	  var type = _ref.type;
@@ -120,13 +121,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var title = _ref.title;
 	  var debugMsg = _ref.debugMsg;
 
-	  var msg = 'Title: ' + title + ', Message: ' + message + ', DebugMsg: ' + debugMsg;
+	  var msg = 'Title: ' + title + ', Message: ' + message + ', DebugMsg: ' + debugMsg + ', type: ' + type;
 
-	  if (type === TYPE.error) return console.error(msg);
-	  if (type === TYPE.warn) return console.warn(msg);
-	  if (type === TYPE.success) return console.info(msg);
+	  if (type === TYPE.error) console.error(msg);else if (type === TYPE.warn) console.warn(msg);else if (type === TYPE.success) console.info(msg);else console.log(msg);
 
-	  console.log(msg);
 	  return msg;
 	}
 
@@ -135,7 +133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {Object} options
 	 */
 	function showMessage(config, options) {
-	  var method = options[config.type] || showDefaultMessage;
+	  var method = options && options[config.type] ? options[config.type] : showDefaultMessage;
 	  method(config);
 
 	  if (config.cb) return config.cb();
@@ -155,6 +153,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	}
 
+	/**
+	 * @param  {String} name
+	 * @param  {Object} options
+	 * @param  {Object} pluginOptions
+	 */
+	function setMethod(name, options, pluginOptions) {
+	  if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name);
+	  options.methods[name] = makeMethod(name, options, pluginOptions);
+	}
+
+	/**
+	 * @param  {String} configName
+	 * @param  {Object} options
+	 * @param  {Object} pluginOptions
+	 * @return {Function}
+	 */
+	function makeMethod(configName, options, pluginOptions) {
+	  return function (config) {
+	    var newConfig = {};
+	    (0, _assign2['default'])(newConfig, VueNotifications.config);
+	    (0, _assign2['default'])(newConfig, options[PROPERTY_NAME][configName]);
+	    (0, _assign2['default'])(newConfig, config);
+
+	    return showMessage(newConfig, pluginOptions);
+	  };
+	}
+
 	var VueNotifications = {
 	  type: TYPE,
 	  config: {
@@ -165,11 +190,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Plugin | vue-notifications
 	   * @param  {Function} Vue
-	   * @param  {Object} options
+	   * @param  {Object} pluginOptions
 	   * @this VueNotifications
 	   */
 	  install: function install(Vue) {
-	    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	    var pluginOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 	    (0, _override2['default'])(Vue, PROPERTY_NAME);
 
@@ -179,33 +204,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Object} notifications
 	     */
 	    function _initVueNotificationPlugin(notifications) {
+	      var _this = this;
+
 	      if (!notifications) return;
-	      (0, _keys2['default'])(notifications).forEach(setMethod.bind(this));
+	      (0, _keys2['default'])(notifications).forEach(function (name) {
+	        setMethod(name, _this.$options, pluginOptions);
+	      });
 
 	      this.$emit(PACKAGE_NAME + '-initiated');
-	    }
-
-	    /**
-	     * @param  {String} name
-	     */
-	    function setMethod(name) {
-	      if (this.$options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name);
-	      this.$options.methods[name] = makeMethod(name);
-	    }
-
-	    /**
-	     * @param  {String} configName
-	     * @return {Function}
-	     */
-	    function makeMethod(configName) {
-	      return function (config) {
-	        var newConfig = {};
-	        (0, _assign2['default'])(newConfig, VueNotifications.config);
-	        (0, _assign2['default'])(newConfig, this.$options[PROPERTY_NAME][configName]);
-	        (0, _assign2['default'])(newConfig, config);
-
-	        return showMessage(newConfig, options);
-	      };
 	    }
 
 	    var mixin = {};
@@ -230,8 +236,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 
-	exports['default'] = VueNotifications
-
+	exports['default'] = VueNotifications;
 
 /***/ },
 /* 1 */
