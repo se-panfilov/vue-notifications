@@ -31,14 +31,14 @@ or download [latest release][1]
 include in project:
 
 ```JS
-import VueNotifications from 'vue-notifications' 
+import VueNotifications from 'vue-notifications'
 ```
 
 ```JS
 Vue.use(VueNotifications, options)
 ```
 
-##Setup and configuraton
+##Setup and configuration
 
 **Attention:** By default VueNotification send all messages _to console_. To activate non-blocking notifiction you've got to use third-party library, like toasr. I suggest you to use [mini-toastr][2] (`npm i mini-toastr --save`)
 
@@ -84,6 +84,13 @@ If you want to setup VueNotification's global configuration, you can do it simpl
 
 ```JS
 VueNotifications.config.timeout = 4000
+Vue.use(VueNotifications, options)
+```
+
+Also you can use any other word instead of `notifications` for configs:
+
+```JS
+VueNotifications.propertyName = 'messages'
 Vue.use(VueNotifications, options)
 ```
 
@@ -152,7 +159,7 @@ Keep in mind that configs merging by `Object.assign` (no deep copying).
 |---|---|---|---|
 | `title`  | `String`  | `undefined`  |  Notification's title |
 | `message`  | `String`  |  `undefined` | Notification's body message. Normally should be set up;  |
-| `timeout`  | `Number`  |  `3000` |  time before notifications gone | 
+| `timeout`  | `Number`  |  `3000` |  time before notifications gone |
 | `cb`  |  `Function` | `undefined` |  Callback function; |
 
 ####How to add custom field?
@@ -195,7 +202,7 @@ Vue.use(VueNotifications, options)
 
 ##Browser support.
 Not tested atm. But all modern at least.
-You can use `ES5` or `ES6` versions as well. 
+You can use `ES5` or `ES6` versions as well.
 
 ###ROADMAP:
 
