@@ -232,6 +232,47 @@ describe('Main.', () => {
 
     })
 
+    describe('makeMethod.', () => {
+
+      it('happy path.', () => {
+        const configName = 'someName'
+
+        const config = {
+          val2: 'val2'
+        }
+
+        const options = {
+          [main.default.propertyName]: {
+            [configName]: {
+              val1: 'val1'
+            }
+          }
+        }
+
+        const pluginOptions = {}
+
+        const VueNotificationsConfig = main.default.config
+        const optionsConfig = options[main.default.propertyName][configName]
+
+        const expectedObj = {}
+        Object.assign(expectedObj, VueNotificationsConfig)
+        Object.assign(expectedObj, optionsConfig)
+        Object.assign(expectedObj, config)
+
+        sinon.spy(_private, 'showMessage')
+
+        const result = _private.makeMethod(configName, options, pluginOptions)
+        expect(result).to.be.a('function')
+        result(config)
+        // TODO (S.Panfilov) fix this test
+        // expect(_private.showMessage).to.be.calledWith(expectedObj, pluginOptions)
+
+        _private.showMessage.restore()
+      })
+
+
+    })
+
   })
 
 })
