@@ -9,10 +9,6 @@ const sinonChai = require('sinon-chai')
 
 chai.use(sinonChai)
 
-// beforeEach(() => {
-//
-// })
-
 describe('Main.', () => {
 
   describe('Check Private Methods.', () => {
@@ -51,7 +47,7 @@ describe('Main.', () => {
     describe('showDefaultMessages.', () => {
       const config = {}
 
-      beforeEach( () => {
+      beforeEach(() => {
         config.message = 'somemessage'
         config.title = 'sometitle'
         config.debugMsg = 'somedebugmsg'
@@ -137,6 +133,61 @@ describe('Main.', () => {
 
     })
 
+    describe('showMessage.', () => {
+
+      it('Config\'s function.', () => {
+
+        const config = {
+          type: 'error'
+        }
+
+        const options = {
+          error: function origin () {
+          }
+        }
+
+        sinon.spy(options, 'error')
+
+        const result = privateMethods.showMessage(config, options)
+        expect(result).to.be.undefined
+        expect(options.error).to.be.called
+
+        options.error.restore()
+      })
+
+      // it('Default function.', () => {
+      //
+      //   const config = {
+      //     type: 'error'
+      //   }
+      //
+      //   const options = {
+      //     error: null
+      //   }
+      //
+      //   sinon.spy(privateMethods, 'showDefaultMessage')
+      //
+      //   const result = privateMethods.showMessage(config, options)
+      //   expect(result).to.be.undefined
+      //   expect(privateMethods.showDefaultMessage).to.be.called
+      //
+      //   privateMethods.showDefaultMessage.restore()
+      // })
+
+      it('Callback showMessage.', () => {
+
+        const config = {
+          cb: function () {
+            return true
+          }
+        }
+
+        const result = privateMethods.showMessage(config)
+        expect(result).to.be.true
+
+      })
+
+    })
 
   })
 

@@ -39,6 +39,7 @@ function getVersion (Vue) {
  * @param  {String} message
  * @param  {String} title
  * @param  {String} debugMsg
+ * @return  {String}
  */
 function showDefaultMessage ({ type, message, title, debugMsg }) {
   let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}, type: ${type}`
@@ -56,7 +57,7 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
  * @param  {Object} options
  */
 function showMessage (config, options) {
-  const method = options[config.type] || showDefaultMessage
+  const method = (options && options[config.type]) ? options[config.type] : showDefaultMessage
   method(config)
 
   if (config.cb) return config.cb()
