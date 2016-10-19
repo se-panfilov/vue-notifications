@@ -49,27 +49,32 @@ describe('Main.', () => {
     })
 
     describe('showDefaultMessages.', () => {
-      beforeEach(function() {
+      const config = {}
+
+      beforeEach( () => {
+        config.message = 'somemessage'
+        config.title = 'sometitle'
+        config.debugMsg = 'somedebugmsg'
+        config.type = null
+
         sinon.spy(console, 'log')
         sinon.spy(console, 'error')
         sinon.spy(console, 'warn')
         sinon.spy(console, 'info')
       })
 
-      afterEach(function() {
+      afterEach(() => {
         console.log.restore()
+        console.error.restore()
+        console.warn.restore()
+        console.info.restore()
       })
 
-      it('Log message.', () => {
+      it('Random type to console.', () => {
 
-        const config = {
-          type: 'sometype',
-          message: 'somemessage',
-          title: 'sometitle',
-          debugMsg: 'somedebugmsg'
-        }
+        config.type = 'sometype'
 
-        const expectedMsg =`Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}`
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
         const result = privateMethods.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.be.called
@@ -77,6 +82,59 @@ describe('Main.', () => {
         expect(console.error).to.not.be.called
         expect(console.info).to.not.be.called
       })
+
+      it('Info type to console.', () => {
+
+        config.type = 'info'
+
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const result = privateMethods.showDefaultMessage(config)
+        expect(result).to.be.equal(expectedMsg)
+        expect(console.log).to.be.called
+        expect(console.warn).to.not.be.called
+        expect(console.error).to.not.be.called
+        expect(console.info).to.not.be.called
+      })
+
+      it('Error type to console.', () => {
+
+        config.type = 'error'
+
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const result = privateMethods.showDefaultMessage(config)
+        expect(result).to.be.equal(expectedMsg)
+        expect(console.log).to.not.be.called
+        expect(console.warn).to.not.be.called
+        expect(console.error).to.be.called
+        expect(console.info).to.not.be.called
+      })
+
+      it('Success type to console.', () => {
+
+        config.type = 'success'
+
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const result = privateMethods.showDefaultMessage(config)
+        expect(result).to.be.equal(expectedMsg)
+        expect(console.log).to.not.be.called
+        expect(console.warn).to.not.be.called
+        expect(console.error).to.not.be.called
+        expect(console.info).to.be.called
+      })
+
+      it('Warn type to console.', () => {
+
+        config.type = 'warn'
+
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const result = privateMethods.showDefaultMessage(config)
+        expect(result).to.be.equal(expectedMsg)
+        expect(console.log).to.not.be.called
+        expect(console.warn).to.be.called
+        expect(console.error).to.not.be.called
+        expect(console.info).to.not.be.called
+      })
+
     })
 
 

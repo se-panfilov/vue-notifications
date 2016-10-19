@@ -41,13 +41,13 @@ function getVersion (Vue) {
  * @param  {String} debugMsg
  */
 function showDefaultMessage ({ type, message, title, debugMsg }) {
-  let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}`
+  let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}, type: ${type}`
 
-  if (type === TYPE.error) return console.error(msg)
-  if (type === TYPE.warn) return console.warn(msg)
-  if (type === TYPE.success) return console.info(msg)
+  if (type === TYPE.error) console.error(msg)
+  else if (type === TYPE.warn) console.warn(msg)
+  else if (type === TYPE.success) console.info(msg)
+  else console.log(msg)
 
-  console.log(msg)
   return msg
 }
 
