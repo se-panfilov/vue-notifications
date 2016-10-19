@@ -4,7 +4,7 @@ const chai = require('chai')
 const expect = chai.expect
 const sinon = require('sinon')
 const main = require('../../src/main')
-const privateMethods = main.default._private
+const _private = main.default._private
 const sinonChai = require('sinon-chai')
 
 chai.use(sinonChai)
@@ -23,7 +23,7 @@ describe('Main.', () => {
       }
 
       expect(Object.keys(targetObj).length).to.be.equal(0)
-      const result = privateMethods.addProtoMethods(targetObj, typesObj)
+      const result = _private.addProtoMethods(targetObj, typesObj)
       expect(result).to.be.undefined
       expect(Object.keys(targetObj).length).to.be.equal(Object.keys(typesObj).length)
       expect(targetObj[typesObj.typeOne]).to.be.a('function')
@@ -37,7 +37,7 @@ describe('Main.', () => {
         version: '1.0.12'
       }
 
-      const result = privateMethods.getVersion(vue)
+      const result = _private.getVersion(vue)
       expect(result).to.be.a('object')
       expect(result.major).to.be.equal(1)
       expect(result.regular).to.be.equal(0)
@@ -71,7 +71,7 @@ describe('Main.', () => {
         config.type = 'sometype'
 
         const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
-        const result = privateMethods.showDefaultMessage(config)
+        const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.be.called
         expect(console.warn).to.not.be.called
@@ -84,7 +84,7 @@ describe('Main.', () => {
         config.type = 'info'
 
         const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
-        const result = privateMethods.showDefaultMessage(config)
+        const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.be.called
         expect(console.warn).to.not.be.called
@@ -97,7 +97,7 @@ describe('Main.', () => {
         config.type = 'error'
 
         const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
-        const result = privateMethods.showDefaultMessage(config)
+        const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.not.be.called
         expect(console.warn).to.not.be.called
@@ -110,7 +110,7 @@ describe('Main.', () => {
         config.type = 'success'
 
         const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
-        const result = privateMethods.showDefaultMessage(config)
+        const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.not.be.called
         expect(console.warn).to.not.be.called
@@ -123,7 +123,7 @@ describe('Main.', () => {
         config.type = 'warn'
 
         const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
-        const result = privateMethods.showDefaultMessage(config)
+        const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.not.be.called
         expect(console.warn).to.be.called
@@ -148,7 +148,7 @@ describe('Main.', () => {
 
         sinon.spy(options, 'error')
 
-        const result = privateMethods.showMessage(config, options)
+        const result = _private.showMessage(config, options)
         expect(result).to.be.undefined
         expect(options.error).to.be.called
 
@@ -165,13 +165,13 @@ describe('Main.', () => {
       //     error: null
       //   }
       //
-      //   sinon.spy(privateMethods, 'showDefaultMessage')
+      //   sinon.spy(_private, 'showDefaultMessage')
       //
-      //   const result = privateMethods.showMessage(config, options)
+      //   const result = _private.showMessage(config, options)
       //   expect(result).to.be.undefined
-      //   expect(privateMethods.showDefaultMessage).to.be.called
+      //   expect(_private.showDefaultMessage).to.be.called
       //
-      //   privateMethods.showDefaultMessage.restore()
+      //   _private.showDefaultMessage.restore()
       // })
 
       it('Callback showMessage.', () => {
@@ -182,9 +182,52 @@ describe('Main.', () => {
           }
         }
 
-        const result = privateMethods.showMessage(config)
+        const result = _private.showMessage(config)
         expect(result).to.be.true
 
+      })
+
+    })
+
+    describe('showMessage.', () => {
+
+      it('method already exist.', () => {
+        const name = 'someName'
+        const options = {
+          methods: {
+            someName: function () {
+            }
+          }
+        }
+        const pluginOptions = {}
+
+        const expectedMsg = _private.MESSAGES.methodNameConflict + name
+        sinon.spy(console, 'error')
+
+        _private.setMethod(name, options, pluginOptions)
+        expect(console.error).to.be.calledWith(expectedMsg)
+
+        console.error.restore()
+      })
+
+      it('method not exist.', () => {
+        const name = 'someName'
+        const options = {
+          methods: {
+          }
+        }
+        const pluginOptions = {}
+
+        const expectedMsg = _private.MESSAGES.methodNameConflict + name
+        sinon.spy(console, 'error')
+        sinon.spy(_private, 'makeMethod')
+
+        _private.setMethod(name, options, pluginOptions)
+        expect(console.error).to.not.be.called
+        expect(_private.makeMethod).to.not.be.calledWith(name, options, pluginOptions)
+
+        console.error.restore()
+        _private.makeMethod.restore()
       })
 
     })

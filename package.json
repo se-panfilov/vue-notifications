@@ -16,6 +16,9 @@
   },
   "keywords": [
     "vue",
+    "toastr",
+    "toast",
+    "non-blocking",
     "notifications",
     "vuejs",
     "vue.js",

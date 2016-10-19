@@ -160,10 +160,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param  {Object} pluginOptions
 	 */
 	function setMethod(name, options, pluginOptions) {
-	  // TODO (S.Panfilov)not sure - error or warn here
+	  // TODO (S.Panfilov) not sure - throw error here or just warn
 	  // if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
 	  if (options.methods[name]) {
-	    console.warn(MESSAGES.methodNameConflict + name);
+	    console.error(MESSAGES.methodNameConflict + name);
 	  } else {
 	    options.methods[name] = makeMethod(name, options, pluginOptions);
 	  }
