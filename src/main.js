@@ -66,10 +66,12 @@ function showMessage (config, options) {
 /**
  * @param {Object} targetObj
  * @param {Object} typesObj
+ * @param {Object} options
  * @return {undefined}
  * */
-function addProtoMethods (targetObj, typesObj) {
+function addProtoMethods (targetObj, typesObj, options) {
   Object.keys(typesObj).forEach(v => {
+    debugger
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v]
       return showMessage(config, options)
@@ -146,7 +148,7 @@ const VueNotifications = {
     }
 
     Vue.mixin(mixin)
-    addProtoMethods(this, TYPE)
+    addProtoMethods(this, this.type, pluginOptions)
 
     this.installed = true
   }
