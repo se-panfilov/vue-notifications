@@ -173,15 +173,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return function (config) {
 	    var newConfig = {};
 	    (0, _assign2['default'])(newConfig, VueNotifications.config);
-	    (0, _assign2['default'])(newConfig, options[PROPERTY_NAME][configName]);
+	    (0, _assign2['default'])(newConfig, options[VueNotifications.propertyName][configName]);
 	    (0, _assign2['default'])(newConfig, config);
 
 	    return showMessage(newConfig, pluginOptions);
 	  };
 	}
 
+	/**
+	 * @param  {Object} notifications
+	 * @param  {Object} pluginOptions
+	 */
+	function initVueNotificationPlugin(notifications, pluginOptions) {
+	  var _this = this;
+
+	  if (!notifications) return;
+	  (0, _keys2['default'])(notifications).forEach(function (name) {
+	    setMethod(name, _this.$options, pluginOptions);
+	  });
+
+	  this.$emit(PACKAGE_NAME + '-initiated');
+	}
+
 	var VueNotifications = {
 	  type: TYPE,
+	  propertyName: PROPERTY_NAME,
 	  config: {
 	    type: TYPE.info,
 	    timeout: 3000
@@ -196,32 +212,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  install: function install(Vue) {
 	    var pluginOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	    (0, _override2['default'])(Vue, PROPERTY_NAME);
-
-	    if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
-
-	    /**
-	     * @param  {Object} notifications
-	     */
-	    function _initVueNotificationPlugin(notifications) {
-	      var _this = this;
-
-	      if (!notifications) return;
-	      (0, _keys2['default'])(notifications).forEach(function (name) {
-	        setMethod(name, _this.$options, pluginOptions);
-	      });
-
-	      this.$emit(PACKAGE_NAME + '-initiated');
-	    }
-
 	    var mixin = {};
 	    var hook = void 0;
 
+	    (0, _override2['default'])(Vue, this.propertyName);
+
+	    if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
 	    if (getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init';
 	    if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate';
 
 	    mixin[hook] = function () {
-	      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME]);
+	      initVueNotificationPlugin.call(this, this.$options[VueNotifications.propertyName], pluginOptions);
 	    };
 
 	    Vue.mixin(mixin);

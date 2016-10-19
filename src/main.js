@@ -97,15 +97,29 @@ function makeMethod (configName, options, pluginOptions) {
   return function (config) {
     const newConfig = {}
     Object.assign(newConfig, VueNotifications.config)
-    Object.assign(newConfig, options[PROPERTY_NAME][configName])
+    Object.assign(newConfig, options[VueNotifications.propertyName][configName])
     Object.assign(newConfig, config)
 
     return showMessage(newConfig, pluginOptions)
   }
 }
 
+/**
+ * @param  {Object} notifications
+ * @param  {Object} pluginOptions
+ */
+function initVueNotificationPlugin (notifications, pluginOptions) {
+  if (!notifications) return
+  Object.keys(notifications).forEach(name => {
+    setMethod(name, this.$options, pluginOptions)
+  })
+
+  this.$emit(`${PACKAGE_NAME}-initiated`)
+}
+
 const VueNotifications = {
   type: TYPE,
+  propertyName: PROPERTY_NAME,
   config: {
     type: TYPE.info,
     timeout: 3000
@@ -118,30 +132,17 @@ const VueNotifications = {
    * @this VueNotifications
    */
   install (Vue, pluginOptions = {}) {
-    override(Vue, PROPERTY_NAME)
-
-    if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
-
-    /**
-     * @param  {Object} notifications
-     */
-    function _initVueNotificationPlugin (notifications) {
-      if (!notifications) return
-      Object.keys(notifications).forEach(name => {
-        setMethod(name, this.$options, pluginOptions)
-      })
-
-      this.$emit(`${PACKAGE_NAME}-initiated`)
-    }
-
     const mixin = {}
     let hook
 
+    override(Vue, this.propertyName)
+
+    if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
     if (getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init'
     if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate'
 
     mixin[hook] = function () {
-      _initVueNotificationPlugin.call(this, this.$options[PROPERTY_NAME])
+      initVueNotificationPlugin.call(this, this.$options[VueNotifications.propertyName], pluginOptions)
     }
 
     Vue.mixin(mixin)
@@ -158,17 +159,19 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 /*START.TESTS_ONLY*/
 VueNotifications._private = {
-  TYPE: TYPE,
-  PLUGIN_NAME: PLUGIN_NAME,
-  PACKAGE_NAME: PACKAGE_NAME,
-  PROPERTY_NAME: PROPERTY_NAME,
-  VUE_VERSION: VUE_VERSION,
-  MESSAGES: MESSAGES,
-  addProtoMethods: addProtoMethods,
-  showDefaultMessage: showDefaultMessage,
-  getVersion: getVersion,
-  showMessage: showMessage,
-  showMessasetMethodge: setMethod
+  TYPE,
+  PLUGIN_NAME,
+  PACKAGE_NAME,
+  PROPERTY_NAME,
+  VUE_VERSION,
+  MESSAGES,
+  addProtoMethods,
+  showDefaultMessage,
+  getVersion,
+  showMessage,
+  setMethod,
+  makeMethod,
+  initVueNotificationPlugin
 };
 /*END.TESTS_ONLY*/
 
