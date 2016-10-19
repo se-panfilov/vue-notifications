@@ -126,7 +126,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (type === TYPE.warn) return console.warn(msg);
 	  if (type === TYPE.success) return console.info(msg);
 
-	  return console.log(msg);
+	  console.log(msg);
+	  return msg;
 	}
 
 	/**
@@ -141,12 +142,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * @param {Object} targetObj
 	 * @param {Object} typesObj
 	 * @return {undefined}
 	 * */
-	function addProtoMethods(typesObj) {
+	function addProtoMethods(targetObj, typesObj) {
 	  (0, _keys2['default'])(typesObj).forEach(function (v) {
-	    VueNotifications[typesObj[v]] = function (config) {
+	    targetObj[typesObj[v]] = function (config) {
 	      config.type = typesObj[v];
 	      return showMessage(config, options);
 	    };
@@ -217,7 +219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Vue.mixin(mixin);
-	    addProtoMethods(TYPE);
+	    addProtoMethods(this, TYPE);
 
 	    this.installed = true;
 	  }
@@ -227,20 +229,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  window.Vue.use(VueNotifications);
 	}
 
-	/*START.TESTS_ONLY*/
-	VueNotifications._private = {
-	  addProtoMethods: addProtoMethods,
-	  showDefaultMessage: showDefaultMessage,
-	  getVersion: getVersion,
-	  showMessage: showMessage
-	};
-	/*END.TESTS_ONLY*/
 
 	exports['default'] = VueNotifications
 
-	/*START.TESTS_ONLY*/;
-	// return VueNotifications;
-	/*END.TESTS_ONLY*/
 
 /***/ },
 /* 1 */

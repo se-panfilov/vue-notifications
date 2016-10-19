@@ -47,7 +47,8 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
   if (type === TYPE.warn) return console.warn(msg)
   if (type === TYPE.success) return console.info(msg)
 
-  return console.log(msg)
+  console.log(msg)
+  return msg
 }
 
 /**
@@ -62,12 +63,13 @@ function showMessage (config, options) {
 }
 
 /**
+ * @param {Object} targetObj
  * @param {Object} typesObj
  * @return {undefined}
  * */
-function addProtoMethods (typesObj) {
+function addProtoMethods (targetObj, typesObj) {
   Object.keys(typesObj).forEach(v => {
-    VueNotifications[typesObj[v]] = function (config) {
+    targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v]
       return showMessage(config, options)
     }
@@ -136,7 +138,7 @@ const VueNotifications = {
     }
 
     Vue.mixin(mixin)
-    addProtoMethods(TYPE)
+    addProtoMethods(this, TYPE)
 
     this.installed = true
   }
@@ -149,6 +151,12 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 /*START.TESTS_ONLY*/
 VueNotifications._private = {
+  TYPE: TYPE,
+  PLUGIN_NAME: PLUGIN_NAME,
+  PACKAGE_NAME: PACKAGE_NAME,
+  PROPERTY_NAME: PROPERTY_NAME,
+  VUE_VERSION: VUE_VERSION,
+  MESSAGES: MESSAGES,
   addProtoMethods: addProtoMethods,
   showDefaultMessage: showDefaultMessage,
   getVersion: getVersion,
