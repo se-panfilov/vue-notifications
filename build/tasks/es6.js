@@ -29,7 +29,7 @@ gulp.task('es6', () => {
       end_comment: "END.TESTS_ONLY"
     }))
     .pipe(gulp.dest(config.dest))
-    .pipe(babel({ presets: ['babili'] }))
+    .pipe(babel({ presets: ['babili'], comments: false }))
     // TODO (S.Panfilov) Remove comments
     // TODO (S.Panfilov) Perhaps add sourcemaps
     .pipe(rename({ basename: `${config.projectName}.es6.min` }))
