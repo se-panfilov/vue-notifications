@@ -14,6 +14,7 @@ const source = require('vinyl-source-stream')
 const umd = require('gulp-umd')
 const to = require('to-case')
 const stripCode = require('gulp-strip-code')
+// const closureCompiler = require('google-closure-compiler').gulp();
 
 gulp.task('es5', () => {
   return gulp.src(config.js.src)
@@ -25,7 +26,7 @@ gulp.task('es5', () => {
         }
       })
     }))
-    .pipe(concat(`${config.projectName}.js`))
+    .pipe(concat(`${config.projectName}.es5.js`))
     .pipe(stripCode({
       start_comment: "START.TESTS_ONLY",
       end_comment: "END.TESTS_ONLY"
@@ -41,10 +42,16 @@ gulp.task('es5', () => {
     }))
     .pipe(gulp.dest(config.dest))
     .pipe(sourcemaps.init({ loadMaps: true }))
+    // .pipe(closureCompiler({
+    //   compilation_level: 'ADVANCED',
+    //   // warning_level: 'VERBOSE',
+    //   language_in: 'ECMASCRIPT5_STRICT',
+    //   language_out: 'ECMASCRIPT5_STRICT',
+    //   // js_output_file: 'output.min.js'
+    // }))
     .pipe(uglify())
-    .pipe(rename({ basename: config.projectName + '.min' }))
+    .pipe(rename({ basename: config.projectName + '.es5.min' }))
     .pipe(gulp.dest(config.dest))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.dest))
-    ;
-});
+})

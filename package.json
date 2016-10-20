@@ -1,8 +1,8 @@
 {
   "name": "vue-notifications",
-  "version": "0.6.0",
+  "version": "0.6.9",
   "description": "Vuejs notifications",
-  "main": "dist/vue-notifications.js",
+  "main": "dist/vue-notifications.es5.js",
   "scripts": {
     "start": "gulp",
     "build": "gulp make",
