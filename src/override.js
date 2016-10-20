@@ -1,4 +1,4 @@
-export default function (Vue, key) {
+function override (Vue, key) {
   const _init = Vue.prototype._init
   const _destroy = Vue.prototype._destroy
 

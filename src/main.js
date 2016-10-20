@@ -1,5 +1,4 @@
-import override from './override'
-
+// import override from './override'
 const PLUGIN_NAME = 'VueNotifications'
 const PACKAGE_NAME = 'vue-notifications'
 const PROPERTY_NAME = 'notifications'
@@ -180,4 +179,4 @@ VueNotifications._private = {
 }
 /*END.TESTS_ONLY*/
 
-export default VueNotifications
+// export default VueNotifications

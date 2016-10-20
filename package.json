@@ -66,6 +66,7 @@
     "gulp-strip-code": "^0.1.4",
     "gulp-todo": "^5.0.0",
     "gulp-uglify": "^2.0.0",
+    "gulp-umd": "^0.2.0",
     "gulp-watch": "^4.3.10",
     "mocha": "^3.1.2",
     "require-dir": "^0.3.0",
@@ -78,8 +79,11 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "webpack": "^1.13.2",
+    "webpack-closure-compiler": "^2.1.1",
     "webpack-merge": "^0.14.1",
     "webpack-stream": "^3.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "google-closure-compiler": "^20160911.0.0"
+  }
 }

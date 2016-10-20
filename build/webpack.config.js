@@ -1,7 +1,8 @@
 var path = require('path')
 var projectRoot = path.resolve('__dirname', '../')
-const config = require('./config');
+const config = require('./config')
 const to = require('to-case')
+// const ClosureCompilerPlugin = require('webpack-closure-compiler')
 
 // module.exports = {
 //   debug: true,
@@ -69,7 +70,17 @@ module.exports = {
           presets: ['latest'],
           plugins: ['transform-runtime']
         }
-      }
+      },
     ]
-  }
+  },
+  plugins: [
+    // new ClosureCompilerPlugin({
+    //   compiler: {
+    //     language_in: 'ECMASCRIPT6',
+    //     language_out: 'ECMASCRIPT5',
+    //     compilation_level: 'ADVANCED'
+    //   },
+    //   concurrency: 3,
+    // })
+  ]
 };

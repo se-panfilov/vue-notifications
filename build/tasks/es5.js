@@ -10,38 +10,41 @@ const rename = require('gulp-rename')
 const notify = require('gulp-notify')
 const plumber = require('gulp-plumber')
 const babel = require('gulp-babel')
-const browserify = require('browserify')
 const source = require('vinyl-source-stream')
-const buffer = require('vinyl-buffer')
-const babelify = require('babelify')
-const fs = require("fs")
-const path = require("path")
-const webpack = require('webpack-stream')
+const umd = require('gulp-umd')
 const to = require('to-case')
 const stripCode = require('gulp-strip-code')
-//const closureCompiler = require('google-closure-compiler').gulp();
 
-gulp.task('js', () => {
-  return gulp.src('./src/main.js')
-    .pipe(webpack(require('../webpack.config.js')))
+gulp.task('es5', () => {
+  return gulp.src(config.js.src)
+    .pipe(plumber({
+      errorHandler: notify.onError(err => {
+        return {
+          title: 'Build ES5',
+          message: err
+        }
+      })
+    }))
+    .pipe(concat(`${config.projectName}.js`))
     .pipe(stripCode({
       start_comment: "START.TESTS_ONLY",
       end_comment: "END.TESTS_ONLY"
     }))
-    .pipe(rename({ basename: config.projectName }))
+    .pipe(babel())
+    .pipe(umd({
+      exports: function (file) {
+        return to.pascal(config.projectName)
+      },
+      namespace: function (file) {
+        return to.pascal(config.projectName)
+      }
+    }))
     .pipe(gulp.dest(config.dest))
     .pipe(sourcemaps.init({ loadMaps: true }))
-    // .pipe(closureCompiler({
-    //   compilation_level: 'ADVANCED',
-    //   // warning_level: 'VERBOSE',
-    //   language_in: 'ECMASCRIPT5_STRICT',
-    //   language_out: 'ECMASCRIPT5_STRICT',
-    //   js_output_file: 'output.min.js'
-    // }))
     .pipe(uglify())
     .pipe(rename({ basename: config.projectName + '.min' }))
     .pipe(gulp.dest(config.dest))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.dest))
-
-})
+    ;
+});
