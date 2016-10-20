@@ -162,7 +162,6 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueNotifications)
 }
 
-
 /*START.TESTS_ONLY*/
 VueNotifications._private = {
   TYPE,
@@ -178,7 +177,7 @@ VueNotifications._private = {
   setMethod,
   makeMethod,
   initVueNotificationPlugin
-};
+}
 /*END.TESTS_ONLY*/
 
 export default VueNotifications

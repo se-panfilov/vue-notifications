@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/se-panfilov/vue-notifications.svg?branch=master)](https://travis-ci.org/se-panfilov/vue-notifications)
 [![devDependency Status](https://david-dm.org/se-panfilov/vue-notifications/dev-status.svg)](https://david-dm.org/se-panfilov/vue-notifications#info=devDependencies)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 [![NPM](https://nodei.co/npm/vue-notifications.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/vue-notifications/)
 

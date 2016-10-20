@@ -8,7 +8,8 @@
     "build": "gulp make",
     "update": "ncu -a && npm update",
     "upgrade": "npm upgrade",
-    "test": "mocha --compilers js:babel-core/register ./test/**/*.spec.js"
+    "test": "mocha --compilers js:babel-core/register ./test/**/*.spec.js",
+    "lint": "eslint ./src"
   },
   "repository": {
     "type": "git",
@@ -49,7 +50,10 @@
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "eslint": "^3.7.1",
+    "eslint-config-standard": "^6.2.0",
     "eslint-friendly-formatter": "^2.0.6",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
