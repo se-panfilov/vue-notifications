@@ -8,12 +8,9 @@ const rename = require('gulp-rename')
 const notify = require('gulp-notify')
 const plumber = require('gulp-plumber')
 const babel = require('gulp-babel')
-const source = require('vinyl-source-stream')
-const webpack = require('webpack-stream')
 const stripCode = require('gulp-strip-code')
 
 gulp.task('es6', () => {
-
   return gulp.src(config.js.src)
     .pipe(plumber({
       errorHandler: notify.onError(function (err) {
@@ -25,8 +22,8 @@ gulp.task('es6', () => {
     }))
     .pipe(concat(`${config.projectName}.es6.js`))
     .pipe(stripCode({
-      start_comment: "START.TESTS_ONLY",
-      end_comment: "END.TESTS_ONLY"
+      start_comment: 'START.TESTS_ONLY',
+      end_comment: 'END.TESTS_ONLY'
     }))
     .pipe(gulp.dest(config.dest))
     .pipe(babel({ presets: ['babili'], comments: false }))
