@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-const SRC = 'src';
-const DEST = 'dist';
-const PROJECT_NAME = 'vue-notifications';
-const TESTS_SRC = 'test';
+const SRC = 'src'
+const DEST = 'dist'
+const PROJECT_NAME = 'vue-notifications'
+const TESTS_SRC = 'test'
 
 const config = {
   SRC: SRC,
@@ -17,6 +17,6 @@ const config = {
   tests: {
     src: [TESTS_SRC]
   }
-};
+}
 
-module.exports = config;
+module.exports = config
