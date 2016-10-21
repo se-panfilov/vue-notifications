@@ -5,7 +5,8 @@ const runSequence = require('run-sequence').use(gulp);
 const config = require('../config');
 
 gulp.task('make', () => {
-    return runSequence(
-        'js'
-    );
+  return runSequence(
+    'es5',
+    'es6'
+  );
 });

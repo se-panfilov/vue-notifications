@@ -1,14 +1,15 @@
 {
   "name": "vue-notifications",
-  "version": "0.6.0",
+  "version": "0.6.9",
   "description": "Vuejs notifications",
-  "main": "dist/vue-notifications.js",
+  "main": "dist/vue-notifications.es5.js",
   "scripts": {
     "start": "gulp",
     "build": "gulp make",
     "update": "ncu -a && npm update",
     "upgrade": "npm upgrade",
-    "test": "mocha --compilers js:babel-core/register ./test/**/*.spec.js"
+    "test": "mocha --compilers js:babel-core/register ./test/**/*.spec.js",
+    "lint": "eslint ./src"
   },
   "repository": {
     "type": "git",
@@ -49,7 +50,10 @@
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "eslint": "^3.7.1",
+    "eslint-config-standard": "^6.2.0",
     "eslint-friendly-formatter": "^2.0.6",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.0",
@@ -62,6 +66,7 @@
     "gulp-strip-code": "^0.1.4",
     "gulp-todo": "^5.0.0",
     "gulp-uglify": "^2.0.0",
+    "gulp-umd": "^0.2.0",
     "gulp-watch": "^4.3.10",
     "mocha": "^3.1.2",
     "require-dir": "^0.3.0",
@@ -74,8 +79,11 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "webpack": "^1.13.2",
+    "webpack-closure-compiler": "^2.1.1",
     "webpack-merge": "^0.15.0",
     "webpack-stream": "^3.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "google-closure-compiler": "^20160911.0.0"
+  }
 }
