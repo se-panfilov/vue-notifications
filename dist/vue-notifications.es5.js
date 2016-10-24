@@ -9,16 +9,6 @@
 }(this, function() {
 'use strict';
 
-var _assign = require('babel-runtime/core-js/object/assign');
-
-var _assign2 = _interopRequireDefault(_assign);
-
-var _keys = require('babel-runtime/core-js/object/keys');
-
-var _keys2 = _interopRequireDefault(_keys);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
 // import override from './override'
 var PLUGIN_NAME = 'VueNotifications';
 var PACKAGE_NAME = 'vue-notifications';
@@ -92,7 +82,7 @@ function showMessage(config, options) {
  * @return {undefined}
  * */
 function addProtoMethods(targetObj, typesObj, options) {
-  (0, _keys2['default'])(typesObj).forEach(function (v) {
+  Object.keys(typesObj).forEach(function (v) {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v];
       return showMessage(config, options);
@@ -124,9 +114,9 @@ function setMethod(name, options, pluginOptions) {
 function makeMethod(configName, options, pluginOptions) {
   return function (config) {
     var newConfig = {};
-    (0, _assign2['default'])(newConfig, VueNotifications.config);
-    (0, _assign2['default'])(newConfig, options[VueNotifications.propertyName][configName]);
-    (0, _assign2['default'])(newConfig, config);
+    Object.assign(newConfig, VueNotifications.config);
+    Object.assign(newConfig, options[VueNotifications.propertyName][configName]);
+    Object.assign(newConfig, config);
 
     return showMessage(newConfig, pluginOptions);
   };
@@ -140,7 +130,7 @@ function initVueNotificationPlugin(notifications, pluginOptions) {
   var _this = this;
 
   if (!notifications) return;
-  (0, _keys2['default'])(notifications).forEach(function (name) {
+  Object.keys(notifications).forEach(function (name) {
     setMethod(name, _this.$options, pluginOptions);
   });
 

@@ -201,7 +201,7 @@ Vue.use(VueNotifications, options)
 ```
 
 ##Browser support.
-Not tested atm. But all modern at least.
+All modern browsers (`ES5` support require). See [ECMAScript 5 compliant browsers][3].
 You can use `ES5` or `ES6` versions as well.
 
 ###ROADMAP:
@@ -234,3 +234,4 @@ SOFTWARE.
 
 [1]: https://github.com/se-panfilov/vue-notifications/releases
 [2]: https://github.com/se-panfilov/mini-toastr
+[3]: http://caniuse.com/#feat=es5
