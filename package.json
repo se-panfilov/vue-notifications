@@ -48,7 +48,8 @@
   ],
   "dependencies": {
     "mini-toastr": "^0.3.10",
-    "vue": "^2.0.1"
+    "vue": "^2.0.1",
+    "vue-notifications": "^0.6.10"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -57,12 +58,21 @@
     "browserify": "^13.0.1",
     "browserify-hmr": "^0.3.1",
     "cross-env": "^1.0.6",
+    "css-loader": "^0.25.0",
     "envify": "^3.4.1",
     "http-server": "^0.9.0",
     "npm-run-all": "^2.1.2",
+    "style-loader": "^0.13.1",
+    "stylus-loader": "^2.3.1",
     "uglify-js": "^2.5.0",
+    "vue-hot-reload-api": "^2.0.6",
+    "vue-html-loader": "^1.2.3",
+    "vue-loader": "^9.7.0",
     "vueify": "^9.1.0",
     "watchify": "^3.4.0"
+  },
+  "peerDependencies": {
+    "stylus": "^0.54.5"
   },
   "browserify": {
     "transform": [

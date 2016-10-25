@@ -3,7 +3,7 @@ import App from './App.vue'
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'
 
-console.info(123)
+miniToastr.init()
 
 function toast ({title, message, type, timeout, cb, debugMsg}) {
   if (debugMsg) console[type](debugMsg)
@@ -17,10 +17,15 @@ const options = {
   warn: toast
 }
 
+Vue.use(VueNotifications, options)
+// Vue.use(VueNotifications)
 
 new Vue({
   el: '#app',
-  render: h => h(App)
+  render: h => h(App),
+  created: function () {
+    // `this` points to the vm instance
+    VueNotifications.error({message: 'asdsad'})
+    console.log(VueNotifications)
+  }
 })
-
-Vue.use(VueNotifications, options)
