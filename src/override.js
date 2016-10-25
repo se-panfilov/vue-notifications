@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 function override (Vue, key) {
   const _init = Vue.prototype._init
   const _destroy = Vue.prototype._destroy
