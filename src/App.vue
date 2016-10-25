@@ -1,6 +1,34 @@
 <template>
   <div id="app">
-    asdsd
+    <section>
+      <h5>Predefined messages</h5>
+      <button type="button" @click="errorMsg()">Error</button>
+      <button type="button" @click="warnMsg()">Warning</button>
+      <button type="button" @click="infoMsg()">Info</button>
+      <button type="button" @click="successMsg()">Success</button>
+    </section>
+
+    <section>
+      <h5>Dynamic messages</h5>
+      <label> Title:
+        <input type="text" v-model="title">
+      </label>
+      <label> Message:
+        <textarea v-model="msg"></textarea>
+      </label>
+      <div>
+        <div v-for="t in types">
+          <label>
+            <input type="radio" name="type" value="t" v-model="type"></input>
+            <span v-text="t"></span>
+          </label>
+        </div>
+      </div>
+      <div>
+        <button type="button" @click="dynamicMsg()">Success</button>
+      </div>
+    </section>
+
   </div>
 </template>
 
@@ -9,14 +37,22 @@
     name: 'app',
     data () {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        types: [
+          'error',
+          'warn',
+          'info',
+          'success',
+        ],
+        title: 'Your title',
+        msg: 'Your message',
+        type: 'error'
       }
     },
     created () {
-      this.errorMsg()
-      this.warnMsg()
-      this.infoMsg()
-      this.successMsg()
+//      this.errorMsg()
+//      this.warnMsg()
+//      this.infoMsg()
+//      this.successMsg()
     },
     methods: {},
     notifications: {
@@ -40,6 +76,17 @@
         title: 'Success title',
         message: 'Some success msg'
       },
+      dynamicMsg: { // TODO (S.Panfilov)add support of this
+        type () {
+          return this.type
+        },
+        title () {
+          return this.title
+        },
+        message () {
+          return this.message
+        }
+      }
     }
   }
 </script>
