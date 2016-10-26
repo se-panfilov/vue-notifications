@@ -16,7 +16,7 @@ describe('Main.', () => {
 
   describe('Check Private Methods.', () => {
 
-    it('addProtoMethods.', () => {
+    it('addMethods.', () => {
 
       const targetObj = {}
 
@@ -26,7 +26,7 @@ describe('Main.', () => {
       }
 
       expect(Object.keys(targetObj).length).to.be.equal(0)
-      const result = _private.addProtoMethods(targetObj, typesObj)
+      const result = _private.addMethods(targetObj, typesObj)
       expect(result).to.be.undefined
       expect(Object.keys(targetObj).length).to.be.equal(Object.keys(typesObj).length)
       expect(targetObj[typesObj.typeOne]).to.be.a('function')

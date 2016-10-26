@@ -52,11 +52,28 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
 
 /**
  * @param  {Object} config
+ * @return {Object}
+ */
+function getValues (config) {
+  const result = {}
+
+  Object.keys(config).forEach(v => {
+    if (v !== 'cb') {
+      result[v] = (typeof config[v] === 'function') ? config[config]() : config[v]
+    }
+  })
+
+  return result
+}
+
+/**
+ * @param  {Object} config
  * @param  {Object} options
  */
 function showMessage (config, options) {
-  const method = (options && options[config.type]) ? options[config.type] : showDefaultMessage
-  method(config)
+  const valuesObj = getValues(config)
+  const method = (options && options[valuesObj.type]) ? options[valuesObj.type] : showDefaultMessage
+  method(valuesObj)
 
   if (config.cb) return config.cb()
 }
@@ -67,7 +84,7 @@ function showMessage (config, options) {
  * @param {Object} options
  * @return {undefined}
  * */
-function addProtoMethods (targetObj, typesObj, options) {
+function addMethods (targetObj, typesObj, options) {
   Object.keys(typesObj).forEach(v => {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v]
@@ -82,12 +99,11 @@ function addProtoMethods (targetObj, typesObj, options) {
  * @param  {Object} pluginOptions
  */
 function setMethod (name, options, pluginOptions) {
-  // TODO (S.Panfilov) not sure - throw error here or just warn
-  // if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
-
   if (!options.methods) options.methods = {}
 
   if (options.methods[name]) {
+    // TODO (S.Panfilov) not sure - throw error here or just warn
+    // if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
     console.error(MESSAGES.methodNameConflict + name)
   } else {
     options.methods[name] = makeMethod(name, options, pluginOptions)
@@ -154,7 +170,7 @@ const VueNotifications = {
     }
 
     Vue.mixin(mixin)
-    addProtoMethods(this, this.type, pluginOptions)
+    addMethods(this, this.type, pluginOptions)
 
     this.installed = true
   }
@@ -172,7 +188,7 @@ VueNotifications._private = {
   PROPERTY_NAME,
   VUE_VERSION,
   MESSAGES,
-  addProtoMethods,
+  addMethods,
   showDefaultMessage,
   getVersion,
   showMessage,
