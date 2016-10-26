@@ -55,6 +55,7 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
  * @return {Object}
  */
 function getValues (config) {
+  // TODO (S.Panfilov) test it!!! CurWorkPoint
   const result = {}
 
   Object.keys(config).forEach(v => {
