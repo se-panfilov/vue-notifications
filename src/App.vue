@@ -19,7 +19,7 @@
       <div>
         <div v-for="t in types">
           <label>
-            <input type="radio" name="type" value="t" v-model="type"></input>
+            <input type="radio" name="type" value="t" v-model="type"/>
             <span v-text="t"></span>
           </label>
         </div>
