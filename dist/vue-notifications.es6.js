@@ -1,4 +1,3 @@
-// import override from './override'
 const PLUGIN_NAME = 'VueNotifications'
 const PACKAGE_NAME = 'vue-notifications'
 const PROPERTY_NAME = 'notifications'
@@ -143,6 +142,7 @@ const VueNotifications = {
     const mixin = {}
     let hook
 
+    // eslint-disable-next-line no-undef
     override(Vue, this.propertyName)
 
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
@@ -165,7 +165,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 
-// export default VueNotifications
+// eslint-disable-next-line no-unused-vars
 function override (Vue, key) {
   const _init = Vue.prototype._init
   const _destroy = Vue.prototype._destroy

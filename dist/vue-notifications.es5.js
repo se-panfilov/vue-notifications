@@ -9,7 +9,6 @@
 }(this, function() {
 'use strict';
 
-// import override from './override'
 var PLUGIN_NAME = 'VueNotifications';
 var PACKAGE_NAME = 'vue-notifications';
 var PROPERTY_NAME = 'notifications';
@@ -52,10 +51,10 @@ function getVersion(Vue) {
  * @return  {String}
  */
 function showDefaultMessage(_ref) {
-  var type = _ref.type;
-  var message = _ref.message;
-  var title = _ref.title;
-  var debugMsg = _ref.debugMsg;
+  var type = _ref.type,
+      message = _ref.message,
+      title = _ref.title,
+      debugMsg = _ref.debugMsg;
 
   var msg = 'Title: ' + title + ', Message: ' + message + ', DebugMsg: ' + debugMsg + ', type: ' + type;
 
@@ -160,6 +159,7 @@ var VueNotifications = {
     var mixin = {};
     var hook = void 0;
 
+    // eslint-disable-next-line no-undef
     override(Vue, this.propertyName);
 
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
@@ -181,7 +181,7 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueNotifications);
 }
 
-// export default VueNotifications
+// eslint-disable-next-line no-unused-vars
 function override(Vue, key) {
   var _init = Vue.prototype._init;
   var _destroy = Vue.prototype._destroy;

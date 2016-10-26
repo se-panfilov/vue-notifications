@@ -80,6 +80,5 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
-    "google-closure-compiler": "^20160911.0.0"
   }
 }
