@@ -64,7 +64,7 @@
     "gulp-size": "^2.1.0",
     "gulp-sourcemaps": "^2.2.0",
     "gulp-strip-code": "^0.1.4",
-    "gulp-todo": "^5.0.0",
+    "gulp-todo": "^5.1.0",
     "gulp-uglify": "^2.0.0",
     "gulp-umd": "^0.2.0",
     "gulp-watch": "^4.3.10",
