@@ -180,6 +180,7 @@ VueNotifications._private = {
   makeMethod,
   initVueNotificationPlugin
 }
-/*END.TESTS_ONLY*/
 
-// export default VueNotifications
+export default VueNotifications
+
+/*END.TESTS_ONLY*/

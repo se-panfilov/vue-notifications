@@ -4,6 +4,9 @@ const chai = require('chai')
 const expect = chai.expect
 const sinon = require('sinon')
 const main = require('../../src/main')
+console.info('========')
+console.log(Object.keys(main))
+console.info('========')
 const _private = main.default._private
 const sinonChai = require('sinon-chai')
 
