@@ -111,7 +111,7 @@ export default {
       //...
     },
     notifications: {
-      showLoinError: {
+      showLoginError: {
         title: 'Login Failed',
         message: 'Failed to authenticate',
         type: 'error' //Default: 'info', also you can use VueNotifications.type.error instead of 'error'
@@ -122,7 +122,7 @@ export default {
     }
   }
 ```
-Now you can call `this.showLoinError()` in any place of this page (i.e. in methods, or whatever).
+Now you can call `this.showLoginError()` in any place of this page (i.e. in methods, or whatever).
 
 You also can call `.success()`, `.error()` and other methods directly (for example in JavaScript files):
 
@@ -134,18 +134,18 @@ In `some.js`:
 ```
 ####Overriding config.
 
-Even if you have specify config, you can ovverride it in any call simple by sending config object: `this.showLoinError({type: 'warn'})`. i.e.:
+Even if you have specify config, you can ovverride it in any call simple by sending config object: `this.showLoginError({type: 'warn'})`. i.e.:
 
 ```JS
  notifications: {
-      showLoinError: {
+      showLoginError: {
         message: 'Failed to authenticate',
         type: 'error'
       }
     }
 
-this.showLoinError() //error message
-this.showLoinError({type: 'warn'}) //info message
+this.showLoginError() //error message
+this.showLoginError({type: 'warn'}) //info message
 
 //Also you can send here whatever params. All would be passed down to `mini-toastr` or any other lib.
 Keep in mind that configs merging by `Object.assign` (no deep copying).
@@ -164,14 +164,14 @@ Keep in mind that configs merging by `Object.assign` (no deep copying).
 
 ####How to add custom field?
 
-Simple: `this.showLoinError({consoleMessage: 'let it be in console'})`. You've passed a custom config here (`{consoleMessage: 'let it be in console'}`) that will be merged with config from `notifications.showLoinError` and with `global config` via `Object.assign` (beware of shallow copy).
+Simple: `this.showLoginError({consoleMessage: 'let it be in console'})`. You've passed a custom config here (`{consoleMessage: 'let it be in console'}`) that will be merged with config from `notifications.showLoginError` and with `global config` via `Object.assign` (beware of shallow copy).
 
 As other option, you can specify as much custom fields as you want in `notifications` section:
 
 ```JS
       //...
     notifications: {
-      showLoinError: {
+      showLoginError: {
         message: 'Failed to authenticate',
         type: 'error', //Also you can use VueNotifications.type.error instead of 'error'
         consoleMessage: 'let it be in console',
