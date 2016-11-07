@@ -58,9 +58,17 @@ function getValues (config) {
   // TODO (S.Panfilov) test it!!! CurWorkPoint
   const result = {}
 
-  Object.keys(config).forEach(v => {
-    if (v !== 'cb') {
-      result[v] = (typeof config[v] === 'function') ? config[config]() : config[v]
+  Object.keys(config).forEach(field => {
+    if (field !== 'cb') {
+      // console.info(`---${field}---`)
+      // if (typeof config[field] === 'function') {
+      //   console.log(config[field]())
+      // } else {
+      //   console.log(config[field])
+      // }
+      // console.info(`---END_${field}---`)
+
+      result[field] = (typeof config[field] === 'function') ? config[field]() : config[field]
     }
   })
 
@@ -73,6 +81,7 @@ function getValues (config) {
  */
 function showMessage (config, options) {
   const valuesObj = getValues(config)
+  console.info(valuesObj)
   const method = (options && options[valuesObj.type]) ? options[valuesObj.type] : showDefaultMessage
   method(valuesObj)
 
@@ -160,7 +169,7 @@ const VueNotifications = {
     let hook
 
     // eslint-disable-next-line no-undef
-    override(Vue, this.propertyName)
+    // override(Vue, this.propertyName)
 
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
     if (getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init'

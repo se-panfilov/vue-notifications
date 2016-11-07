@@ -55,11 +55,20 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
  * @return {Object}
  */
 function getValues (config) {
+  // TODO (S.Panfilov) test it!!! CurWorkPoint
   const result = {}
 
-  Object.keys(config).forEach(v => {
-    if (v !== 'cb') {
-      result[v] = (typeof config[v] === 'function') ? config[config]() : config[v]
+  Object.keys(config).forEach(field => {
+    if (field !== 'cb') {
+      // console.info(`---${field}---`)
+      // if (typeof config[field] === 'function') {
+      //   console.log(config[field]())
+      // } else {
+      //   console.log(config[field])
+      // }
+      // console.info(`---END_${field}---`)
+
+      result[field] = (typeof config[field] === 'function') ? config[field]() : config[field]
     }
   })
 
@@ -72,6 +81,7 @@ function getValues (config) {
  */
 function showMessage (config, options) {
   const valuesObj = getValues(config)
+  console.info(valuesObj)
   const method = (options && options[valuesObj.type]) ? options[valuesObj.type] : showDefaultMessage
   method(valuesObj)
 
@@ -159,7 +169,7 @@ const VueNotifications = {
     let hook
 
     // eslint-disable-next-line no-undef
-    override(Vue, this.propertyName)
+    // override(Vue, this.propertyName)
 
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
     if (getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init'
@@ -181,38 +191,41 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 
-// eslint-disable-next-line no-unused-vars
-function override (Vue, key) {
-  const _init = Vue.prototype._init
-  const _destroy = Vue.prototype._destroy
-
-  Vue.prototype._init = function (options = {}) {
-    options.init = options.init
-      ? [customInit].concat(options.init)
-      : customInit
-    _init.call(this, options)
-  }
-
-  Vue.prototype._destroy = function () {
-    if (this[key]) {
-      this[key] = undefined
-      delete this[key]
-    }
-
-    _destroy.apply(this, arguments)
-  }
-
-  function customInit () {
-    if (this[key]) throw console.error(`Override: property "${key}" is already defined`)
-    this[key] = {}
-
-    const options = this.$options
-    const keyOption = options[key]
-
-    if (keyOption) {
-      this[key] = keyOption
-    } else if (options.parent && options.parent[key]) {
-      this[key] = options.parent[key]
-    }
-  }
-}
+// // eslint-disable-next-line no-unused-vars
+// function override (Vue, key) {
+//   const _init = Vue.prototype._init
+//   const _destroy = Vue.prototype._destroy
+//
+//   Vue.prototype._init = function (options = {}) {
+//     options.init = options.init
+//       ? [customInit].concat(options.init)
+//       : customInit
+//     _init.call(this, options)
+//   }
+//
+//   Vue.prototype._destroy = function () {
+//     console.info('123213')
+//     console.info(this)
+//     console.info('123213')
+//     if (this[key]) {
+//       this[key] = undefined
+//       delete this[key]
+//     }
+//
+//     _destroy.apply(this, arguments)
+//   }
+//
+//   function customInit () {
+//     if (this[key]) throw console.error(`Override: property "${key}" is already defined`)
+//     this[key] = {}
+//
+//     const options = this.$options
+//     const keyOption = options[key]
+//
+//     if (keyOption) {
+//       this[key] = keyOption
+//     } else if (options.parent && options.parent[key]) {
+//       this[key] = options.parent[key]
+//     }
+//   }
+// }
