@@ -51,10 +51,11 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
 }
 
 /**
+ * @param  {Object} vueApp
  * @param  {Object} config
  * @return {Object}
  */
-function getValues (config) {
+function getValues (vueApp, config) {
   // TODO (S.Panfilov) test it!!! CurWorkPoint
   const result = {}
 
@@ -68,7 +69,11 @@ function getValues (config) {
       // }
       // console.info(`---END_${field}---`)
 
-      result[field] = (typeof config[field] === 'function') ? config[field]() : config[field]
+      // console.info('THIS')
+      // console.log(this)
+      // console.info('THIS')
+
+      result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
     }
   })
 
@@ -78,10 +83,10 @@ function getValues (config) {
 /**
  * @param  {Object} config
  * @param  {Object} options
+ * @param  {Object} vueApp
  */
-function showMessage (config, options) {
-  const valuesObj = getValues(config)
-  console.info(valuesObj)
+function showMessage (config, options, vueApp) {
+  const valuesObj = getValues(vueApp, config)
   const method = (options && options[valuesObj.type]) ? options[valuesObj.type] : showDefaultMessage
   method(valuesObj)
 
@@ -98,17 +103,19 @@ function addMethods (targetObj, typesObj, options) {
   Object.keys(typesObj).forEach(v => {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v]
+      // TODO (S.Panfilov)fix 'vueApp' in param
       return showMessage(config, options)
     }
   })
 }
 
 /**
+ * @param  {Object} vueApp
  * @param  {String} name
  * @param  {Object} options
  * @param  {Object} pluginOptions
  */
-function setMethod (name, options, pluginOptions) {
+function setMethod (vueApp, name, options, pluginOptions) {
   if (!options.methods) options.methods = {}
 
   if (options.methods[name]) {
@@ -116,38 +123,40 @@ function setMethod (name, options, pluginOptions) {
     // if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
     console.error(MESSAGES.methodNameConflict + name)
   } else {
-    options.methods[name] = makeMethod(name, options, pluginOptions)
+    options.methods[name] = makeMethod(vueApp, name, options, pluginOptions)
   }
 }
 
 /**
+ * @param  {Object} vueApp
  * @param  {String} configName
  * @param  {Object} options
  * @param  {Object} pluginOptions
  * @return {Function}
  */
-function makeMethod (configName, options, pluginOptions) {
+function makeMethod (vueApp,configName, options, pluginOptions) {
   return function (config) {
     const newConfig = {}
     Object.assign(newConfig, VueNotifications.config)
     Object.assign(newConfig, options[VueNotifications.propertyName][configName])
     Object.assign(newConfig, config)
 
-    return showMessage(newConfig, pluginOptions)
+    return showMessage(newConfig, pluginOptions, vueApp)
   }
 }
 
 /**
+ * @param  {Object} vueApp
  * @param  {Object} notifications
  * @param  {Object} pluginOptions
  */
-function initVueNotificationPlugin (notifications, pluginOptions) {
+function initVueNotificationPlugin (vueApp, notifications, pluginOptions) {
   if (!notifications) return
   Object.keys(notifications).forEach(name => {
-    setMethod(name, this.$options, pluginOptions)
+    setMethod(vueApp, name, vueApp.$options, pluginOptions)
   })
 
-  this.$emit(`${PACKAGE_NAME}-initiated`)
+  vueApp.$emit(`${PACKAGE_NAME}-initiated`)
 }
 
 const VueNotifications = {
@@ -168,15 +177,16 @@ const VueNotifications = {
     const mixin = {}
     let hook
 
-    // eslint-disable-next-line no-undef
-    // override(Vue, this.propertyName)
-
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
     if (getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init'
     if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate'
 
     mixin[hook] = function () {
-      initVueNotificationPlugin.call(this, this.$options[VueNotifications.propertyName], pluginOptions)
+      const vueApp = this
+      const vueAppOptions = this.$options
+      const notificationsField = vueAppOptions[VueNotifications.propertyName]
+
+      initVueNotificationPlugin(vueApp, notificationsField, pluginOptions)
     }
 
     Vue.mixin(mixin)

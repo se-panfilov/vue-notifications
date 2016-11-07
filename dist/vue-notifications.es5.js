@@ -64,10 +64,11 @@ function showDefaultMessage(_ref) {
 }
 
 /**
+ * @param  {Object} vueApp
  * @param  {Object} config
  * @return {Object}
  */
-function getValues(config) {
+function getValues(vueApp, config) {
   // TODO (S.Panfilov) test it!!! CurWorkPoint
   var result = {};
 
@@ -81,7 +82,11 @@ function getValues(config) {
       // }
       // console.info(`---END_${field}---`)
 
-      result[field] = typeof config[field] === 'function' ? config[field]() : config[field];
+      // console.info('THIS')
+      // console.log(this)
+      // console.info('THIS')
+
+      result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
     }
   });
 
@@ -91,10 +96,10 @@ function getValues(config) {
 /**
  * @param  {Object} config
  * @param  {Object} options
+ * @param  {Object} vueApp
  */
-function showMessage(config, options) {
-  var valuesObj = getValues(config);
-  console.info(valuesObj);
+function showMessage(config, options, vueApp) {
+  var valuesObj = getValues(vueApp, config);
   var method = options && options[valuesObj.type] ? options[valuesObj.type] : showDefaultMessage;
   method(valuesObj);
 
@@ -111,17 +116,19 @@ function addMethods(targetObj, typesObj, options) {
   Object.keys(typesObj).forEach(function (v) {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v];
+      // TODO (S.Panfilov)fix 'vueApp' in param
       return showMessage(config, options);
     };
   });
 }
 
 /**
+ * @param  {Object} vueApp
  * @param  {String} name
  * @param  {Object} options
  * @param  {Object} pluginOptions
  */
-function setMethod(name, options, pluginOptions) {
+function setMethod(vueApp, name, options, pluginOptions) {
   if (!options.methods) options.methods = {};
 
   if (options.methods[name]) {
@@ -129,40 +136,40 @@ function setMethod(name, options, pluginOptions) {
     // if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
     console.error(MESSAGES.methodNameConflict + name);
   } else {
-    options.methods[name] = makeMethod(name, options, pluginOptions);
+    options.methods[name] = makeMethod(vueApp, name, options, pluginOptions);
   }
 }
 
 /**
+ * @param  {Object} vueApp
  * @param  {String} configName
  * @param  {Object} options
  * @param  {Object} pluginOptions
  * @return {Function}
  */
-function makeMethod(configName, options, pluginOptions) {
+function makeMethod(vueApp, configName, options, pluginOptions) {
   return function (config) {
     var newConfig = {};
     Object.assign(newConfig, VueNotifications.config);
     Object.assign(newConfig, options[VueNotifications.propertyName][configName]);
     Object.assign(newConfig, config);
 
-    return showMessage(newConfig, pluginOptions);
+    return showMessage(newConfig, pluginOptions, vueApp);
   };
 }
 
 /**
+ * @param  {Object} vueApp
  * @param  {Object} notifications
  * @param  {Object} pluginOptions
  */
-function initVueNotificationPlugin(notifications, pluginOptions) {
-  var _this = this;
-
+function initVueNotificationPlugin(vueApp, notifications, pluginOptions) {
   if (!notifications) return;
   Object.keys(notifications).forEach(function (name) {
-    setMethod(name, _this.$options, pluginOptions);
+    setMethod(vueApp, name, vueApp.$options, pluginOptions);
   });
 
-  this.$emit(PACKAGE_NAME + '-initiated');
+  vueApp.$emit(PACKAGE_NAME + '-initiated');
 }
 
 var VueNotifications = {
@@ -185,15 +192,16 @@ var VueNotifications = {
     var mixin = {};
     var hook = void 0;
 
-    // eslint-disable-next-line no-undef
-    // override(Vue, this.propertyName)
-
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
     if (getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init';
     if (getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate';
 
     mixin[hook] = function () {
-      initVueNotificationPlugin.call(this, this.$options[VueNotifications.propertyName], pluginOptions);
+      var vueApp = this;
+      var vueAppOptions = this.$options;
+      var notificationsField = vueAppOptions[VueNotifications.propertyName];
+
+      initVueNotificationPlugin(vueApp, notificationsField, pluginOptions);
     };
 
     Vue.mixin(mixin);
@@ -206,44 +214,5 @@ var VueNotifications = {
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueNotifications);
 }
-
-// // eslint-disable-next-line no-unused-vars
-// function override (Vue, key) {
-//   const _init = Vue.prototype._init
-//   const _destroy = Vue.prototype._destroy
-//
-//   Vue.prototype._init = function (options = {}) {
-//     options.init = options.init
-//       ? [customInit].concat(options.init)
-//       : customInit
-//     _init.call(this, options)
-//   }
-//
-//   Vue.prototype._destroy = function () {
-//     console.info('123213')
-//     console.info(this)
-//     console.info('123213')
-//     if (this[key]) {
-//       this[key] = undefined
-//       delete this[key]
-//     }
-//
-//     _destroy.apply(this, arguments)
-//   }
-//
-//   function customInit () {
-//     if (this[key]) throw console.error(`Override: property "${key}" is already defined`)
-//     this[key] = {}
-//
-//     const options = this.$options
-//     const keyOption = options[key]
-//
-//     if (keyOption) {
-//       this[key] = keyOption
-//     } else if (options.parent && options.parent[key]) {
-//       this[key] = options.parent[key]
-//     }
-//   }
-// }
 return VueNotifications;
 }));
