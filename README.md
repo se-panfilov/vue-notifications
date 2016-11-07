@@ -74,7 +74,7 @@ import miniToastr from 'mini-toastr'// don't forget to make "npm i mini-toastr -
 
 //in 'ready section
 //  ...
-    ready () {
+    ready () { //'mounted' instade of ready for Vue 2.0
       miniToastr.init()//or "miniToastr.init(miniToastrConfig)" if you want to specify configuration
     },
 //  ...
