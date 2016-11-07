@@ -25,7 +25,7 @@ new Vue({
   render: h => h(App),
   created: function () {
     // `this` points to the vm instance
-    VueNotifications.error({message: 'asdsad'})
-    console.log(VueNotifications)
+    // VueNotifications.error({message: 'asdsad'})
+    // console.log(VueNotifications)
   }
 })

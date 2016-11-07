@@ -53,8 +53,13 @@
 //      this.warnMsg()
 //      this.infoMsg()
 //      this.successMsg()
+      this.asd()
     },
-    methods: {},
+    methods: {
+      asd () {
+        console.log(this.type)
+      }
+    },
     notifications: {
       errorMsg: {
         type: 'error',
@@ -76,17 +81,30 @@
         title: 'Success title',
         message: 'Some success msg'
       },
-      dynamicMsg: { // TODO (S.Panfilov)add support of this
+      dynamicMsg: { // TODO (S.Panfilov) add support of this
         type () {
+          // console.log('22222')
+          // console.log(this)
+          // console.log('22222')
+          // console.log(this.type)
+          // return 'type'
+
           return this.type
         },
         title () {
+          //return 'title'
           return this.title
         },
         message () {
+          //return 'message'
           return this.message
         }
       }
     }
   }
+
+
+
+
+
 </script>
