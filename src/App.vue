@@ -19,7 +19,7 @@
       <div>
         <div v-for="t in types">
           <label>
-            <input type="radio" name="type" value="t" v-model="type"/>
+            <input type="radio" name="type" :value="t" v-model="type"/>
             <span v-text="t"></span>
           </label>
         </div>
@@ -49,16 +49,12 @@
       }
     },
     created () {
-//      this.errorMsg()
-//      this.warnMsg()
-//      this.infoMsg()
-//      this.successMsg()
-      this.asd()
+      this.errorMsg()
+      this.warnMsg()
+      this.infoMsg()
+      this.successMsg()
     },
     methods: {
-      asd () {
-        console.log(this.type)
-      }
     },
     notifications: {
       errorMsg: {
@@ -81,30 +77,17 @@
         title: 'Success title',
         message: 'Some success msg'
       },
-      dynamicMsg: { // TODO (S.Panfilov) add support of this
+      dynamicMsg: {
         type () {
-          // console.log('22222')
-          // console.log(this)
-          // console.log('22222')
-          // console.log(this.type)
-          // return 'type'
-
           return this.type
         },
         title () {
-          //return 'title'
           return this.title
         },
         message () {
-          //return 'message'
-          return this.message
+          return this.msg
         }
       }
     }
   }
-
-
-
-
-
 </script>
