@@ -207,7 +207,14 @@ describe('Main.', () => {
         const expectedMsg = _private.MESSAGES.methodNameConflict + name
         sinon.spy(console, 'error')
 
-        _private.setMethod(name, options, pluginOptions)
+        const vueApp = {
+          notifications: {
+            someName: function () {
+            }
+          }
+        }
+
+        _private.setMethod(vueApp, name, options, pluginOptions)
         expect(console.error).to.be.calledWith(expectedMsg)
 
         console.error.restore()
@@ -264,7 +271,10 @@ describe('Main.', () => {
 
         sinon.spy(_private, 'showMessage')
 
-        const result = _private.makeMethod(configName, options, pluginOptions)
+        const vueApp = {
+        }
+
+        const result = _private.makeMethod(vueApp, configName, options, pluginOptions)
         expect(result).to.be.a('function')
         result(config)
         // TODO (S.Panfilov) fix this test

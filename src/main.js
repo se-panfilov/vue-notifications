@@ -134,7 +134,7 @@ function setMethod (vueApp, name, options, pluginOptions) {
  * @param  {Object} pluginOptions
  * @return {Function}
  */
-function makeMethod (vueApp,configName, options, pluginOptions) {
+function makeMethod (vueApp, configName, options, pluginOptions) {
   return function (config) {
     const newConfig = {}
     Object.assign(newConfig, VueNotifications.config)
