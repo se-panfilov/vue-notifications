@@ -62,13 +62,15 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
 /**
  * @param  {String} id
  * @param  {String} type
+ * @param  {String} timeout
  * @param  {String} title
  * @param  {String} message
+ * @param  {Function} computed // TODO (S.Panfilov) or not fn?
  * @param  {String} debugMsg
  * @param  {Function} cb
  * @return  {String}
  */
-function showInlineMessage ({ id, type, title, message, debugMsg, cb }) {
+function showInlineMessage ({ id, type, timeout, title, message, computed, debugMsg, cb }) {
   // TODO (S.Panfilov) handle class add and remove here
   if (debugMsg) showInConsole(debugMsg, type, TYPE)
   const elem = document.getElementById(id)
@@ -77,10 +79,25 @@ function showInlineMessage ({ id, type, title, message, debugMsg, cb }) {
   if (title) msg = `${title}: ${msg}`
 
   elem.innerText = msg
+
+  function clearFn (elem) {
+    elem.innerText = ''
+  }
+
+  if (timeout && !computed) {
+    setTimeout(() => {
+      clearFn(elem)
+    }, timeout)
+  } else {
+    // TODO (S.Panfilov) Computed property doesn't work yet
+    // const interval = setInterval(() => {
+    //   if (!computed) clearInterval(interval)
+    // }, 50)
+  }
+
+  // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
   if (cb) {
-    cb(elem, () => {
-      elem.innerText = ''
-    })
+    cb(elem, clearFn)
   }
 
   return msg

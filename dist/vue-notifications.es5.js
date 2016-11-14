@@ -75,8 +75,10 @@ function showDefaultMessage(_ref) {
 /**
  * @param  {String} id
  * @param  {String} type
+ * @param  {String} timeout
  * @param  {String} title
  * @param  {String} message
+ * @param  {Function} computed // TODO (S.Panfilov) or not fn?
  * @param  {String} debugMsg
  * @param  {Function} cb
  * @return  {String}
@@ -84,8 +86,10 @@ function showDefaultMessage(_ref) {
 function showInlineMessage(_ref2) {
   var id = _ref2.id,
       type = _ref2.type,
+      timeout = _ref2.timeout,
       title = _ref2.title,
       message = _ref2.message,
+      computed = _ref2.computed,
       debugMsg = _ref2.debugMsg,
       cb = _ref2.cb;
 
@@ -97,10 +101,25 @@ function showInlineMessage(_ref2) {
   if (title) msg = title + ': ' + msg;
 
   elem.innerText = msg;
+
+  function clearFn(elem) {
+    elem.innerText = '';
+  }
+
+  if (timeout && !computed) {
+    setTimeout(function () {
+      clearFn(elem);
+    }, timeout);
+  } else {}
+  // TODO (S.Panfilov) Computed property doesn't work yet
+  // const interval = setInterval(() => {
+  //   if (!computed) clearInterval(interval)
+  // }, 50)
+
+
+  // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
   if (cb) {
-    cb(elem, function () {
-      elem.innerText = '';
-    });
+    cb(elem, clearFn);
   }
 
   return msg;
