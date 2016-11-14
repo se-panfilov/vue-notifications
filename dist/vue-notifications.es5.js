@@ -44,6 +44,15 @@ function getVersion(Vue) {
 }
 
 /**
+ * @param  {String} msg
+ * @param  {String} type
+ * @param  {Object} types
+ */
+function showInConsole(msg, type, types) {
+  if (type === types.error) console.error(msg);else if (type === types.warn) console.warn(msg);else if (type === types.success) console.info(msg);else console.log(msg);
+}
+
+/**
  * @param  {String} type
  * @param  {String} message
  * @param  {String} title
@@ -58,7 +67,41 @@ function showDefaultMessage(_ref) {
 
   var msg = 'Title: ' + title + ', Message: ' + message + ', DebugMsg: ' + debugMsg + ', type: ' + type;
 
-  if (type === TYPE.error) console.error(msg);else if (type === TYPE.warn) console.warn(msg);else if (type === TYPE.success) console.info(msg);else console.log(msg);
+  showInConsole(msg, type, TYPE);
+
+  return msg;
+}
+
+/**
+ * @param  {String} id
+ * @param  {String} type
+ * @param  {String} title
+ * @param  {String} message
+ * @param  {String} debugMsg
+ * @param  {Function} cb
+ * @return  {String}
+ */
+function showInlineMessage(_ref2) {
+  var id = _ref2.id,
+      type = _ref2.type,
+      title = _ref2.title,
+      message = _ref2.message,
+      debugMsg = _ref2.debugMsg,
+      cb = _ref2.cb;
+
+  // TODO (S.Panfilov) handle class add and remove here
+  if (debugMsg) showInConsole(debugMsg, type, TYPE);
+  var elem = document.getElementById(id);
+
+  var msg = message;
+  if (title) msg = title + ': ' + msg;
+
+  elem.innerText = msg;
+  if (cb) {
+    cb(elem, function () {
+      elem.innerText = '';
+    });
+  }
 
   return msg;
 }
@@ -69,24 +112,13 @@ function showDefaultMessage(_ref) {
  * @return {Object}
  */
 function getValues(vueApp, config) {
-  // TODO (S.Panfilov) test it!!! CurWorkPoint
   var result = {};
 
   Object.keys(config).forEach(function (field) {
     if (field !== 'cb') {
-      // console.info(`---${field}---`)
-      // if (typeof config[field] === 'function') {
-      //   console.log(config[field]())
-      // } else {
-      //   console.log(config[field])
-      // }
-      // console.info(`---END_${field}---`)
-
-      // console.info('THIS')
-      // console.log(this)
-      // console.info('THIS')
-
       result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
+    } else {
+      result[field] = config[field];
     }
   });
 
@@ -100,8 +132,15 @@ function getValues(vueApp, config) {
  */
 function showMessage(config, options, vueApp) {
   var valuesObj = getValues(vueApp, config);
-  var method = options && options[valuesObj.type] ? options[valuesObj.type] : showDefaultMessage;
-  method(valuesObj);
+  var isLinkedToElem = !!valuesObj.id;
+
+  if (isLinkedToElem) {
+    showInlineMessage(valuesObj);
+  } else {
+    var isMethodOverridden = options && options[valuesObj.type];
+    var method = isMethodOverridden ? options[valuesObj.type] : showDefaultMessage;
+    method(valuesObj);
+  }
 
   if (config.cb) return config.cb();
 }

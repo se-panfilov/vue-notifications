@@ -33,6 +33,18 @@ function getVersion (Vue) {
 }
 
 /**
+ * @param  {String} msg
+ * @param  {String} type
+ * @param  {Object} types
+ */
+function showInConsole (msg, type, types) {
+  if (type === types.error) console.error(msg)
+  else if (type === types.warn) console.warn(msg)
+  else if (type === types.success) console.info(msg)
+  else console.log(msg)
+}
+
+/**
  * @param  {String} type
  * @param  {String} message
  * @param  {String} title
@@ -42,10 +54,34 @@ function getVersion (Vue) {
 function showDefaultMessage ({ type, message, title, debugMsg }) {
   let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}, type: ${type}`
 
-  if (type === TYPE.error) console.error(msg)
-  else if (type === TYPE.warn) console.warn(msg)
-  else if (type === TYPE.success) console.info(msg)
-  else console.log(msg)
+  showInConsole(msg, type, TYPE)
+
+  return msg
+}
+
+/**
+ * @param  {String} id
+ * @param  {String} type
+ * @param  {String} title
+ * @param  {String} message
+ * @param  {String} debugMsg
+ * @param  {Function} cb
+ * @return  {String}
+ */
+function showInlineMessage ({ id, type, title, message, debugMsg, cb }) {
+  // TODO (S.Panfilov) handle class add and remove here
+  if (debugMsg) showInConsole(debugMsg, type, TYPE)
+  const elem = document.getElementById(id)
+
+  let msg = message
+  if (title) msg = `${title}: ${msg}`
+
+  elem.innerText = msg
+  if (cb) {
+    cb(elem, () => {
+      elem.innerText = ''
+    })
+  }
 
   return msg
 }
@@ -56,24 +92,13 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
  * @return {Object}
  */
 function getValues (vueApp, config) {
-  // TODO (S.Panfilov) test it!!! CurWorkPoint
   const result = {}
 
   Object.keys(config).forEach(field => {
     if (field !== 'cb') {
-      // console.info(`---${field}---`)
-      // if (typeof config[field] === 'function') {
-      //   console.log(config[field]())
-      // } else {
-      //   console.log(config[field])
-      // }
-      // console.info(`---END_${field}---`)
-
-      // console.info('THIS')
-      // console.log(this)
-      // console.info('THIS')
-
       result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
+    } else {
+      result[field] = config[field]
     }
   })
 
@@ -87,8 +112,15 @@ function getValues (vueApp, config) {
  */
 function showMessage (config, options, vueApp) {
   const valuesObj = getValues(vueApp, config)
-  const method = (options && options[valuesObj.type]) ? options[valuesObj.type] : showDefaultMessage
-  method(valuesObj)
+  const isLinkedToElem = !!valuesObj.id
+
+  if (isLinkedToElem) {
+    showInlineMessage(valuesObj)
+  } else {
+    const isMethodOverridden = options && options[valuesObj.type]
+    const method = isMethodOverridden ? options[valuesObj.type] : showDefaultMessage
+    method(valuesObj)
+  }
 
   if (config.cb) return config.cb()
 }

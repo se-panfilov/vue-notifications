@@ -77,7 +77,6 @@ function showInlineMessage ({ id, type, title, message, debugMsg, cb }) {
   if (title) msg = `${title}: ${msg}`
 
   elem.innerText = msg
-
   if (cb) {
     cb(elem, () => {
       elem.innerText = ''
@@ -93,24 +92,13 @@ function showInlineMessage ({ id, type, title, message, debugMsg, cb }) {
  * @return {Object}
  */
 function getValues (vueApp, config) {
-  // TODO (S.Panfilov) test it!!! CurWorkPoint
   const result = {}
 
   Object.keys(config).forEach(field => {
     if (field !== 'cb') {
-      // console.info(`---${field}---`)
-      // if (typeof config[field] === 'function') {
-      //   console.log(config[field]())
-      // } else {
-      //   console.log(config[field])
-      // }
-      // console.info(`---END_${field}---`)
-
-      // console.info('THIS')
-      // console.log(this)
-      // console.info('THIS')
-
       result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
+    } else {
+      result[field] = config[field]
     }
   })
 
