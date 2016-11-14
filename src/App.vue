@@ -67,7 +67,7 @@
     methods: {
       switchLinkedVal () {
         this.switchVal = !this.switchVal
-        console.info(this.switchVal)
+//        console.info(this.switchVal)
       }
     },
 //    computed: {
@@ -105,7 +105,11 @@
         cb (elem, clearFn) {
 //          console.info(elem)
 //          console.info(clearFn)
-          setTimeout(() => clearFn(), 2000)
+          console.info(this.switchVal)
+          setTimeout(() => {
+            // TODO (S.Panfilov)bug here with 2 times call
+            if (clearFn) clearFn()
+          }, 3000)
 
         }
       },
@@ -115,17 +119,17 @@
         title: 'Success title',
         message: 'Some success msg',
         timeout: false,
-        computed () {
-          console.info(this.switchVal)
-          return this.switchVal
-        },
+//        computed () {
+////          console.info(this.switchVal)
+//          return this.switchVal
+//        },
         cb (elem, clearFn) {
           console.log('==switchVal')
           console.info(this)
-          console.info(this.switchVal)
+//          console.info(this.switchVal)
           console.log('switchVal==')
-          console.info(elem)
-          console.info(clearFn)
+//          console.info(elem)
+//          console.info(clearFn)
           setTimeout(() => {
             // TODO (S.Panfilov)bug here with 2 times call
             if (clearFn) clearFn()
