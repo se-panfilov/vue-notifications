@@ -51,6 +51,21 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
 }
 
 /**
+ * @param  {String} id
+ * @param  {String} message
+ * @param  {String} title
+ * @param  {String} debugMsg
+ * @return  {String}
+ */
+function showInlineMessage ({ id, title, message, debugMsg }) {
+
+  // TODO (S.Panfilov) handle class add and remove here
+
+
+  return msg
+}
+
+/**
  * @param  {Object} vueApp
  * @param  {Object} config
  * @return {Object}
@@ -87,8 +102,15 @@ function getValues (vueApp, config) {
  */
 function showMessage (config, options, vueApp) {
   const valuesObj = getValues(vueApp, config)
-  const method = (options && options[valuesObj.type]) ? options[valuesObj.type] : showDefaultMessage
-  method(valuesObj)
+  const isLinkedToElem = !!valuesObj.id
+
+  if (isLinkedToElem) {
+    showInlineMessage(valuesObj)
+  } else {
+    const isMethodOverridden = options && options[valuesObj.type]
+    const method = isMethodOverridden ? options[valuesObj.type] : showDefaultMessage
+    method(valuesObj)
+  }
 
   if (config.cb) return config.cb()
 }
