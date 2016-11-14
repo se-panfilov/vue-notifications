@@ -57,9 +57,10 @@ function showInConsole(msg, type, types) {
  * @param  {String} message
  * @param  {String} title
  * @param  {String} debugMsg
+ * @param  {Object} vueApp
  * @return  {String}
  */
-function showDefaultMessage(_ref) {
+function showDefaultMessage(_ref, vueApp) {
   var type = _ref.type,
       message = _ref.message,
       title = _ref.title,
@@ -81,9 +82,12 @@ function showDefaultMessage(_ref) {
  * @param  {Function} computed // TODO (S.Panfilov) or not fn?
  * @param  {String} debugMsg
  * @param  {Function} cb
+ * @param  {Object} vueApp
  * @return  {String}
  */
-function showInlineMessage(_ref2) {
+function showInlineMessage(_ref2, vueApp) {
+  var _this = this;
+
   var id = _ref2.id,
       type = _ref2.type,
       timeout = _ref2.timeout,
@@ -108,18 +112,23 @@ function showInlineMessage(_ref2) {
 
   if (timeout && !computed) {
     setTimeout(function () {
-      clearFn(elem);
+      clearFn.call(vueApp, elem);
     }, timeout);
   } else {}
   // TODO (S.Panfilov) Computed property doesn't work yet
   // const interval = setInterval(() => {
-  //   if (!computed) clearInterval(interval)
+  // console.info(computed)
+  // if (!computed) clearInterval(interval)
   // }, 50)
 
 
   // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
+  console.warn(this);
   if (cb) {
-    cb(elem, clearFn);
+    // TODO (S.Panfilov) bug here
+    cb.call(vueApp, elem, function () {
+      return clearFn.call(_this, elem);
+    });
   }
 
   return msg;
@@ -137,7 +146,8 @@ function getValues(vueApp, config) {
     if (field !== 'cb') {
       result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
     } else {
-      result[field] = config[field];
+      console.info(vueApp);
+      result[field] = config[field].bind(vueApp);
     }
   });
 
@@ -154,11 +164,11 @@ function showMessage(config, options, vueApp) {
   var isLinkedToElem = !!valuesObj.id;
 
   if (isLinkedToElem) {
-    showInlineMessage(valuesObj);
+    showInlineMessage(valuesObj, vueApp);
   } else {
     var isMethodOverridden = options && options[valuesObj.type];
     var method = isMethodOverridden ? options[valuesObj.type] : showDefaultMessage;
-    method(valuesObj);
+    method(valuesObj, vueApp);
   }
 
   if (config.cb) return config.cb();

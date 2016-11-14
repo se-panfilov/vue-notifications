@@ -49,9 +49,10 @@ function showInConsole (msg, type, types) {
  * @param  {String} message
  * @param  {String} title
  * @param  {String} debugMsg
+ * @param  {Object} vueApp
  * @return  {String}
  */
-function showDefaultMessage ({ type, message, title, debugMsg }) {
+function showDefaultMessage ({ type, message, title, debugMsg }, vueApp) {
   let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}, type: ${type}`
 
   showInConsole(msg, type, TYPE)
@@ -68,9 +69,10 @@ function showDefaultMessage ({ type, message, title, debugMsg }) {
  * @param  {Function} computed // TODO (S.Panfilov) or not fn?
  * @param  {String} debugMsg
  * @param  {Function} cb
+ * @param  {Object} vueApp
  * @return  {String}
  */
-function showInlineMessage ({ id, type, timeout, title, message, computed, debugMsg, cb }) {
+function showInlineMessage ({ id, type, timeout, title, message, computed, debugMsg, cb }, vueApp) {
   // TODO (S.Panfilov) handle class add and remove here
   if (debugMsg) showInConsole(debugMsg, type, TYPE)
   const elem = document.getElementById(id)
@@ -86,18 +88,21 @@ function showInlineMessage ({ id, type, timeout, title, message, computed, debug
 
   if (timeout && !computed) {
     setTimeout(() => {
-      clearFn(elem)
+      clearFn.call(vueApp, elem)
     }, timeout)
   } else {
     // TODO (S.Panfilov) Computed property doesn't work yet
     // const interval = setInterval(() => {
-    //   if (!computed) clearInterval(interval)
+    // console.info(computed)
+    // if (!computed) clearInterval(interval)
     // }, 50)
   }
 
   // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
+  console.warn(this)
   if (cb) {
-    cb(elem, clearFn)
+    // TODO (S.Panfilov) bug here
+    cb.call(vueApp, elem, () => clearFn.call(this, elem))
   }
 
   return msg
@@ -115,7 +120,8 @@ function getValues (vueApp, config) {
     if (field !== 'cb') {
       result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
     } else {
-      result[field] = config[field]
+      console.info(vueApp)
+      result[field] = config[field].bind(vueApp)
     }
   })
 
@@ -132,11 +138,11 @@ function showMessage (config, options, vueApp) {
   const isLinkedToElem = !!valuesObj.id
 
   if (isLinkedToElem) {
-    showInlineMessage(valuesObj)
+    showInlineMessage(valuesObj, vueApp)
   } else {
     const isMethodOverridden = options && options[valuesObj.type]
     const method = isMethodOverridden ? options[valuesObj.type] : showDefaultMessage
-    method(valuesObj)
+    method(valuesObj, vueApp)
   }
 
   if (config.cb) return config.cb()
