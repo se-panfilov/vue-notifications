@@ -6,6 +6,7 @@
       <button type="button" @click="warnMsg()">Warning</button>
       <button type="button" @click="infoMsg()">Info</button>
       <button type="button" @click="successMsg()">Success</button>
+      <button type="button" @click="linkedMsg()">Linked message</button>
     </section>
 
     <section>
@@ -29,6 +30,7 @@
       </div>
     </section>
 
+    <div id="msg_elem"></div>
   </div>
 </template>
 
@@ -76,6 +78,15 @@
         type: 'success',
         title: 'Success title',
         message: 'Some success msg'
+      },
+      linkedMsg: {
+        id: 'msg_elem',
+        type: 'success',
+        title: 'Success title',
+        message: 'Some success msg',
+        cb (elem) {
+          console.info(elem)
+        }
       },
       dynamicMsg: {
         type () {
