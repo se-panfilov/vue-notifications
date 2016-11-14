@@ -114,6 +114,7 @@
         type: 'success',
         title: 'Success title',
         message: 'Some success msg',
+        timeout: false,
         computed () {
           console.info(this.switchVal)
           return this.switchVal
@@ -125,7 +126,10 @@
           console.log('switchVal==')
           console.info(elem)
           console.info(clearFn)
-          setTimeout(() => clearFn(), 2000)
+          setTimeout(() => {
+            // TODO (S.Panfilov)bug here with 2 times call
+            if (clearFn) clearFn()
+          }, 3000)
         }
       },
       dynamicMsg: {
