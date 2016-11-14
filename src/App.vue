@@ -119,10 +119,10 @@
         title: 'Success title',
         message: 'Some success msg',
         timeout: false,
-//        computed () {
-////          console.info(this.switchVal)
-//          return this.switchVal
-//        },
+        computed () {
+          console.info(this.switchVal)
+          return this.switchVal
+        },
         cb (elem, clearFn) {
           console.log('==switchVal')
           console.info(this)
