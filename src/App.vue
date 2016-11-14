@@ -46,7 +46,7 @@
     name: 'app',
     data () {
       return {
-        switchVal: false,
+        switchVal: true,
         types: [
           'error',
           'warn',
@@ -103,8 +103,10 @@
         title: 'Success title',
         message: 'Some success msg',
         cb (elem, clearFn) {
-          console.info(elem)
-          console.info(clearFn)
+//          console.info(elem)
+//          console.info(clearFn)
+          setTimeout(() => clearFn(), 2000)
+
         }
       },
       inlineAndComputedMsg: {
@@ -117,8 +119,13 @@
           return this.switchVal
         },
         cb (elem, clearFn) {
+          console.log('==switchVal')
+          console.info(this)
+          console.info(this.switchVal)
+          console.log('switchVal==')
           console.info(elem)
           console.info(clearFn)
+          setTimeout(() => clearFn(), 2000)
         }
       },
       dynamicMsg: {
