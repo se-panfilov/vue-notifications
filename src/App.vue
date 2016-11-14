@@ -6,7 +6,14 @@
       <button type="button" @click="warnMsg()">Warning</button>
       <button type="button" @click="infoMsg()">Info</button>
       <button type="button" @click="successMsg()">Success</button>
-      <button type="button" @click="linkedMsg()">Linked message</button>
+      <button type="button" @click="inlineMsg()">Inline message</button>
+      <button type="button" @click="inlineAndComputedMsg()">Inline and computed message</button>
+    </section>
+
+    <section>
+
+      <button type="button" @click="switchLinkedVal()">Switch for computed</button>
+
     </section>
 
     <section>
@@ -39,6 +46,7 @@
     name: 'app',
     data () {
       return {
+        switchVal: false,
         types: [
           'error',
           'warn',
@@ -57,7 +65,17 @@
       this.successMsg()
     },
     methods: {
+      switchLinkedVal () {
+        this.switchVal = !this.switchVal
+        console.info(this.switchVal)
+      }
     },
+//    computed: {
+//      someVal () {
+//        console.info(this.switchVal)
+//        return this.switchVal
+//      }
+//    },
     notifications: {
       errorMsg: {
         type: 'error',
@@ -79,13 +97,28 @@
         title: 'Success title',
         message: 'Some success msg'
       },
-      linkedMsg: {
+      inlineMsg: {
         id: 'msg_elem',
         type: 'success',
         title: 'Success title',
         message: 'Some success msg',
-        cb (elem) {
+        cb (elem, clearFn) {
           console.info(elem)
+          console.info(clearFn)
+        }
+      },
+      inlineAndComputedMsg: {
+        id: 'msg_elem',
+        type: 'success',
+        title: 'Success title',
+        message: 'Some success msg',
+        computed () {
+          console.info(this.switchVal)
+          return this.switchVal
+        },
+        cb (elem, clearFn) {
+          console.info(elem)
+          console.info(clearFn)
         }
       },
       dynamicMsg: {
