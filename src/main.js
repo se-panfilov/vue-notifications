@@ -101,7 +101,6 @@ const innerMethods = {
     }
 
     // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
-    console.warn(this)
     if (cb) {
       // TODO (S.Panfilov) bug here
       cb.call(vueApp, elem, () => innerMethods.clearFn.call(innerMethods, elem))
