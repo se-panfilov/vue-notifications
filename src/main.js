@@ -62,8 +62,68 @@ const innerMethods = {
   },
   /**
    * @param  {Object} elem
+   * @param  {String} className
    */
-  clearFn  (elem) {
+  addClass (elem, className) {
+    if (elem.classList) {
+      elem.classList.add(className)
+    } else {
+      elem.className += ' ' + className
+    }
+  },
+  /**
+   * @param  {Object} elem
+   * @param  {String} className
+   */
+  removeClass (elem, className) {
+    if (elem.classList) {
+      elem.classList.remove(className)
+    } else {
+      elem.className = elem.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ')
+    }
+  },
+  /**
+   * @param  {Object} elem
+   * @param  {String} className
+   * @return {Boolean}
+   */
+  hasClass (elem, className) {
+    if (elem.classList) {
+      return elem.classList.contains(className)
+    } else {
+      return new RegExp('(^| )' + className + '( |$)', 'gi').test(elem.className)
+    }
+  },
+  /**
+   * @param  {Object} elem
+   * @param  {String} message
+   * @param  {String} inClass
+   * @param  {String} outClass
+   */
+  showInlineFn  (elem, message, { inClass, outClass }) {
+    elem.innerText = message
+    if (inClass) {
+      if (!innerMethods.hasClass(elem, inClass)) innerMethods.addClass(elem, inClass)
+    }
+
+    if (outClass) {
+      if (innerMethods.hasClass(elem, outClass)) innerMethods.removeClass(elem, outClass)
+    }
+  },
+  /**
+   * @param  {Object} elem
+   * @param  {String} inClass
+   * @param  {String} outClass
+   */
+  clearInlineFn  (elem, { inClass, outClass }) {
+    if (inClass) {
+      if (innerMethods.hasClass(elem, inClass)) innerMethods.removeClass(elem, inClass)
+    }
+
+    if (outClass) {
+      if (!innerMethods.hasClass(elem, outClass)) innerMethods.addClass(elem, outClass)
+    }
+
     elem.innerText = ''
   },
   /**
@@ -71,28 +131,30 @@ const innerMethods = {
    * @param  {String} type
    * @param  {String} timeout
    * @param  {String} message
+   * @param  {Object} classes
    * @param  {Function} watch
    * @param  {String} debugMsg
    * @param  {Function} cb
    * @param  {Object} vueApp
    * @return  {String}
    */
-  showInlineMessage  ({ id, type, timeout, message, watch, debugMsg, cb }, vueApp) {
+  showInlineMessage  ({ id, type, timeout, message, classes = {}, watch, debugMsg, cb }, vueApp) {
     // TODO (S.Panfilov) handle class add and remove here
     if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE)
     const elem = document.getElementById(id)
 
 
-    elem.innerText = message
+    innerMethods.showInlineFn(elem, message, classes)
+
     if (timeout && !watch) {
       setTimeout(() => {
-        innerMethods.clearFn.call(vueApp, elem)
+        innerMethods.clearInlineFn.call(vueApp, elem, classes)
       }, timeout)
     } else {
       const interval = setInterval(() => {
         if (watch && !watch()) {
           clearInterval(interval)
-          innerMethods.clearFn.call(innerMethods, elem)
+          innerMethods.clearInlineFn.call(innerMethods, elem, classes)
         }
       }, 50)
     }
@@ -100,7 +162,7 @@ const innerMethods = {
     // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
     if (cb) {
       // TODO (S.Panfilov) bug here
-      cb.call(vueApp, elem, () => innerMethods.clearFn.call(innerMethods, elem))
+      cb.call(vueApp, elem, () => innerMethods.clearInlineFn.call(innerMethods, elem, classes))
     }
 
     return message

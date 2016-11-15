@@ -78,8 +78,78 @@ var innerMethods = {
 
   /**
    * @param  {Object} elem
+   * @param  {String} className
    */
-  clearFn: function clearFn(elem) {
+  addClass: function addClass(elem, className) {
+    if (elem.classList) {
+      elem.classList.add(className);
+    } else {
+      elem.className += ' ' + className;
+    }
+  },
+
+  /**
+   * @param  {Object} elem
+   * @param  {String} className
+   */
+  removeClass: function removeClass(elem, className) {
+    if (elem.classList) {
+      elem.classList.remove(className);
+    } else {
+      elem.className = elem.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    }
+  },
+
+  /**
+   * @param  {Object} elem
+   * @param  {String} className
+   * @return {Boolean}
+   */
+  hasClass: function hasClass(elem, className) {
+    if (elem.classList) {
+      return elem.classList.contains(className);
+    } else {
+      return new RegExp('(^| )' + className + '( |$)', 'gi').test(elem.className);
+    }
+  },
+
+  /**
+   * @param  {Object} elem
+   * @param  {String} message
+   * @param  {String} inClass
+   * @param  {String} outClass
+   */
+  showInlineFn: function showInlineFn(elem, message, _ref2) {
+    var inClass = _ref2.inClass,
+        outClass = _ref2.outClass;
+
+    elem.innerText = message;
+    if (inClass) {
+      if (!innerMethods.hasClass(elem, inClass)) innerMethods.addClass(elem, inClass);
+    }
+
+    if (outClass) {
+      if (innerMethods.hasClass(elem, outClass)) innerMethods.removeClass(elem, outClass);
+    }
+  },
+
+  /**
+   * @param  {Object} elem
+   * @param  {String} inClass
+   * @param  {String} outClass
+   */
+  clearInlineFn: function clearInlineFn(elem, _ref3) {
+    var inClass = _ref3.inClass,
+        outClass = _ref3.outClass;
+
+    if (inClass) {
+      if (innerMethods.hasClass(elem, inClass)) innerMethods.removeClass(elem, inClass);
+    }
+
+    if (outClass) {
+      if (!innerMethods.hasClass(elem, outClass)) innerMethods.addClass(elem, outClass);
+    }
+
     elem.innerText = '';
   },
 
@@ -88,36 +158,40 @@ var innerMethods = {
    * @param  {String} type
    * @param  {String} timeout
    * @param  {String} message
+   * @param  {Object} classes
    * @param  {Function} watch
    * @param  {String} debugMsg
    * @param  {Function} cb
    * @param  {Object} vueApp
    * @return  {String}
    */
-  showInlineMessage: function showInlineMessage(_ref2, vueApp) {
-    var id = _ref2.id,
-        type = _ref2.type,
-        timeout = _ref2.timeout,
-        message = _ref2.message,
-        watch = _ref2.watch,
-        debugMsg = _ref2.debugMsg,
-        cb = _ref2.cb;
+  showInlineMessage: function showInlineMessage(_ref4, vueApp) {
+    var id = _ref4.id,
+        type = _ref4.type,
+        timeout = _ref4.timeout,
+        message = _ref4.message,
+        _ref4$classes = _ref4.classes,
+        classes = _ref4$classes === undefined ? {} : _ref4$classes,
+        watch = _ref4.watch,
+        debugMsg = _ref4.debugMsg,
+        cb = _ref4.cb;
 
     // TODO (S.Panfilov) handle class add and remove here
     if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE);
     var elem = document.getElementById(id);
 
-    elem.innerText = message;
+    innerMethods.showInlineFn(elem, message, classes);
+
     if (timeout && !watch) {
       setTimeout(function () {
-        innerMethods.clearFn.call(vueApp, elem);
+        innerMethods.clearInlineFn.call(vueApp, elem, classes);
       }, timeout);
     } else {
       (function () {
         var interval = setInterval(function () {
           if (watch && !watch()) {
             clearInterval(interval);
-            innerMethods.clearFn.call(innerMethods, elem);
+            innerMethods.clearInlineFn.call(innerMethods, elem, classes);
           }
         }, 50);
       })();
@@ -127,7 +201,7 @@ var innerMethods = {
     if (cb) {
       // TODO (S.Panfilov) bug here
       cb.call(vueApp, elem, function () {
-        return innerMethods.clearFn.call(innerMethods, elem);
+        return innerMethods.clearInlineFn.call(innerMethods, elem, classes);
       });
     }
 
