@@ -24,7 +24,7 @@ const innerMethods = {
    * @param  {Object} Vue
    * @return {Object}
    */
-  getVersion  (Vue) {
+  getVersion (Vue) {
     const version = Vue.version.match(/(\d+)/g)
     return {
       major: +version[0],
@@ -38,7 +38,7 @@ const innerMethods = {
    * @param  {String} type
    * @param  {Object} types
    */
-  showInConsole  (msg, type, types) {
+  showInConsole (msg, type, types) {
     if (type === types.error) console.error(msg)
     else if (type === types.warn) console.warn(msg)
     else if (type === types.success) console.info(msg)
@@ -52,7 +52,7 @@ const innerMethods = {
    * @param  {String} debugMsg
    * @return  {String}
    */
-  showDefaultMessage  ({ type, message, title, debugMsg }) {
+  showDefaultMessage ({ type, message, title, debugMsg }) {
     let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}, type: ${type}`
 
     innerMethods.showInConsole(msg, type, TYPE)
@@ -99,7 +99,7 @@ const innerMethods = {
    * @param  {String} inClass
    * @param  {String} outClass
    */
-  showInlineFn  (elem, message, { inClass, outClass }) {
+  showInlineFn (elem, message, { inClass, outClass }) {
     elem.innerText = message
     if (inClass) {
       if (!innerMethods.hasClass(elem, inClass)) innerMethods.addClass(elem, inClass)
@@ -114,7 +114,7 @@ const innerMethods = {
    * @param  {String} inClass
    * @param  {String} outClass
    */
-  clearInlineFn  (elem, { inClass, outClass }) {
+  clearInlineFn (elem, { inClass, outClass }) {
     if (inClass) {
       if (innerMethods.hasClass(elem, inClass)) innerMethods.removeClass(elem, inClass)
     }
@@ -137,7 +137,7 @@ const innerMethods = {
    * @param  {Object} vueApp
    * @return  {String}
    */
-  showInlineMessage  ({ id, type, timeout, message, classes = {}, watch, debugMsg, cb }, vueApp) {
+  showInlineMessage ({ id, type, timeout, message, classes = {}, watch, debugMsg, cb }, vueApp) {
     // TODO (S.Panfilov) handle class add and remove here
     if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE)
     const elem = document.getElementById(id)
@@ -182,13 +182,11 @@ const innerMethods = {
    * @param  {Object} config
    * @return {Object}
    */
-  getValues  (vueApp, config) {
+  getValues (vueApp, config) {
     const result = {}
-
     const keepFnFields = ['cb', 'watch']
 
     Object.keys(config).forEach(field => {
-
       keepFnFields.forEach(fnField => {
         if (field === fnField) {
           result[field] = config[field].bind(vueApp)
@@ -196,7 +194,6 @@ const innerMethods = {
           result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
         }
       })
-
     })
 
     return result
@@ -207,8 +204,7 @@ const innerMethods = {
    * @param  {Object} options
    * @param  {Object} vueApp
    */
-  showMessage(config, options, vueApp)
-  {
+  showMessage (config, options, vueApp) {
     const valuesObj = innerMethods.getValues(vueApp, config)
     const isLinkedToElem = !!valuesObj.id
 
@@ -229,7 +225,7 @@ const innerMethods = {
    * @param {Object} options
    * @return {undefined}
    * */
-  addMethods(targetObj, typesObj, options){
+  addMethods (targetObj, typesObj, options) {
     Object.keys(typesObj).forEach(v => {
       targetObj[typesObj[v]] = function (config) {
         config.type = typesObj[v]
@@ -245,7 +241,7 @@ const innerMethods = {
    * @param  {Object} options
    * @param  {Object} pluginOptions
    */
-  setMethod(vueApp, name, options, pluginOptions){
+  setMethod (vueApp, name, options, pluginOptions) {
     if (!options.methods) options.methods = {}
 
     if (options.methods[name]) {
@@ -263,7 +259,7 @@ const innerMethods = {
    * @param  {Object} pluginOptions
    * @return {Function}
    */
-  makeMethod(vueApp, configName, options, pluginOptions) {
+  makeMethod (vueApp, configName, options, pluginOptions) {
     return function (config) {
       const newConfig = {}
       Object.assign(newConfig, VueNotifications.config)
@@ -278,7 +274,7 @@ const innerMethods = {
    * @param  {Object} notifications
    * @param  {Object} pluginOptions
    */
-  initVueNotificationPlugin(vueApp, notifications, pluginOptions) {
+  initVueNotificationPlugin (vueApp, notifications, pluginOptions) {
     if (!notifications) return
     Object.keys(notifications).forEach(name => {
       innerMethods.setMethod(vueApp, name, vueApp.$options, pluginOptions)
@@ -290,7 +286,7 @@ const innerMethods = {
    * @param  {Object} vueApp
    * @param  {Object} notifications
    */
-  launchWatchableNotifications(vueApp, notifications) {
+  launchWatchableNotifications (vueApp, notifications) {
     if (!notifications) return
     Object.keys(notifications).forEach(name => {
       if (vueApp[name] && notifications[name].watch) {
@@ -304,10 +300,9 @@ const innerMethods = {
    * @param  {Object} vueApp
    * @param  {Object} notifications
    */
-  unlinkVueNotificationPlugin(vueApp, notifications) {
+  unlinkVueNotificationPlugin (vueApp, notifications) {
     if (!notifications) return
     const attachedMethods = vueApp.$options.methods
-    debugger
     Object.keys(notifications).forEach(name => {
       if (attachedMethods[name]) {
         attachedMethods[name] = undefined
@@ -362,7 +357,6 @@ function makeMixin (Vue, pluginOptions) {
       innerMethods.unlinkVueNotificationPlugin(vueApp, notificationsField)
     }
   }
-
 }
 
 const VueNotifications = {

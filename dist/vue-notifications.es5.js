@@ -228,11 +228,9 @@ var innerMethods = {
    */
   getValues: function getValues(vueApp, config) {
     var result = {};
-
     var keepFnFields = ['cb', 'watch'];
 
     Object.keys(config).forEach(function (field) {
-
       keepFnFields.forEach(function (fnField) {
         if (field === fnField) {
           result[field] = config[field].bind(vueApp);
@@ -356,7 +354,6 @@ var innerMethods = {
   unlinkVueNotificationPlugin: function unlinkVueNotificationPlugin(vueApp, notifications) {
     if (!notifications) return;
     var attachedMethods = vueApp.$options.methods;
-    debugger;
     Object.keys(notifications).forEach(function (name) {
       if (attachedMethods[name]) {
         attachedMethods[name] = undefined;
