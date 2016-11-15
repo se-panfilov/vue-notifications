@@ -37,7 +37,9 @@
       </div>
     </section>
 
-    <div id="msg_elem"></div>
+    <section>
+      <div id="msg_elem" class="base_msg"></div>
+    </section>
   </div>
 </template>
 
@@ -121,6 +123,10 @@
           console.info(this.switchVal)
           return this.switchVal
         },
+        classes: {
+          inClass: '-in_class',
+          outClass: '-outClass'
+        }
 //        cb (elem, clearFn) {
 //          console.log('==switchVal')
 //          console.info(this)
@@ -148,3 +154,20 @@
     }
   }
 </script>
+
+<style>
+
+  .base_msg {
+    display: block;
+    min-height: 20px;
+    background-color: #0b97c4;
+  }
+
+  .-in_class {
+    background-color: red;
+  }
+
+  .-out_class {
+    background-color: green;
+  }
+</style>
