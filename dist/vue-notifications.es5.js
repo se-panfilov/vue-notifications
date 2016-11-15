@@ -87,9 +87,8 @@ var innerMethods = {
    * @param  {String} id
    * @param  {String} type
    * @param  {String} timeout
-   * @param  {String} title
    * @param  {String} message
-   * @param  {Function} computed // TODO (S.Panfilov) or not fn?
+   * @param  {Function} watch
    * @param  {String} debugMsg
    * @param  {Function} cb
    * @param  {Object} vueApp
@@ -99,9 +98,8 @@ var innerMethods = {
     var id = _ref2.id,
         type = _ref2.type,
         timeout = _ref2.timeout,
-        title = _ref2.title,
         message = _ref2.message,
-        computed = _ref2.computed,
+        watch = _ref2.watch,
         debugMsg = _ref2.debugMsg,
         cb = _ref2.cb;
 
@@ -109,22 +107,21 @@ var innerMethods = {
     if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE);
     var elem = document.getElementById(id);
 
-    var msg = message;
-    if (title) msg = title + ': ' + msg;
-
-    elem.innerText = msg;
-
-    if (timeout && !computed) {
+    elem.innerText = message;
+    if (timeout && !watch) {
       setTimeout(function () {
         innerMethods.clearFn.call(vueApp, elem);
       }, timeout);
-    } else {}
-    // TODO (S.Panfilov) Computed property doesn't work yet
-    // const interval = setInterval(() => {
-    // console.info(computed)
-    // if (!computed) clearInterval(interval)
-    // }, 50)
-
+    } else {
+      (function () {
+        var interval = setInterval(function () {
+          if (watch && !watch()) {
+            clearInterval(interval);
+            innerMethods.clearFn.call(innerMethods, elem);
+          }
+        }, 50);
+      })();
+    }
 
     // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
     if (cb) {
@@ -134,7 +131,7 @@ var innerMethods = {
       });
     }
 
-    return msg;
+    return message;
   },
 
 
@@ -146,13 +143,17 @@ var innerMethods = {
   getValues: function getValues(vueApp, config) {
     var result = {};
 
+    var keepFnFields = ['cb', 'watch'];
+
     Object.keys(config).forEach(function (field) {
-      if (field !== 'cb') {
-        result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
-      } else {
-        console.info(vueApp);
-        result[field] = config[field].bind(vueApp);
-      }
+
+      keepFnFields.forEach(function (fnField) {
+        if (field === fnField) {
+          result[field] = config[field].bind(vueApp);
+        } else {
+          result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
+        }
+      });
     });
 
     return result;
@@ -208,7 +209,6 @@ var innerMethods = {
 
     if (options.methods[name]) {
       // TODO (S.Panfilov) not sure - throw error here or just warn
-      // if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
       console.error(MESSAGES.methodNameConflict + name);
     } else {
       options.methods[name] = innerMethods.makeMethod(vueApp, name, options, pluginOptions);

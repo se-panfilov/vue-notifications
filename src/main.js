@@ -70,34 +70,31 @@ const innerMethods = {
    * @param  {String} id
    * @param  {String} type
    * @param  {String} timeout
-   * @param  {String} title
    * @param  {String} message
-   * @param  {Function} computed // TODO (S.Panfilov) or not fn?
+   * @param  {Function} watch
    * @param  {String} debugMsg
    * @param  {Function} cb
    * @param  {Object} vueApp
    * @return  {String}
    */
-  showInlineMessage  ({ id, type, timeout, title, message, computed, debugMsg, cb }, vueApp) {
+  showInlineMessage  ({ id, type, timeout, message, watch, debugMsg, cb }, vueApp) {
     // TODO (S.Panfilov) handle class add and remove here
     if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE)
     const elem = document.getElementById(id)
 
-    let msg = message
-    if (title) msg = `${title}: ${msg}`
 
-    elem.innerText = msg
-
-    if (timeout && !computed) {
+    elem.innerText = message
+    if (timeout && !watch) {
       setTimeout(() => {
         innerMethods.clearFn.call(vueApp, elem)
       }, timeout)
     } else {
-      // TODO (S.Panfilov) Computed property doesn't work yet
-      // const interval = setInterval(() => {
-      // console.info(computed)
-      // if (!computed) clearInterval(interval)
-      // }, 50)
+      const interval = setInterval(() => {
+        if (watch && !watch()){
+          clearInterval(interval)
+          innerMethods.clearFn.call(innerMethods, elem)
+        }
+      }, 50)
     }
 
     // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
@@ -106,7 +103,7 @@ const innerMethods = {
       cb.call(vueApp, elem, () => innerMethods.clearFn.call(innerMethods, elem))
     }
 
-    return msg
+    return message
   },
 
   /**
@@ -117,13 +114,18 @@ const innerMethods = {
   getValues  (vueApp, config) {
     const result = {}
 
+    const keepFnFields = ['cb', 'watch']
+
     Object.keys(config).forEach(field => {
-      if (field !== 'cb') {
-        result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
-      } else {
-        console.info(vueApp)
-        result[field] = config[field].bind(vueApp)
-      }
+
+      keepFnFields.forEach(fnField => {
+        if (field === fnField) {
+          result[field] = config[field].bind(vueApp)
+        } else {
+          result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
+        }
+      })
+
     })
 
     return result
@@ -134,7 +136,8 @@ const innerMethods = {
    * @param  {Object} options
    * @param  {Object} vueApp
    */
-  showMessage  (config, options, vueApp) {
+  showMessage(config, options, vueApp)
+  {
     const valuesObj = innerMethods.getValues(vueApp, config)
     const isLinkedToElem = !!valuesObj.id
 
@@ -147,7 +150,8 @@ const innerMethods = {
     }
 
     if (config.cb) return config.cb()
-  },
+  }
+  ,
 
   /**
    * @param {Object} targetObj
@@ -155,7 +159,8 @@ const innerMethods = {
    * @param {Object} options
    * @return {undefined}
    * */
-  addMethods  (targetObj, typesObj, options) {
+  addMethods(targetObj, typesObj, options)
+  {
     Object.keys(typesObj).forEach(v => {
       targetObj[typesObj[v]] = function (config) {
         config.type = typesObj[v]
@@ -163,7 +168,8 @@ const innerMethods = {
         return innerMethods.showMessage(config, options)
       }
     })
-  },
+  }
+  ,
 
   /**
    * @param  {Object} vueApp
@@ -171,17 +177,18 @@ const innerMethods = {
    * @param  {Object} options
    * @param  {Object} pluginOptions
    */
-  setMethod  (vueApp, name, options, pluginOptions) {
+  setMethod(vueApp, name, options, pluginOptions)
+  {
     if (!options.methods) options.methods = {}
 
     if (options.methods[name]) {
       // TODO (S.Panfilov) not sure - throw error here or just warn
-      // if (options.methods[name]) throw console.error(MESSAGES.methodNameConflict + name)
       console.error(MESSAGES.methodNameConflict + name)
     } else {
       options.methods[name] = innerMethods.makeMethod(vueApp, name, options, pluginOptions)
     }
-  },
+  }
+  ,
 
   /**
    * @param  {Object} vueApp
@@ -190,7 +197,8 @@ const innerMethods = {
    * @param  {Object} pluginOptions
    * @return {Function}
    */
-  makeMethod  (vueApp, configName, options, pluginOptions) {
+  makeMethod(vueApp, configName, options, pluginOptions)
+  {
     return function (config) {
       const newConfig = {}
       Object.assign(newConfig, VueNotifications.config)
@@ -199,13 +207,15 @@ const innerMethods = {
 
       return innerMethods.showMessage(newConfig, pluginOptions, vueApp)
     }
-  },
+  }
+  ,
   /**
    * @param  {Object} vueApp
    * @param  {Object} notifications
    * @param  {Object} pluginOptions
    */
-  initVueNotificationPlugin  (vueApp, notifications, pluginOptions) {
+  initVueNotificationPlugin(vueApp, notifications, pluginOptions)
+  {
     if (!notifications) return
     Object.keys(notifications).forEach(name => {
       innerMethods.setMethod(vueApp, name, vueApp.$options, pluginOptions)
@@ -252,7 +262,8 @@ const VueNotifications = {
   }
 }
 
-if (typeof window !== 'undefined' && window.Vue) {
+if (typeof window !== 'undefined' && window.Vue
+) {
   window.Vue.use(VueNotifications)
 }
 
