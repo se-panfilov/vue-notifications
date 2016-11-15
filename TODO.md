@@ -6,4 +6,4 @@
 | main.js | 102 | @S.Panfilov bug here
 | main.js | 167 | @S.Panfilov fix 'vueApp' in param
 | main.js | 185 | @S.Panfilov not sure - throw error here or just warn
-| unit/main.spec.js | 280 | @S.Panfilov fix this test
+| unit/main.spec.js | 283 | @S.Panfilov fix this test
