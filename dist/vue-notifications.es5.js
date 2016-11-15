@@ -60,10 +60,9 @@ var innerMethods = {
    * @param  {String} message
    * @param  {String} title
    * @param  {String} debugMsg
-   * @param  {Object} vueApp
    * @return  {String}
    */
-  showDefaultMessage: function showDefaultMessage(_ref, vueApp) {
+  showDefaultMessage: function showDefaultMessage(_ref) {
     var type = _ref.type,
         message = _ref.message,
         title = _ref.title,
@@ -180,14 +179,10 @@ var innerMethods = {
     if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE);
     var elem = document.getElementById(id);
 
-    innerMethods.showInlineFn(elem, message, classes);
-
-    if (timeout && !watch) {
-      setTimeout(function () {
-        innerMethods.clearInlineFn.call(vueApp, elem, classes);
-      }, timeout);
-    } else {
+    if (watch) {
       (function () {
+        timeout = false;
+        if (watch && watch()) innerMethods.showInlineFn(elem, message, classes);
         var interval = setInterval(function () {
           if (watch && !watch()) {
             clearInterval(interval);
@@ -195,6 +190,13 @@ var innerMethods = {
           }
         }, 50);
       })();
+    }
+
+    if (!watch) {
+      innerMethods.showInlineFn(elem, message, classes);
+      setTimeout(function () {
+        innerMethods.clearInlineFn.call(vueApp, elem, classes);
+      }, timeout);
     }
 
     // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times

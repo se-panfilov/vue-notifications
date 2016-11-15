@@ -50,10 +50,9 @@ const innerMethods = {
    * @param  {String} message
    * @param  {String} title
    * @param  {String} debugMsg
-   * @param  {Object} vueApp
    * @return  {String}
    */
-  showDefaultMessage  ({ type, message, title, debugMsg }, vueApp) {
+  showDefaultMessage  ({ type, message, title, debugMsg }) {
     let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}, type: ${type}`
 
     innerMethods.showInConsole(msg, type, TYPE)
@@ -143,20 +142,22 @@ const innerMethods = {
     if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE)
     const elem = document.getElementById(id)
 
-
-    innerMethods.showInlineFn(elem, message, classes)
-
-    if (timeout && !watch) {
-      setTimeout(() => {
-        innerMethods.clearInlineFn.call(vueApp, elem, classes)
-      }, timeout)
-    } else {
+    if (watch) {
+      timeout = false
+      if (watch && watch()) innerMethods.showInlineFn(elem, message, classes)
       const interval = setInterval(() => {
         if (watch && !watch()) {
           clearInterval(interval)
           innerMethods.clearInlineFn.call(innerMethods, elem, classes)
         }
       }, 50)
+    }
+
+    if (!watch) {
+      innerMethods.showInlineFn(elem, message, classes)
+      setTimeout(() => {
+        innerMethods.clearInlineFn.call(vueApp, elem, classes)
+      }, timeout)
     }
 
     // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
