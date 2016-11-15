@@ -90,7 +90,7 @@ const innerMethods = {
       }, timeout)
     } else {
       const interval = setInterval(() => {
-        if (watch && !watch()){
+        if (watch && !watch()) {
           clearInterval(interval)
           innerMethods.clearFn.call(innerMethods, elem)
         }

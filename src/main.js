@@ -90,7 +90,7 @@ const innerMethods = {
       }, timeout)
     } else {
       const interval = setInterval(() => {
-        if (watch && !watch()){
+        if (watch && !watch()) {
           clearInterval(interval)
           innerMethods.clearFn.call(innerMethods, elem)
         }
@@ -269,6 +269,12 @@ if (typeof window !== 'undefined' && window.Vue
 
 /*START.TESTS_ONLY*/
 VueNotifications._private = innerMethods
+VueNotifications._private.TYPE = TYPE
+VueNotifications._private.PLUGIN_NAME = PLUGIN_NAME
+VueNotifications._private.PACKAGE_NAME = PACKAGE_NAME
+VueNotifications._private.PROPERTY_NAME = PROPERTY_NAME
+VueNotifications._private.VUE_VERSION = VUE_VERSION
+VueNotifications._private.MESSAGES = MESSAGES
 
 export default VueNotifications
 

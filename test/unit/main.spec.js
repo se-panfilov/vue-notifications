@@ -232,9 +232,12 @@ describe('Main.', () => {
         sinon.spy(console, 'error')
         sinon.spy(_private, 'makeMethod')
 
+        const vueApp = {
+        }
+
         _private.setMethod(name, options, pluginOptions)
         expect(console.error).to.not.be.called
-        expect(_private.makeMethod).to.not.be.calledWith(name, options, pluginOptions)
+        expect(_private.makeMethod).to.not.be.calledWith(vueApp, name, options, pluginOptions)
 
         console.error.restore()
         _private.makeMethod.restore()
