@@ -9,6 +9,8 @@
 }(this, function() {
 'use strict';
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var PLUGIN_NAME = 'VueNotifications';
 var PACKAGE_NAME = 'vue-notifications';
 var PROPERTY_NAME = 'notifications';
@@ -183,10 +185,18 @@ var innerMethods = {
       (function () {
         timeout = false;
         if (watch && watch()) innerMethods.showInlineFn(elem, message, classes);
-        var interval = setInterval(function () {
-          if (watch && !watch()) {
-            clearInterval(interval);
-            innerMethods.clearInlineFn.call(innerMethods, elem, classes);
+        // const interval = setInterval(() => {
+        var prev = void 0;
+        var cur = void 0;
+        setInterval(function () {
+          if (watch) {
+            cur = watch();
+            // clearInterval(interval)
+            if (cur !== prev) {
+              if (cur) innerMethods.showInlineFn.call(innerMethods, elem, message, classes);
+              if (!cur) innerMethods.clearInlineFn.call(innerMethods, elem, classes);
+              prev = cur;
+            }
           }
         }, 50);
       })();
@@ -322,8 +332,84 @@ var innerMethods = {
     });
 
     vueApp.$emit(PACKAGE_NAME + '-initiated');
+  },
+
+  /**
+   * @param  {Object} vueApp
+   * @param  {Object} notifications
+   */
+  launchWatchableNotifications: function launchWatchableNotifications(vueApp, notifications) {
+    if (!notifications) return;
+    Object.keys(notifications).forEach(function (name) {
+      if (vueApp[name] && notifications[name].watch) {
+        vueApp[name]();
+      }
+    });
+
+    vueApp.$emit(PACKAGE_NAME + '-launched_watchable');
+  },
+
+  /**
+   * @param  {Object} vueApp
+   * @param  {Object} notifications
+   */
+  unlinkVueNotificationPlugin: function unlinkVueNotificationPlugin(vueApp, notifications) {
+    if (!notifications) return;
+    var attachedMethods = vueApp.$options.methods;
+    debugger;
+    Object.keys(notifications).forEach(function (name) {
+      if (attachedMethods[name]) {
+        attachedMethods[name] = undefined;
+        delete attachedMethods[name];
+      }
+    });
+
+    vueApp.$emit(PACKAGE_NAME + '-unlinked');
   }
 };
+
+/**
+ * @param {Function} Vue
+ * @param {Object} pluginOptions
+ * @return {Object}
+ */
+function makeMixin(Vue, pluginOptions) {
+  var _ref5;
+
+  var hooks = {
+    init: '',
+    destroy: 'beforeDestroy',
+    mounted: ''
+  };
+
+  if (innerMethods.getVersion(Vue).major === VUE_VERSION.evangelion) {
+    hooks.init = 'init';
+    hooks.mounted = 'compiled';
+  }
+  if (innerMethods.getVersion(Vue).major === VUE_VERSION.ghostInTheShell) {
+    hooks.init = 'beforeCreate';
+    hooks.mounted = 'mounted';
+  }
+
+  return _ref5 = {}, _defineProperty(_ref5, hooks.init, function () {
+    var vueApp = this;
+    var vueAppOptions = this.$options;
+    var notificationsField = vueAppOptions[VueNotifications.propertyName];
+
+    innerMethods.initVueNotificationPlugin(vueApp, notificationsField, pluginOptions);
+  }), _defineProperty(_ref5, hooks.mounted, function () {
+    var vueApp = this;
+    var vueAppOptions = this.$options;
+    var notificationsField = vueAppOptions[VueNotifications.propertyName];
+
+    innerMethods.launchWatchableNotifications(vueApp, notificationsField);
+  }), _defineProperty(_ref5, hooks.destroy, function () {
+    var vueApp = this;
+    var vueAppOptions = this.$options;
+    var notificationsField = vueAppOptions[VueNotifications.propertyName];
+    innerMethods.unlinkVueNotificationPlugin(vueApp, notificationsField);
+  }), _ref5;
+}
 
 var VueNotifications = {
   type: TYPE,
@@ -342,22 +428,10 @@ var VueNotifications = {
   install: function install(Vue) {
     var pluginOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var mixin = {};
-    var hook = void 0;
-
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled);
-    if (innerMethods.getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init';
-    if (innerMethods.getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate';
-
-    mixin[hook] = function () {
-      var vueApp = this;
-      var vueAppOptions = this.$options;
-      var notificationsField = vueAppOptions[VueNotifications.propertyName];
-
-      innerMethods.initVueNotificationPlugin(vueApp, notificationsField, pluginOptions);
-    };
-
+    var mixin = makeMixin(Vue, pluginOptions);
     Vue.mixin(mixin);
+
     innerMethods.addMethods(this, this.type, pluginOptions);
 
     this.installed = true;

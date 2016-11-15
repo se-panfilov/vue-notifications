@@ -145,10 +145,18 @@ const innerMethods = {
     if (watch) {
       timeout = false
       if (watch && watch()) innerMethods.showInlineFn(elem, message, classes)
-      const interval = setInterval(() => {
-        if (watch && !watch()) {
-          clearInterval(interval)
-          innerMethods.clearInlineFn.call(innerMethods, elem, classes)
+      // const interval = setInterval(() => {
+      let prev
+      let cur
+      setInterval(() => {
+        if (watch) {
+          cur = watch()
+          // clearInterval(interval)
+          if (cur !== prev) {
+            if (cur) innerMethods.showInlineFn.call(innerMethods, elem, message, classes)
+            if (!cur) innerMethods.clearInlineFn.call(innerMethods, elem, classes)
+            prev = cur
+          }
         }
       }, 50)
     }
@@ -213,8 +221,7 @@ const innerMethods = {
     }
 
     if (config.cb) return config.cb()
-  }
-  ,
+  },
 
   /**
    * @param {Object} targetObj
@@ -222,8 +229,7 @@ const innerMethods = {
    * @param {Object} options
    * @return {undefined}
    * */
-  addMethods(targetObj, typesObj, options)
-  {
+  addMethods(targetObj, typesObj, options){
     Object.keys(typesObj).forEach(v => {
       targetObj[typesObj[v]] = function (config) {
         config.type = typesObj[v]
@@ -231,8 +237,7 @@ const innerMethods = {
         return innerMethods.showMessage(config, options)
       }
     })
-  }
-  ,
+  },
 
   /**
    * @param  {Object} vueApp
@@ -240,8 +245,7 @@ const innerMethods = {
    * @param  {Object} options
    * @param  {Object} pluginOptions
    */
-  setMethod(vueApp, name, options, pluginOptions)
-  {
+  setMethod(vueApp, name, options, pluginOptions){
     if (!options.methods) options.methods = {}
 
     if (options.methods[name]) {
@@ -250,8 +254,7 @@ const innerMethods = {
     } else {
       options.methods[name] = innerMethods.makeMethod(vueApp, name, options, pluginOptions)
     }
-  }
-  ,
+  },
 
   /**
    * @param  {Object} vueApp
@@ -260,8 +263,7 @@ const innerMethods = {
    * @param  {Object} pluginOptions
    * @return {Function}
    */
-  makeMethod(vueApp, configName, options, pluginOptions)
-  {
+  makeMethod(vueApp, configName, options, pluginOptions) {
     return function (config) {
       const newConfig = {}
       Object.assign(newConfig, VueNotifications.config)
@@ -270,22 +272,97 @@ const innerMethods = {
 
       return innerMethods.showMessage(newConfig, pluginOptions, vueApp)
     }
-  }
-  ,
+  },
   /**
    * @param  {Object} vueApp
    * @param  {Object} notifications
    * @param  {Object} pluginOptions
    */
-  initVueNotificationPlugin(vueApp, notifications, pluginOptions)
-  {
+  initVueNotificationPlugin(vueApp, notifications, pluginOptions) {
     if (!notifications) return
     Object.keys(notifications).forEach(name => {
       innerMethods.setMethod(vueApp, name, vueApp.$options, pluginOptions)
     })
 
     vueApp.$emit(`${PACKAGE_NAME}-initiated`)
+  },
+  /**
+   * @param  {Object} vueApp
+   * @param  {Object} notifications
+   */
+  launchWatchableNotifications(vueApp, notifications) {
+    if (!notifications) return
+    Object.keys(notifications).forEach(name => {
+      if (vueApp[name] && notifications[name].watch) {
+        vueApp[name]()
+      }
+    })
+
+    vueApp.$emit(`${PACKAGE_NAME}-launched_watchable`)
+  },
+  /**
+   * @param  {Object} vueApp
+   * @param  {Object} notifications
+   */
+  unlinkVueNotificationPlugin(vueApp, notifications) {
+    if (!notifications) return
+    const attachedMethods = vueApp.$options.methods
+    debugger
+    Object.keys(notifications).forEach(name => {
+      if (attachedMethods[name]) {
+        attachedMethods[name] = undefined
+        delete attachedMethods[name]
+      }
+    })
+
+    vueApp.$emit(`${PACKAGE_NAME}-unlinked`)
   }
+}
+
+/**
+ * @param {Function} Vue
+ * @param {Object} pluginOptions
+ * @return {Object}
+ */
+function makeMixin (Vue, pluginOptions) {
+  let hooks = {
+    init: '',
+    destroy: 'beforeDestroy',
+    mounted: ''
+  }
+
+  if (innerMethods.getVersion(Vue).major === VUE_VERSION.evangelion) {
+    hooks.init = 'init'
+    hooks.mounted = 'compiled'
+  }
+  if (innerMethods.getVersion(Vue).major === VUE_VERSION.ghostInTheShell) {
+    hooks.init = 'beforeCreate'
+    hooks.mounted = 'mounted'
+  }
+
+  return {
+    [hooks.init]: function () {
+      const vueApp = this
+      const vueAppOptions = this.$options
+      const notificationsField = vueAppOptions[VueNotifications.propertyName]
+
+      innerMethods.initVueNotificationPlugin(vueApp, notificationsField, pluginOptions)
+    },
+    [hooks.mounted]: function () {
+      const vueApp = this
+      const vueAppOptions = this.$options
+      const notificationsField = vueAppOptions[VueNotifications.propertyName]
+
+      innerMethods.launchWatchableNotifications(vueApp, notificationsField)
+    },
+    [hooks.destroy]: function () {
+      const vueApp = this
+      const vueAppOptions = this.$options
+      const notificationsField = vueAppOptions[VueNotifications.propertyName]
+      innerMethods.unlinkVueNotificationPlugin(vueApp, notificationsField)
+    }
+  }
+
 }
 
 const VueNotifications = {
@@ -303,30 +380,17 @@ const VueNotifications = {
    * @this VueNotifications
    */
   install (Vue, pluginOptions = {}) {
-    const mixin = {}
-    let hook
-
     if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
-    if (innerMethods.getVersion(Vue).major === VUE_VERSION.evangelion) hook = 'init'
-    if (innerMethods.getVersion(Vue).major === VUE_VERSION.ghostInTheShell) hook = 'beforeCreate'
-
-    mixin[hook] = function () {
-      const vueApp = this
-      const vueAppOptions = this.$options
-      const notificationsField = vueAppOptions[VueNotifications.propertyName]
-
-      innerMethods.initVueNotificationPlugin(vueApp, notificationsField, pluginOptions)
-    }
-
+    const mixin = makeMixin(Vue, pluginOptions)
     Vue.mixin(mixin)
+
     innerMethods.addMethods(this, this.type, pluginOptions)
 
     this.installed = true
   }
 }
 
-if (typeof window !== 'undefined' && window.Vue
-) {
+if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueNotifications)
 }
 
