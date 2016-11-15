@@ -103,8 +103,6 @@
         title: 'Success title',
         message: 'Some success msg',
         cb (elem, clearFn) {
-//          console.info(elem)
-//          console.info(clearFn)
           console.info(this.switchVal)
           setTimeout(() => {
             // TODO (S.Panfilov)bug here with 2 times call
@@ -117,24 +115,24 @@
         id: 'msg_elem',
         type: 'success',
         title: 'Success title',
-        message: 'Some success msg',
+        message: 'Some inline msg',
         timeout: false,
-        computed () {
+        watch () {
           console.info(this.switchVal)
           return this.switchVal
         },
-        cb (elem, clearFn) {
-          console.log('==switchVal')
-          console.info(this)
-//          console.info(this.switchVal)
-          console.log('switchVal==')
-//          console.info(elem)
-//          console.info(clearFn)
-          setTimeout(() => {
-            // TODO (S.Panfilov)bug here with 2 times call
-            if (clearFn) clearFn()
-          }, 3000)
-        }
+//        cb (elem, clearFn) {
+//          console.log('==switchVal')
+//          console.info(this)
+////          console.info(this.switchVal)
+//          console.log('switchVal==')
+////          console.info(elem)
+////          console.info(clearFn)
+//          setTimeout(() => {
+//            // TODO (S.Panfilov)bug here with 2 times call
+//            if (clearFn) clearFn()
+//          }, 3000)
+//        }
       },
       dynamicMsg: {
         type () {
