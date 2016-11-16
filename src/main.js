@@ -148,6 +148,8 @@ const innerMethods = {
       // const interval = setInterval(() => {
       let prev
       let cur
+
+      // TODO (S.Panfilov)make sure no memory leak here, destroy interval when we're leave page
       setInterval(() => {
         if (watch) {
           cur = watch()
