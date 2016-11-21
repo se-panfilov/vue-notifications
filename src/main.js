@@ -384,6 +384,9 @@ const VueNotifications = {
 
     this.installed = true
   }
+
+  //TODO (S.Panfilov) add ability to access this.notifications.someError.message
+  //TODO (S.Panfilov) add "noCall:true" property
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
