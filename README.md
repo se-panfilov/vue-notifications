@@ -43,19 +43,20 @@ Vue.use(VueNotifications, options)
 **Attention:** By default VueNotification send all messages _to console_. To activate non-blocking notifiction you've got to use third-party library, like toasr. I suggest you to use [mini-toastr][2] (`npm i mini-toastr --save`)
 
 ```JS
-//Include Plugin in project
+// Include Plugin in project
 import VueNotifications from 'vue-notifications'
-//Include mini-toaster (or any other UI-notification library
+
+// Include mini-toaster (or any other UI-notification library
 import miniToastr from 'mini-toastr'
 
-//Here we setup messages output to `mini-toastr`
+// Here we setup messages output to `mini-toastr`
 function toast ({title, message, type, timeout, cb}) {
   return miniToastr[type](message, title, timeout, cb)
 }
 
-//Binding for methods .success(), .error() and etc. You can specify and map your own methods here.
-//Required to pipe our outout to UI library (mini-toastr in example here)
-//All not-specifyed events (types) would be piped to output in console.
+// Binding for methods .success(), .error() and etc. You can specify and map your own methods here.
+// Required to pipe our output to UI library (mini-toastr in example here)
+// All not-specified events (types) would be piped to output in console.
 const options = {
   success: toast,
   error: toast,
@@ -63,13 +64,13 @@ const options = {
   warn: toast
 }
 
-//Activate plugin
+// Activate plugin
 Vue.use(VueNotifications, options)// VueNotifications have auto install but if we want to specify options we've got to do it manually.
 ```
 
 ```JS
-//THIS ISN'T REQUIRED IF YOU DON'T USE 'mini-toastr'
-//and if you would use "miniToastr" you have to init in in your App.vue
+// THIS ISN'T REQUIRED IF YOU DON'T USE 'mini-toastr'
+// and if you would use "miniToastr" you have to init in in your App.vue
 import miniToastr from 'mini-toastr'// don't forget to make "npm i mini-toastr --save"
 
 //in 'ready section
