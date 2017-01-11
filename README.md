@@ -49,6 +49,16 @@ import VueNotifications from 'vue-notifications'
 // Include mini-toaster (or any other UI-notification library
 import miniToastr from 'mini-toastr'
 
+// If using mini-toastr, provide additional configuration
+const toastTypes = {
+  success: 'success',
+  error: 'error',
+  info: 'info',
+  warn: 'warn'
+}
+
+miniToastr.init({types: toastTypes})
+
 // Here we setup messages output to `mini-toastr`
 function toast ({title, message, type, timeout, cb}) {
   return miniToastr[type](message, title, timeout, cb)
