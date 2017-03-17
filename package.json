@@ -49,7 +49,7 @@
     "babili": "0.0.12",
     "browserify": "^14.0.0",
     "chai": "^3.5.0",
-    "eslint": "^3.10.1",
+    "eslint": "^3.18.0",
     "eslint-config-standard": "^7.0.0",
     "eslint-friendly-formatter": "^2.0.6",
     "eslint-plugin-promise": "^3.3.0",
