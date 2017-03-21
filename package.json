@@ -71,7 +71,7 @@
     "mocha": "^3.1.2",
     "require-dir": "^0.3.0",
     "run-sequence": "^1.2.2",
-    "sinon": "^2.0.0",
+    "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
     "source": "0.0.3",
     "through2": "^2.0.1",
