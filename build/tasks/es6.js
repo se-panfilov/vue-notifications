@@ -13,7 +13,7 @@ const stripCode = require('gulp-strip-code')
 gulp.task('es6', () => {
   return gulp.src(config.js.src)
     .pipe(plumber({
-      errorHandler: notify.onError(function (err) {
+      errorHandler: notify.onError(err => {
         return {
           title: 'Build ES6',
           message: err.message
@@ -26,9 +26,9 @@ gulp.task('es6', () => {
       end_comment: 'END.TESTS_ONLY'
     }))
     .pipe(gulp.dest(config.dest))
-    .pipe(babel({ presets: ['babili'], comments: false }))
-    // TODO (S.Panfilov) Remove comments
-    // TODO (S.Panfilov) Perhaps add sourcemaps
+    // .pipe(babel({ presets: ['babili'], comments: false }))
+    // // TODO (S.Panfilov) Remove comments
+    // // TODO (S.Panfilov) Perhaps add sourcemaps
     .pipe(rename({ basename: `${config.projectName}.es6.min` }))
     .pipe(gulp.dest(config.dest))
 })
