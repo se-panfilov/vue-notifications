@@ -50,7 +50,7 @@
     "browserify": "^14.2.0",
     "chai": "^3.5.0",
     "eslint": "^3.19.0",
-    "eslint-config-standard": "^10.0.0",
+    "eslint-config-standard": "^10.1.0",
     "eslint-friendly-formatter": "^2.0.6",
     "eslint-plugin-promise": "^3.3.0",
     "eslint-plugin-standard": "^2.2.0",
