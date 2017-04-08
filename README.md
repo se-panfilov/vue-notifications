@@ -13,7 +13,7 @@
 
 ----
 
-##Instalation
+## Installation
 
 via npm:
 
@@ -23,7 +23,7 @@ npm i vue-notifications --save
 
 via bower:
 
-```shell
+```sh
 bower i vue-notifications --save
 ```
 or download [latest release][1]
@@ -38,7 +38,7 @@ import VueNotifications from 'vue-notifications'
 Vue.use(VueNotifications, options)
 ```
 
-##Setup and configuration
+## Setup and configuration
 
 **Attention:** By default VueNotification send all messages _to console_. To activate non-blocking notifiction you've got to use third-party library, like toasr. I suggest you to use [mini-toastr][2] (`npm i mini-toastr --save`)
 
@@ -105,7 +105,7 @@ VueNotifications.propertyName = 'messages'
 Vue.use(VueNotifications, options)
 ```
 
-##Usage
+## Usage
 
 You've got to specify notifications config:
 
@@ -143,7 +143,7 @@ In `some.js`:
   import VueNotifications from 'vue-notifications'
   VueNotifications.error({message: 'Some Error'})
 ```
-####Overriding config.
+#### Overriding config.
 
 Even if you have specify config, you can ovverride it in any call simple by sending config object: `this.showLoginError({type: 'warn'})`. i.e.:
 
@@ -162,7 +162,7 @@ this.showLoginError({type: 'warn'}) //info message
 Keep in mind that configs merging by `Object.assign` (no deep copying).
 ```
 
-##Options
+## Options
 
 **VueNotification** can work fine with any of your custom options, but by default it would be:
 
@@ -173,7 +173,7 @@ Keep in mind that configs merging by `Object.assign` (no deep copying).
 | `timeout`  | `Number`  |  `3000` |  time before notifications gone |
 | `cb`  |  `Function` | `undefined` |  Callback function; |
 
-####How to add custom field?
+#### How to add custom field?
 
 Simple: `this.showLoginError({consoleMessage: 'let it be in console'})`. You've passed a custom config here (`{consoleMessage: 'let it be in console'}`) that will be merged with config from `notifications.showLoginError` and with `global config` via `Object.assign` (beware of shallow copy).
 
@@ -211,15 +211,15 @@ const options = {
 Vue.use(VueNotifications, options)
 ```
 
-##Browser support.
+## Browser support.
 All modern browsers (`ES5` support require). See [ECMAScript 5 compliant browsers][3].
 You can use `ES5` or `ES6` versions as well.
 
-###ROADMAP:
+### ROADMAP:
 
 1. Add native support for `computed` properties.
 
-##License
+## License
 
 MIT License
 
