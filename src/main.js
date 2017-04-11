@@ -10,8 +10,8 @@ const TYPE = {
 }
 
 const VUE_VERSION = {
-  evangelion: 1,
-  ghostInTheShell: 2
+  eva: 1,
+  ghost: 2
 }
 
 const MESSAGES = {
@@ -24,13 +24,9 @@ const innerMethods = {
    * @param  {Object} Vue
    * @return {Object}
    */
-  getVersion (Vue) {
+  getMajorVersion (Vue) {
     const version = Vue.version.match(/(\d+)/g)
-    return {
-      major: +version[0],
-      regular: +version[1],
-      minor: +version[2]
-    }
+    return +version[0]
   },
 
   /**
@@ -52,7 +48,7 @@ const innerMethods = {
    * @param  {String} debugMsg
    * @return  {String}
    */
-  showDefaultMessage ({ type, message, title, debugMsg }) {
+  showDefaultMessage ({type, message, title, debugMsg}) {
     let msg = `Title: ${title}, Message: ${message}, DebugMsg: ${debugMsg}, type: ${type}`
 
     innerMethods.showInConsole(msg, type, TYPE)
@@ -94,99 +90,13 @@ const innerMethods = {
     }
   },
   /**
-   * @param  {Object} elem
-   * @param  {String} message
-   * @param  {String} inClass
-   * @param  {String} outClass
-   */
-  showInlineFn (elem, message, { inClass, outClass }) {
-    elem.innerText = message
-    if (inClass) {
-      if (!innerMethods.hasClass(elem, inClass)) innerMethods.addClass(elem, inClass)
-    }
-
-    if (outClass) {
-      if (innerMethods.hasClass(elem, outClass)) innerMethods.removeClass(elem, outClass)
-    }
-  },
-  /**
-   * @param  {Object} elem
-   * @param  {String} inClass
-   * @param  {String} outClass
-   */
-  clearInlineFn (elem, { inClass, outClass }) {
-    if (inClass) {
-      if (innerMethods.hasClass(elem, inClass)) innerMethods.removeClass(elem, inClass)
-    }
-
-    if (outClass) {
-      if (!innerMethods.hasClass(elem, outClass)) innerMethods.addClass(elem, outClass)
-    }
-
-    elem.innerText = ''
-  },
-  /**
-   * @param  {String} id
-   * @param  {String} type
-   * @param  {String} timeout
-   * @param  {String} message
-   * @param  {Object} classes
-   * @param  {Function} watch
-   * @param  {String} debugMsg
-   * @param  {Function} cb
-   * @param  {Object} vueApp
-   * @return  {String}
-   */
-  showInlineMessage ({ id, type, timeout, message, classes = {}, watch, debugMsg, cb }, vueApp) {
-    // TODO (S.Panfilov) handle class add and remove here
-    if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE)
-    const elem = document.getElementById(id)
-
-    if (watch) {
-      timeout = false
-      if (watch && watch()) innerMethods.showInlineFn(elem, message, classes)
-      // const interval = setInterval(() => {
-      let prev
-      let cur
-
-      // TODO (S.Panfilov)make sure no memory leak here, destroy interval when we're leave page
-      setInterval(() => {
-        if (watch) {
-          cur = watch()
-          // clearInterval(interval)
-          if (cur !== prev) {
-            if (cur) innerMethods.showInlineFn.call(innerMethods, elem, message, classes)
-            if (!cur) innerMethods.clearInlineFn.call(innerMethods, elem, classes)
-            prev = cur
-          }
-        }
-      }, 50)
-    }
-
-    if (!watch) {
-      innerMethods.showInlineFn(elem, message, classes)
-      setTimeout(() => {
-        innerMethods.clearInlineFn.call(vueApp, elem, classes)
-      }, timeout)
-    }
-
-    // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
-    if (cb) {
-      // TODO (S.Panfilov) bug here
-      cb.call(vueApp, elem, () => innerMethods.clearInlineFn.call(innerMethods, elem, classes))
-    }
-
-    return message
-  },
-
-  /**
    * @param  {Object} vueApp
    * @param  {Object} config
    * @return {Object}
    */
   getValues (vueApp, config) {
     const result = {}
-    const keepFnFields = ['cb', 'watch']
+    const keepFnFields = ['cb']
 
     Object.keys(config).forEach(field => {
       keepFnFields.forEach(fnField => {
@@ -208,15 +118,9 @@ const innerMethods = {
    */
   showMessage (config, options, vueApp) {
     const valuesObj = innerMethods.getValues(vueApp, config)
-    const isLinkedToElem = !!valuesObj.id
-
-    if (isLinkedToElem) {
-      innerMethods.showInlineMessage(valuesObj, vueApp)
-    } else {
-      const isMethodOverridden = options && options[valuesObj.type]
-      const method = isMethodOverridden ? options[valuesObj.type] : innerMethods.showDefaultMessage
-      method(valuesObj, vueApp)
-    }
+    const isMethodOverridden = options && options[valuesObj.type]
+    const method = isMethodOverridden ? options[valuesObj.type] : innerMethods.showDefaultMessage
+    method(valuesObj, vueApp)
 
     if (config.cb) return config.cb()
   },
@@ -288,20 +192,6 @@ const innerMethods = {
    * @param  {Object} vueApp
    * @param  {Object} notifications
    */
-  launchWatchableNotifications (vueApp, notifications) {
-    if (!notifications) return
-    Object.keys(notifications).forEach(name => {
-      if (vueApp[name] && notifications[name].watch) {
-        vueApp[name]()
-      }
-    })
-
-    vueApp.$emit(`${PACKAGE_NAME}-launched_watchable`)
-  },
-  /**
-   * @param  {Object} vueApp
-   * @param  {Object} notifications
-   */
   unlinkVueNotificationPlugin (vueApp, notifications) {
     if (!notifications) return
     const attachedMethods = vueApp.$options.methods
@@ -328,11 +218,11 @@ function makeMixin (Vue, pluginOptions) {
     mounted: ''
   }
 
-  if (innerMethods.getVersion(Vue).major === VUE_VERSION.evangelion) {
+  if (innerMethods.getMajorVersion(Vue) === VUE_VERSION.eva) {
     hooks.init = 'init'
     hooks.mounted = 'compiled'
   }
-  if (innerMethods.getVersion(Vue).major === VUE_VERSION.ghostInTheShell) {
+  if (innerMethods.getMajorVersion(Vue) === VUE_VERSION.ghost) {
     hooks.init = 'beforeCreate'
     hooks.mounted = 'mounted'
   }
@@ -344,13 +234,6 @@ function makeMixin (Vue, pluginOptions) {
       const notificationsField = vueAppOptions[VueNotifications.propertyName]
 
       innerMethods.initVueNotificationPlugin(vueApp, notificationsField, pluginOptions)
-    },
-    [hooks.mounted]: function () {
-      const vueApp = this
-      const vueAppOptions = this.$options
-      const notificationsField = vueAppOptions[VueNotifications.propertyName]
-
-      innerMethods.launchWatchableNotifications(vueApp, notificationsField)
     },
     [hooks.destroy]: function () {
       const vueApp = this

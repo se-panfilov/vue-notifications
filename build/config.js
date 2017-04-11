@@ -1,5 +1,3 @@
-'use strict'
-
 const SRC = 'src'
 const DEST = 'dist'
 const PROJECT_NAME = 'vue-notifications'

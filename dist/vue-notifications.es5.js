@@ -23,8 +23,8 @@ var TYPE = {
 };
 
 var VUE_VERSION = {
-  evangelion: 1,
-  ghostInTheShell: 2
+  eva: 1,
+  ghost: 2
 };
 
 var MESSAGES = {
@@ -37,13 +37,9 @@ var innerMethods = {
    * @param  {Object} Vue
    * @return {Object}
    */
-  getVersion: function getVersion(Vue) {
+  getMajorVersion: function getMajorVersion(Vue) {
     var version = Vue.version.match(/(\d+)/g);
-    return {
-      major: +version[0],
-      regular: +version[1],
-      minor: +version[2]
-    };
+    return +version[0];
   },
 
 
@@ -115,122 +111,13 @@ var innerMethods = {
   },
 
   /**
-   * @param  {Object} elem
-   * @param  {String} message
-   * @param  {String} inClass
-   * @param  {String} outClass
-   */
-  showInlineFn: function showInlineFn(elem, message, _ref2) {
-    var inClass = _ref2.inClass,
-        outClass = _ref2.outClass;
-
-    elem.innerText = message;
-    if (inClass) {
-      if (!innerMethods.hasClass(elem, inClass)) innerMethods.addClass(elem, inClass);
-    }
-
-    if (outClass) {
-      if (innerMethods.hasClass(elem, outClass)) innerMethods.removeClass(elem, outClass);
-    }
-  },
-
-  /**
-   * @param  {Object} elem
-   * @param  {String} inClass
-   * @param  {String} outClass
-   */
-  clearInlineFn: function clearInlineFn(elem, _ref3) {
-    var inClass = _ref3.inClass,
-        outClass = _ref3.outClass;
-
-    if (inClass) {
-      if (innerMethods.hasClass(elem, inClass)) innerMethods.removeClass(elem, inClass);
-    }
-
-    if (outClass) {
-      if (!innerMethods.hasClass(elem, outClass)) innerMethods.addClass(elem, outClass);
-    }
-
-    elem.innerText = '';
-  },
-
-  /**
-   * @param  {String} id
-   * @param  {String} type
-   * @param  {String} timeout
-   * @param  {String} message
-   * @param  {Object} classes
-   * @param  {Function} watch
-   * @param  {String} debugMsg
-   * @param  {Function} cb
-   * @param  {Object} vueApp
-   * @return  {String}
-   */
-  showInlineMessage: function showInlineMessage(_ref4, vueApp) {
-    var id = _ref4.id,
-        type = _ref4.type,
-        timeout = _ref4.timeout,
-        message = _ref4.message,
-        _ref4$classes = _ref4.classes,
-        classes = _ref4$classes === undefined ? {} : _ref4$classes,
-        watch = _ref4.watch,
-        debugMsg = _ref4.debugMsg,
-        cb = _ref4.cb;
-
-    // TODO (S.Panfilov) handle class add and remove here
-    if (debugMsg) innerMethods.showInConsole(debugMsg, type, TYPE);
-    var elem = document.getElementById(id);
-
-    if (watch) {
-      (function () {
-        timeout = false;
-        if (watch && watch()) innerMethods.showInlineFn(elem, message, classes);
-        // const interval = setInterval(() => {
-        var prev = void 0;
-        var cur = void 0;
-
-        // TODO (S.Panfilov)make sure no memory leak here, destroy interval when we're leave page
-        setInterval(function () {
-          if (watch) {
-            cur = watch();
-            // clearInterval(interval)
-            if (cur !== prev) {
-              if (cur) innerMethods.showInlineFn.call(innerMethods, elem, message, classes);
-              if (!cur) innerMethods.clearInlineFn.call(innerMethods, elem, classes);
-              prev = cur;
-            }
-          }
-        }, 50);
-      })();
-    }
-
-    if (!watch) {
-      innerMethods.showInlineFn(elem, message, classes);
-      setTimeout(function () {
-        innerMethods.clearInlineFn.call(vueApp, elem, classes);
-      }, timeout);
-    }
-
-    // TODO (S.Panfilov) BUG: Weird behaviour: cb calls 2 times
-    if (cb) {
-      // TODO (S.Panfilov) bug here
-      cb.call(vueApp, elem, function () {
-        return innerMethods.clearInlineFn.call(innerMethods, elem, classes);
-      });
-    }
-
-    return message;
-  },
-
-
-  /**
    * @param  {Object} vueApp
    * @param  {Object} config
    * @return {Object}
    */
   getValues: function getValues(vueApp, config) {
     var result = {};
-    var keepFnFields = ['cb', 'watch'];
+    var keepFnFields = ['cb'];
 
     Object.keys(config).forEach(function (field) {
       keepFnFields.forEach(function (fnField) {
@@ -253,15 +140,9 @@ var innerMethods = {
    */
   showMessage: function showMessage(config, options, vueApp) {
     var valuesObj = innerMethods.getValues(vueApp, config);
-    var isLinkedToElem = !!valuesObj.id;
-
-    if (isLinkedToElem) {
-      innerMethods.showInlineMessage(valuesObj, vueApp);
-    } else {
-      var isMethodOverridden = options && options[valuesObj.type];
-      var method = isMethodOverridden ? options[valuesObj.type] : innerMethods.showDefaultMessage;
-      method(valuesObj, vueApp);
-    }
+    var isMethodOverridden = options && options[valuesObj.type];
+    var method = isMethodOverridden ? options[valuesObj.type] : innerMethods.showDefaultMessage;
+    method(valuesObj, vueApp);
 
     if (config.cb) return config.cb();
   },
@@ -338,21 +219,6 @@ var innerMethods = {
    * @param  {Object} vueApp
    * @param  {Object} notifications
    */
-  launchWatchableNotifications: function launchWatchableNotifications(vueApp, notifications) {
-    if (!notifications) return;
-    Object.keys(notifications).forEach(function (name) {
-      if (vueApp[name] && notifications[name].watch) {
-        vueApp[name]();
-      }
-    });
-
-    vueApp.$emit(PACKAGE_NAME + '-launched_watchable');
-  },
-
-  /**
-   * @param  {Object} vueApp
-   * @param  {Object} notifications
-   */
   unlinkVueNotificationPlugin: function unlinkVueNotificationPlugin(vueApp, notifications) {
     if (!notifications) return;
     var attachedMethods = vueApp.$options.methods;
@@ -373,7 +239,7 @@ var innerMethods = {
  * @return {Object}
  */
 function makeMixin(Vue, pluginOptions) {
-  var _ref5;
+  var _ref2;
 
   var hooks = {
     init: '',
@@ -381,33 +247,27 @@ function makeMixin(Vue, pluginOptions) {
     mounted: ''
   };
 
-  if (innerMethods.getVersion(Vue).major === VUE_VERSION.evangelion) {
+  if (innerMethods.getMajorVersion(Vue) === VUE_VERSION.eva) {
     hooks.init = 'init';
     hooks.mounted = 'compiled';
   }
-  if (innerMethods.getVersion(Vue).major === VUE_VERSION.ghostInTheShell) {
+  if (innerMethods.getMajorVersion(Vue) === VUE_VERSION.ghost) {
     hooks.init = 'beforeCreate';
     hooks.mounted = 'mounted';
   }
 
-  return _ref5 = {}, _defineProperty(_ref5, hooks.init, function () {
+  return _ref2 = {}, _defineProperty(_ref2, hooks.init, function () {
     var vueApp = this;
     var vueAppOptions = this.$options;
     var notificationsField = vueAppOptions[VueNotifications.propertyName];
 
     innerMethods.initVueNotificationPlugin(vueApp, notificationsField, pluginOptions);
-  }), _defineProperty(_ref5, hooks.mounted, function () {
-    var vueApp = this;
-    var vueAppOptions = this.$options;
-    var notificationsField = vueAppOptions[VueNotifications.propertyName];
-
-    innerMethods.launchWatchableNotifications(vueApp, notificationsField);
-  }), _defineProperty(_ref5, hooks.destroy, function () {
+  }), _defineProperty(_ref2, hooks.destroy, function () {
     var vueApp = this;
     var vueAppOptions = this.$options;
     var notificationsField = vueAppOptions[VueNotifications.propertyName];
     innerMethods.unlinkVueNotificationPlugin(vueApp, notificationsField);
-  }), _ref5;
+  }), _ref2;
 }
 
 var VueNotifications = {
