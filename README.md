@@ -215,15 +215,12 @@ Vue.use(VueNotifications, options)
 All modern browsers (`ES5` support require). See [ECMAScript 5 compliant browsers][3].
 You can use `ES5` or `ES6` versions as well.
 
-###ROADMAP:
-
-1. Add native support for `computed` properties.
 
 ##License
 
 MIT License
 
-Copyright (c) 2016 Sergey Panfilov
+Copyright (c) 2016 Sergei Panfilov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
