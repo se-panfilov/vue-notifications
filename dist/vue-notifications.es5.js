@@ -32,212 +32,105 @@ var MESSAGES = {
   methodNameConflict: PLUGIN_NAME + ': names conflict - '
 };
 
-var innerMethods = {
-  /**
-   * @param  {Object} Vue
-   * @return {Object}
-   */
-  getMajorVersion: function getMajorVersion(Vue) {
-    var version = Vue.version.match(/(\d+)/g);
-    return +version[0];
-  },
+function getMajorVersion(Vue) {
+  var version = Vue.version.match(/(\d+)/g);
+  return +version[0];
+}
 
+function showInConsole(msg, type, types) {
+  if (type === types.error) console.error(msg);else if (type === types.warn) console.warn(msg);else if (type === types.success) console.info(msg);else console.log(msg);
+}
 
-  /**
-   * @param  {String} msg
-   * @param  {String} type
-   * @param  {Object} types
-   */
-  showInConsole: function showInConsole(msg, type, types) {
-    if (type === types.error) console.error(msg);else if (type === types.warn) console.warn(msg);else if (type === types.success) console.info(msg);else console.log(msg);
-  },
+function showDefaultMessage(_ref) {
+  var type = _ref.type,
+      message = _ref.message,
+      title = _ref.title,
+      debugMsg = _ref.debugMsg;
 
+  var msg = 'Title: ' + title + ' Message: ' + message + ' DebugMsg: ' + debugMsg + ' type: ' + type;
 
-  /**
-   * @param  {String} type
-   * @param  {String} message
-   * @param  {String} title
-   * @param  {String} debugMsg
-   * @return  {String}
-   */
-  showDefaultMessage: function showDefaultMessage(_ref) {
-    var type = _ref.type,
-        message = _ref.message,
-        title = _ref.title,
-        debugMsg = _ref.debugMsg;
+  showInConsole(msg, type, TYPE);
 
-    var msg = 'Title: ' + title + ', Message: ' + message + ', DebugMsg: ' + debugMsg + ', type: ' + type;
+  return msg;
+}
+function getValues(vueApp, config) {
+  var result = {};
+  var keepFnFields = ['cb'];
 
-    innerMethods.showInConsole(msg, type, TYPE);
-
-    return msg;
-  },
-
-  /**
-   * @param  {Object} elem
-   * @param  {String} className
-   */
-  addClass: function addClass(elem, className) {
-    if (elem.classList) {
-      elem.classList.add(className);
-    } else {
-      elem.className += ' ' + className;
-    }
-  },
-
-  /**
-   * @param  {Object} elem
-   * @param  {String} className
-   */
-  removeClass: function removeClass(elem, className) {
-    if (elem.classList) {
-      elem.classList.remove(className);
-    } else {
-      elem.className = elem.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-    }
-  },
-
-  /**
-   * @param  {Object} elem
-   * @param  {String} className
-   * @return {Boolean}
-   */
-  hasClass: function hasClass(elem, className) {
-    if (elem.classList) {
-      return elem.classList.contains(className);
-    } else {
-      return new RegExp('(^| )' + className + '( |$)', 'gi').test(elem.className);
-    }
-  },
-
-  /**
-   * @param  {Object} vueApp
-   * @param  {Object} config
-   * @return {Object}
-   */
-  getValues: function getValues(vueApp, config) {
-    var result = {};
-    var keepFnFields = ['cb'];
-
-    Object.keys(config).forEach(function (field) {
-      keepFnFields.forEach(function (fnField) {
-        if (field === fnField) {
-          result[field] = config[field].bind(vueApp);
-        } else {
-          result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
-        }
-      });
-    });
-
-    return result;
-  },
-
-
-  /**
-   * @param  {Object} config
-   * @param  {Object} options
-   * @param  {Object} vueApp
-   */
-  showMessage: function showMessage(config, options, vueApp) {
-    var valuesObj = innerMethods.getValues(vueApp, config);
-    var isMethodOverridden = options && options[valuesObj.type];
-    var method = isMethodOverridden ? options[valuesObj.type] : innerMethods.showDefaultMessage;
-    method(valuesObj, vueApp);
-
-    if (config.cb) return config.cb();
-  },
-
-
-  /**
-   * @param {Object} targetObj
-   * @param {Object} typesObj
-   * @param {Object} options
-   * @return {undefined}
-   * */
-  addMethods: function addMethods(targetObj, typesObj, options) {
-    Object.keys(typesObj).forEach(function (v) {
-      targetObj[typesObj[v]] = function (config) {
-        config.type = typesObj[v];
-        // TODO (S.Panfilov)fix 'vueApp' in param
-        return innerMethods.showMessage(config, options);
-      };
-    });
-  },
-
-
-  /**
-   * @param  {Object} vueApp
-   * @param  {String} name
-   * @param  {Object} options
-   * @param  {Object} pluginOptions
-   */
-  setMethod: function setMethod(vueApp, name, options, pluginOptions) {
-    if (!options.methods) options.methods = {};
-
-    if (options.methods[name]) {
-      // TODO (S.Panfilov) not sure - throw error here or just warn
-      console.error(MESSAGES.methodNameConflict + name);
-    } else {
-      options.methods[name] = innerMethods.makeMethod(vueApp, name, options, pluginOptions);
-    }
-  },
-
-
-  /**
-   * @param  {Object} vueApp
-   * @param  {String} configName
-   * @param  {Object} options
-   * @param  {Object} pluginOptions
-   * @return {Function}
-   */
-  makeMethod: function makeMethod(vueApp, configName, options, pluginOptions) {
-    return function (config) {
-      var newConfig = {};
-      Object.assign(newConfig, VueNotifications.config);
-      Object.assign(newConfig, options[VueNotifications.propertyName][configName]);
-      Object.assign(newConfig, config);
-
-      return innerMethods.showMessage(newConfig, pluginOptions, vueApp);
-    };
-  },
-
-  /**
-   * @param  {Object} vueApp
-   * @param  {Object} notifications
-   * @param  {Object} pluginOptions
-   */
-  initVueNotificationPlugin: function initVueNotificationPlugin(vueApp, notifications, pluginOptions) {
-    if (!notifications) return;
-    Object.keys(notifications).forEach(function (name) {
-      innerMethods.setMethod(vueApp, name, vueApp.$options, pluginOptions);
-    });
-
-    vueApp.$emit(PACKAGE_NAME + '-initiated');
-  },
-
-  /**
-   * @param  {Object} vueApp
-   * @param  {Object} notifications
-   */
-  unlinkVueNotificationPlugin: function unlinkVueNotificationPlugin(vueApp, notifications) {
-    if (!notifications) return;
-    var attachedMethods = vueApp.$options.methods;
-    Object.keys(notifications).forEach(function (name) {
-      if (attachedMethods[name]) {
-        attachedMethods[name] = undefined;
-        delete attachedMethods[name];
+  Object.keys(config).forEach(function (field) {
+    keepFnFields.forEach(function (fnField) {
+      if (field === fnField) {
+        result[field] = config[field].bind(vueApp);
+      } else {
+        result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
       }
     });
+  });
 
-    vueApp.$emit(PACKAGE_NAME + '-unlinked');
+  return result;
+}
+
+function showMessage(config, options, vueApp) {
+  var valuesObj = getValues(vueApp, config);
+  var isMethodOverridden = options && options[valuesObj.type];
+  var method = isMethodOverridden ? options[valuesObj.type] : showDefaultMessage;
+  method(valuesObj, vueApp);
+
+  if (config.cb) return config.cb();
+}
+
+function addMethods(targetObj, typesObj, options) {
+  Object.keys(typesObj).forEach(function (v) {
+    targetObj[typesObj[v]] = function (config) {
+      config.type = typesObj[v];
+      // TODO (S.Panfilov)fix 'vueApp' in param
+      return showMessage(config, options);
+    };
+  });
+}
+
+function setMethod(vueApp, name, options, pluginOptions) {
+  if (!options.methods) options.methods = {};
+
+  if (options.methods[name]) {
+    // TODO (S.Panfilov) not sure - throw error here or just warn
+    console.error(MESSAGES.methodNameConflict + name);
+  } else {
+    options.methods[name] = makeMethod(vueApp, name, options, pluginOptions);
   }
-};
+}
 
-/**
- * @param {Function} Vue
- * @param {Object} pluginOptions
- * @return {Object}
- */
+function makeMethod(vueApp, configName, options, pluginOptions) {
+  return function (config) {
+    var newConfig = {};
+    Object.assign(newConfig, VueNotifications.config);
+    Object.assign(newConfig, options[VueNotifications.propertyName][configName]);
+    Object.assign(newConfig, config);
+
+    return showMessage(newConfig, pluginOptions, vueApp);
+  };
+}
+function initVueNotificationPlugin(vueApp, notifications, pluginOptions) {
+  if (!notifications) return;
+  Object.keys(notifications).forEach(function (name) {
+    setMethod(vueApp, name, vueApp.$options, pluginOptions);
+  });
+
+  vueApp.$emit(PACKAGE_NAME + '-initiated');
+}
+function unlinkVueNotificationPlugin(vueApp, notifications) {
+  if (!notifications) return;
+  var attachedMethods = vueApp.$options.methods;
+  Object.keys(notifications).forEach(function (name) {
+    if (attachedMethods[name]) {
+      attachedMethods[name] = undefined;
+      delete attachedMethods[name];
+    }
+  });
+
+  vueApp.$emit(PACKAGE_NAME + '-unlinked');
+}
+
 function makeMixin(Vue, pluginOptions) {
   var _ref2;
 
@@ -247,11 +140,11 @@ function makeMixin(Vue, pluginOptions) {
     mounted: ''
   };
 
-  if (innerMethods.getMajorVersion(Vue) === VUE_VERSION.eva) {
+  if (getMajorVersion(Vue) === VUE_VERSION.eva) {
     hooks.init = 'init';
     hooks.mounted = 'compiled';
   }
-  if (innerMethods.getMajorVersion(Vue) === VUE_VERSION.ghost) {
+  if (getMajorVersion(Vue) === VUE_VERSION.ghost) {
     hooks.init = 'beforeCreate';
     hooks.mounted = 'mounted';
   }
@@ -261,12 +154,12 @@ function makeMixin(Vue, pluginOptions) {
     var vueAppOptions = this.$options;
     var notificationsField = vueAppOptions[VueNotifications.propertyName];
 
-    innerMethods.initVueNotificationPlugin(vueApp, notificationsField, pluginOptions);
+    initVueNotificationPlugin(vueApp, notificationsField, pluginOptions);
   }), _defineProperty(_ref2, hooks.destroy, function () {
     var vueApp = this;
     var vueAppOptions = this.$options;
     var notificationsField = vueAppOptions[VueNotifications.propertyName];
-    innerMethods.unlinkVueNotificationPlugin(vueApp, notificationsField);
+    unlinkVueNotificationPlugin(vueApp, notificationsField);
   }), _ref2;
 }
 
@@ -291,7 +184,7 @@ var VueNotifications = {
     var mixin = makeMixin(Vue, pluginOptions);
     Vue.mixin(mixin);
 
-    innerMethods.addMethods(this, this.type, pluginOptions);
+    addMethods(this, this.type, pluginOptions);
 
     this.installed = true;
   }
