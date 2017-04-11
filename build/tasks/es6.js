@@ -1,5 +1,3 @@
-'use strict'
-
 const gulp = require('gulp')
 
 const config = require('../config')
@@ -26,8 +24,7 @@ gulp.task('es6', () => {
       end_comment: 'END.TESTS_ONLY'
     }))
     .pipe(gulp.dest(config.dest))
-    // .pipe(babel({ presets: ['babili'], comments: false }))
-    // // TODO (S.Panfilov) Remove comments
+    .pipe(babel({ presets: ['babili'], comments: false }))
     // // TODO (S.Panfilov) Perhaps add sourcemaps
     .pipe(rename({ basename: `${config.projectName}.es6.min` }))
     .pipe(gulp.dest(config.dest))

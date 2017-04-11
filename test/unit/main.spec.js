@@ -34,17 +34,15 @@ describe('Main.', () => {
 
     })
 
-    it('getVersion.', () => {
+    it('getMajorVersion.', () => {
 
       const vue = {
         version: '1.0.12'
       }
 
-      const result = _private.getVersion(vue)
-      expect(result).to.be.a('object')
-      expect(result.major).to.be.equal(1)
-      expect(result.regular).to.be.equal(0)
-      expect(result.minor).to.be.equal(12)
+      const result = _private.getMajorVersion(vue)
+      expect(result).to.be.a('number')
+      expect(result).to.be.equal(1)
     })
 
     describe('showDefaultMessages.', () => {
@@ -73,7 +71,7 @@ describe('Main.', () => {
 
         config.type = 'sometype'
 
-        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
         const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.be.called
@@ -86,7 +84,7 @@ describe('Main.', () => {
 
         config.type = 'info'
 
-        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
         const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.be.called
@@ -99,7 +97,7 @@ describe('Main.', () => {
 
         config.type = 'error'
 
-        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
         const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.not.be.called
@@ -112,7 +110,7 @@ describe('Main.', () => {
 
         config.type = 'success'
 
-        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
         const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.not.be.called
@@ -125,7 +123,7 @@ describe('Main.', () => {
 
         config.type = 'warn'
 
-        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, DebugMsg: ${config.debugMsg}, type: ${config.type}`
+        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
         const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
         expect(console.log).to.not.be.called
@@ -223,8 +221,7 @@ describe('Main.', () => {
       it('method not exist.', () => {
         const name = 'someName'
         const options = {
-          methods: {
-          }
+          methods: {}
         }
         const pluginOptions = {}
 
@@ -232,8 +229,7 @@ describe('Main.', () => {
         sinon.spy(console, 'error')
         sinon.spy(_private, 'makeMethod')
 
-        const vueApp = {
-        }
+        const vueApp = {}
 
         _private.setMethod(name, options, pluginOptions)
         expect(console.error).to.not.be.called
@@ -274,8 +270,7 @@ describe('Main.', () => {
 
         sinon.spy(_private, 'showMessage')
 
-        const vueApp = {
-        }
+        const vueApp = {}
 
         const result = _private.makeMethod(vueApp, configName, options, pluginOptions)
         expect(result).to.be.a('function')
