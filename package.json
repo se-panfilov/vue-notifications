@@ -71,7 +71,7 @@
     "gulp-umd": "^0.2.1",
     "gulp-watch": "^4.3.11",
     "mocha": "^3.4.0",
-    "require-dir": "^0.3.1",
+    "require-dir": "^0.3.2",
     "run-sequence": "^1.2.2",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.9.0",
