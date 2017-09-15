@@ -57,14 +57,12 @@ describe('Main.', () => {
         sinon.spy(console, 'log')
         sinon.spy(console, 'error')
         sinon.spy(console, 'warn')
-        sinon.spy(console, 'info')
       })
 
       afterEach(() => {
         console.log.restore()
         console.error.restore()
         console.warn.restore()
-        console.info.restore()
       })
 
       it('Random type to console.', () => {
@@ -77,12 +75,11 @@ describe('Main.', () => {
         expect(console.log).to.be.called
         expect(console.warn).to.not.be.called
         expect(console.error).to.not.be.called
-        expect(console.info).to.not.be.called
       })
 
       it('Info type to console.', () => {
 
-        config.type = 'info'
+        config.type = 'log'
 
         const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
         const result = _private.showDefaultMessage(config)
@@ -90,7 +87,6 @@ describe('Main.', () => {
         expect(console.log).to.be.called
         expect(console.warn).to.not.be.called
         expect(console.error).to.not.be.called
-        expect(console.info).to.not.be.called
       })
 
       it('Error type to console.', () => {
@@ -103,7 +99,6 @@ describe('Main.', () => {
         expect(console.log).to.not.be.called
         expect(console.warn).to.not.be.called
         expect(console.error).to.be.called
-        expect(console.info).to.not.be.called
       })
 
       it('Success type to console.', () => {
@@ -113,10 +108,9 @@ describe('Main.', () => {
         const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
         const result = _private.showDefaultMessage(config)
         expect(result).to.be.equal(expectedMsg)
-        expect(console.log).to.not.be.called
+        expect(console.log).to.be.called
         expect(console.warn).to.not.be.called
         expect(console.error).to.not.be.called
-        expect(console.info).to.be.called
       })
 
       it('Warn type to console.', () => {
@@ -129,7 +123,6 @@ describe('Main.', () => {
         expect(console.log).to.not.be.called
         expect(console.warn).to.be.called
         expect(console.error).to.not.be.called
-        expect(console.info).to.not.be.called
       })
 
     })
@@ -192,31 +185,32 @@ describe('Main.', () => {
 
     describe('showMessage.', () => {
 
-      it('method already exist.', () => {
-        const name = 'someName'
-        const options = {
-          methods: {
-            someName: function () {
-            }
-          }
-        }
-        const pluginOptions = {}
-
-        const expectedMsg = _private.MESSAGES.methodNameConflict + name
-        sinon.spy(console, 'error')
-
-        const vueApp = {
-          notifications: {
-            someName: function () {
-            }
-          }
-        }
-
-        _private.setMethod(vueApp, name, options, pluginOptions)
-        expect(console.error).to.be.calledWith(expectedMsg)
-
-        console.error.restore()
-      })
+      // TODO (S.Panfilov) We don't check it atm
+      // it('method already exist.', () => {
+      //   const name = 'someName'
+      //   const options = {
+      //     methods: {
+      //       someName: function () {
+      //       }
+      //     }
+      //   }
+      //   const pluginOptions = {}
+      //
+      //   const expectedMsg = _private.MESSAGES.methodNameConflict + name
+      //   sinon.spy(console, 'error')
+      //
+      //   const vueApp = {
+      //     notifications: {
+      //       someName: function () {
+      //       }
+      //     }
+      //   }
+      //
+      //   _private.setMethod(vueApp, name, options, pluginOptions)
+      //   expect(console.error).to.be.calledWith(expectedMsg)
+      //
+      //   console.error.restore()
+      // })
 
       it('method not exist.', () => {
         const name = 'someName'

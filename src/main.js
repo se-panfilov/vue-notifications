@@ -66,7 +66,7 @@ function addMethods (targetObj, typesObj, options) {
   Object.keys(typesObj).forEach(v => {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v]
-      // TODO (S.Panfilov)fix 'vueApp' in param
+      // TODO (S.Panfilov) fix 'vueApp' in param
       return showMessage(config, options)
     }
   })
@@ -75,10 +75,20 @@ function addMethods (targetObj, typesObj, options) {
 function setMethod (vueApp, name, options, pluginOptions) {
   if (!options.methods) options.methods = {}
 
-  if (options.methods[name]) {
-    // TODO (S.Panfilov) not sure - throw error here or just warn
-    console.error(MESSAGES.methodNameConflict + name)
-  } else {
+  // ///////////////////////////////////////////////////////////////////////
+  // TODO (S.Panfilov) We can't check if method already exist,
+  // cause it won't allow us to use same component more then one tine in the same page
+  // But it would be good to check somehow if it's already exist a method that was created not from this plugin
+
+  // if (options.methods[name]) {
+  // console.error(MESSAGES.methodNameConflict + name)
+  // } else {
+  //   options.methods[name] = makeMethod(vueApp, name, options, pluginOptions)
+  // }
+
+  // ///////////////////////////////////////////////////////////////////////
+
+  if (!options.methods[name]) {
     options.methods[name] = makeMethod(vueApp, name, options, pluginOptions)
   }
 }
@@ -198,7 +208,8 @@ VueNotifications._private.TYPE = TYPE
 VueNotifications._private.PLUGIN_NAME = PLUGIN_NAME
 VueNotifications._private.PACKAGE_NAME = PACKAGE_NAME
 VueNotifications._private.PROPERTY_NAME = PROPERTY_NAME
-VueNotifications._private.VUE_VERSION = VUE_VERSION
+VueNotifications._private.EVANGELION = EVANGELION
+VueNotifications._private.GHOST_IN_THE_SHELL = GHOST_IN_THE_SHELL
 VueNotifications._private.MESSAGES = MESSAGES
 
 export default VueNotifications

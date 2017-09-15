@@ -82,7 +82,7 @@ function addMethods(targetObj, typesObj, options) {
   Object.keys(typesObj).forEach(function (v) {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v];
-      // TODO (S.Panfilov)fix 'vueApp' in param
+      // TODO (S.Panfilov) fix 'vueApp' in param
       return showMessage(config, options);
     };
   });
@@ -91,10 +91,20 @@ function addMethods(targetObj, typesObj, options) {
 function setMethod(vueApp, name, options, pluginOptions) {
   if (!options.methods) options.methods = {};
 
-  if (options.methods[name]) {
-    // TODO (S.Panfilov) not sure - throw error here or just warn
-    console.error(MESSAGES.methodNameConflict + name);
-  } else {
+  // ///////////////////////////////////////////////////////////////////////
+  // TODO (S.Panfilov) We can't check if method already exist,
+  // cause it won't allow us to use same component more then one tine in the same page
+  // But it would be good to check somehow if it's already exist a method that was created not from this plugin
+
+  // if (options.methods[name]) {
+  // console.error(MESSAGES.methodNameConflict + name)
+  // } else {
+  //   options.methods[name] = makeMethod(vueApp, name, options, pluginOptions)
+  // }
+
+  // ///////////////////////////////////////////////////////////////////////
+
+  if (!options.methods[name]) {
     options.methods[name] = makeMethod(vueApp, name, options, pluginOptions);
   }
 }
