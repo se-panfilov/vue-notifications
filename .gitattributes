@@ -1,3 +1,83 @@
 * text=auto
-*.js eol=lf
-*.ts eol=lf
+
+## SOURCE CODE
+*.bat      text eol=crlf
+*.css      text
+*.htm      text
+*.html     text
+*.js       text
+*.json     text
+*.sass     text
+*.scss     text
+*.styl     text
+*.sh       text eol=lf
+*.xml      text
+*.xhtml    text
+
+## DOCUMENTATION
+*.md         text
+*.txt        text
+CHANGELOG    text
+LICENSE      text
+*README*     text
+VERSION     text
+
+## LINTERS
+.eslintrc     text
+
+## CONFIGS
+.babelrc    text
+.nvmrc    text
+.editorconfig  text
+.eslintignore  text
+.gitattributes text
+.gitconfig     text
+.gitignore     text
+.htaccess      text
+.htpasswd      text
+*.npmignore    text
+*.yaml         text
+*.yml          text
+yarn.lock       text
+
+## GRAPHICS
+*.ai   binary
+*.bmp  binary
+*.eps  binary
+*.gif  binary
+*.ico  binary
+*.jng  binary
+*.jp2  binary
+*.jpg  binary
+*.jpeg binary
+*.jpx  binary
+*.jxr  binary
+*.pdf  binary
+*.png  binary
+*.psb  binary
+*.psd  binary
+*.svg  text
+*.svgz binary
+*.tif  binary
+*.tiff binary
+*.wbmp binary
+*.webp binary
+
+## ARCHIVES
+*.7z  binary
+*.gz  binary
+*.jar binary
+*.rar binary
+*.tar binary
+*.zip binary
+
+## FONTS
+*.ttf   binary
+*.eot   binary
+*.otf   binary
+*.woff  binary
+*.woff2 binary
+
+## EXECUTABLES
+*.exe binary
+*.pyc binary
