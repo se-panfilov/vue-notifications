@@ -22,10 +22,8 @@ var TYPE = {
   success: 'success'
 };
 
-var VUE_VERSION = {
-  eva: 1,
-  ghost: 2
-};
+var EVANGELION = 1;
+var GHOST_IN_THE_SHELL = 2;
 
 var MESSAGES = {
   alreadyInstalled: PLUGIN_NAME + ': plugin already installed',
@@ -38,7 +36,7 @@ function getMajorVersion(Vue) {
 }
 
 function showInConsole(msg, type, types) {
-  if (type === types.error) console.error(msg);else if (type === types.warn) console.warn(msg);else if (type === types.success) console.info(msg);else console.log(msg);
+  if (type === types.error) console.error(msg);else if (type === types.warn) console.warn(msg);else console.log(msg);
 }
 
 function showDefaultMessage(_ref) {
@@ -53,6 +51,7 @@ function showDefaultMessage(_ref) {
 
   return msg;
 }
+
 function getValues(vueApp, config) {
   var result = {};
   var keepFnFields = ['cb'];
@@ -110,6 +109,7 @@ function makeMethod(vueApp, configName, options, pluginOptions) {
     return showMessage(newConfig, pluginOptions, vueApp);
   };
 }
+
 function initVueNotificationPlugin(vueApp, notifications, pluginOptions) {
   if (!notifications) return;
   Object.keys(notifications).forEach(function (name) {
@@ -118,6 +118,7 @@ function initVueNotificationPlugin(vueApp, notifications, pluginOptions) {
 
   vueApp.$emit(PACKAGE_NAME + '-initiated');
 }
+
 function unlinkVueNotificationPlugin(vueApp, notifications) {
   if (!notifications) return;
   var attachedMethods = vueApp.$options.methods;
@@ -140,11 +141,11 @@ function makeMixin(Vue, pluginOptions) {
     mounted: ''
   };
 
-  if (getMajorVersion(Vue) === VUE_VERSION.eva) {
+  if (getMajorVersion(Vue) === EVANGELION) {
     hooks.init = 'init';
     hooks.mounted = 'compiled';
   }
-  if (getMajorVersion(Vue) === VUE_VERSION.ghost) {
+  if (getMajorVersion(Vue) === GHOST_IN_THE_SHELL) {
     hooks.init = 'beforeCreate';
     hooks.mounted = 'mounted';
   }
