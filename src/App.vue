@@ -1,5 +1,11 @@
 <template>
   <div id="app">
+
+    <section>
+      Check the <a href="docs/html/index.html">the Documentation here</a>
+      <br/>
+    </section>
+
     <section>
       <h5>Predefined messages</h5>
       <button type="button" @click="errorMsg()">Error</button>
