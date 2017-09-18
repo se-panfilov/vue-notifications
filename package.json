@@ -6,6 +6,8 @@
   "scripts": {
     "start": "gulp",
     "build": "gulp make",
+    "docs": "cd ./docs gitbook build ./html",
+    "docs:to:gh": "cpx './docs' ../dev-server/docs",
     "update": "ncu -a && yarn upgrade",
     "upgrade": "yarn upgrade",
     "test": "mocha --compilers js:babel-core/register ./test/**/*.spec.js",
@@ -49,6 +51,7 @@
     "babili": "0.1.4",
     "browserify": "14.4.0",
     "chai": "4.1.2",
+    "cpx": "1.5.0",
     "eslint": "4.6.1",
     "eslint-config-standard": "10.2.1",
     "eslint-friendly-formatter": "3.0.0",
