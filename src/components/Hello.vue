@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>Vue-Notifications</h1>
+    <h1>VueNotifications</h1>
     <img src="../assets/logo.png">
     <h2><a href="https://vuejs.org">vue.js</a> agnostic non-blocking notifications library</h2>
     <ul class="msg-buttons">
@@ -16,8 +16,6 @@
       <li>
         <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
       </li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
     </ul>
   </div>
 </template>
@@ -55,13 +53,11 @@
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" type="text/stylus" scoped>
   primary_color = #41b883
 
   h1, h2
     font-weight normal
-    margin 0
 
   ul
     list-style-type none
@@ -74,15 +70,20 @@
   a
     color #42b983
 
+  .hello
+    text-align center
+
   .msg-buttons
+    margin 10px
     &__btn
       color white
       font-size 14px
       background-color primary_color
       border-radius 3px
-      padding 5px 10px
+      padding 7px 12px
       border 1px solid transparent
       transition background .4s ease
+      cursor pointer
       &:hover
         background-color lighten(primary_color, 5)
 </style>
