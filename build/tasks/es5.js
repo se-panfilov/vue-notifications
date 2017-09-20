@@ -11,7 +11,6 @@ const babel = require('gulp-babel')
 const umd = require('gulp-umd')
 const to = require('to-case')
 const stripCode = require('gulp-strip-code')
-const closureCompiler = require('google-closure-compiler').gulp()
 
 gulp.task('es5', () => {
   return gulp.src(config.js.src)
@@ -19,7 +18,7 @@ gulp.task('es5', () => {
       errorHandler: notify.onError(err => {
         return {
           title: 'Build ES5',
-          message: err
+          message: err.message || err
         }
       })
     }))
@@ -38,16 +37,9 @@ gulp.task('es5', () => {
       }
     }))
     .pipe(gulp.dest(config.dest))
-    .pipe(sourcemaps.init({ loadMaps: true }))
-    // .pipe(closureCompiler({
-    //   compilation_level: 'ADVANCED',
-    //   // warning_level: 'VERBOSE',
-    //   language_in: 'ECMASCRIPT5_STRICT',
-    //   language_out: 'ECMASCRIPT5_STRICT',
-    //   // js_output_file: 'output.min.js'
-    // }))
+    .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(uglify())
-    .pipe(rename({ basename: config.projectName + '.es5.min' }))
+    .pipe(rename({basename: config.projectName + '.es5.min'}))
     .pipe(gulp.dest(config.dest))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.dest))

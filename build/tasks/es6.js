@@ -14,7 +14,7 @@ gulp.task('es6', () => {
       errorHandler: notify.onError(err => {
         return {
           title: 'Build ES6',
-          message: err.message
+          message: err.message || err
         }
       })
     }))
@@ -24,8 +24,8 @@ gulp.task('es6', () => {
       end_comment: 'END.TESTS_ONLY'
     }))
     .pipe(gulp.dest(config.dest))
-    .pipe(babel({ presets: ['babili'], comments: false }))
+    .pipe(babel({presets: ['babili'], comments: false}))
     // // TODO (S.Panfilov) Perhaps add sourcemaps
-    .pipe(rename({ basename: `${config.projectName}.es6.min` }))
+    .pipe(rename({basename: `${config.projectName}.es6.min`}))
     .pipe(gulp.dest(config.dest))
 })
