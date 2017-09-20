@@ -2,7 +2,7 @@
   "name": "vue-notifications",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "Sergei <se-panfilov@ya.ru>",
+  "author": "Sergei Panfilov <se-panfilov@ya.ru>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
