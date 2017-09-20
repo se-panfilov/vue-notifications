@@ -82,7 +82,7 @@ function addMethods(targetObj, typesObj, options) {
   Object.keys(typesObj).forEach(function (v) {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v];
-      // TODO (S.Panfilov) fix 'vueApp' in param
+
       return showMessage(config, options);
     };
   });
@@ -90,19 +90,6 @@ function addMethods(targetObj, typesObj, options) {
 
 function setMethod(vueApp, name, options, pluginOptions) {
   if (!options.methods) options.methods = {};
-
-  // ///////////////////////////////////////////////////////////////////////
-  // TODO (S.Panfilov) We can't check if method already exist,
-  // cause it won't allow us to use same component more then one tine in the same page
-  // But it would be good to check somehow if it's already exist a method that was created not from this plugin
-
-  // if (options.methods[name]) {
-  // console.error(MESSAGES.methodNameConflict + name)
-  // } else {
-  //   options.methods[name] = makeMethod(vueApp, name, options, pluginOptions)
-  // }
-
-  // ///////////////////////////////////////////////////////////////////////
 
   if (!options.methods[name]) {
     options.methods[name] = makeMethod(vueApp, name, options, pluginOptions);
@@ -182,12 +169,6 @@ var VueNotifications = {
     timeout: 3000
   },
   installed: false,
-  /**
-   * Plugin | vue-notifications
-   * @param  {Function} Vue
-   * @param  {Object} pluginOptions
-   * @this VueNotifications
-   */
   install: function install(Vue) {
     var pluginOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -199,10 +180,6 @@ var VueNotifications = {
 
     this.installed = true;
   }
-
-  //TODO (S.Panfilov) add ability to access this.notifications.someError.message
-  //TODO (S.Panfilov) add "noCall:true" property
-
 };
 
 if (typeof window !== 'undefined' && window.Vue) {

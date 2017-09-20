@@ -11,7 +11,7 @@ const babel = require('gulp-babel')
 const umd = require('gulp-umd')
 const to = require('to-case')
 const stripCode = require('gulp-strip-code')
-// const closureCompiler = require('google-closure-compiler').gulp();
+const closureCompiler = require('google-closure-compiler').gulp()
 
 gulp.task('es5', () => {
   return gulp.src(config.js.src)
@@ -28,7 +28,7 @@ gulp.task('es5', () => {
       start_comment: 'START.TESTS_ONLY',
       end_comment: 'END.TESTS_ONLY'
     }))
-    .pipe(babel())
+    .pipe(babel({comments: false}))
     .pipe(umd({
       exports: function (file) {
         return to.pascal(config.projectName)
