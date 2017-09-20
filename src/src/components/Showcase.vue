@@ -8,6 +8,9 @@
       That's also means you can have any look and feel of notifications you want to! <br/>
       And it would be easy to replace it =)
     </p>
+    <section>
+      <p v-text="notificationsSetup"></p>
+    </section>
   </div>
 </template>
 
@@ -17,7 +20,9 @@
   export default {
     name: 'showcase',
     data () {
-      return {}
+      return {
+        notificationsSetup: JSON.stringify(this.notifications)
+      }
     },
     notifications: {
       showSuccessMsg: {
