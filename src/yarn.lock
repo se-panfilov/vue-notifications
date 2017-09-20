@@ -6358,6 +6358,10 @@ vary@~1.1.0, vary@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.1.tgz#67535ebb694c1d52257457984665323f587e8d37"
 
+velocity-animate@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/velocity-animate/-/velocity-animate-1.5.0.tgz#fc8771d8dfe1136ff02a707e10fbb0957c4b030f"
+
 vendors@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.1.tgz#37ad73c8ee417fb3d580e785312307d274847f22"
@@ -6405,6 +6409,12 @@ vue-loader@13.0.4:
     vue-hot-reload-api "^2.1.0"
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.5.3"
+
+vue-notification@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/vue-notification/-/vue-notification-1.3.4.tgz#73cff338785a8dbc8f25f96552f7c5e4848268f9"
+  dependencies:
+    velocity-animate "^1.5.0"
 
 vue-notifications@0.8.2:
   version "0.8.2"

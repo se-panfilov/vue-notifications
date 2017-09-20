@@ -5,9 +5,10 @@ import App from './App'
 import router from './router'
 import VueNotifications from 'vue-notifications'
 //Third-party UI libs
-import VueEasyToast from 'vue-easy-toast'
-import miniToastr from 'mini-toastr'
-import VueToasted from 'vue-toasted'
+import VueEasyToast from 'vue-easy-toast' //https://github.com/noru/vue-easy-toast
+import miniToastr from 'mini-toastr' //https://github.com/se-panfilov/mini-toastr
+import VueToasted from 'vue-toasted' //https://github.com/shakee93/vue-toasted
+import VueNotification from 'vue-notification' //https://github.com/euvl/vue-notification
 
 Vue.config.productionTip = false
 
@@ -16,26 +17,18 @@ miniToastr.init()
 const UI_LIBS = {
   miniToastr: 'miniToastr',
   VueToasted: 'VueToasted',
-  VueEasyToast: 'VueEasyToast'
+  VueEasyToast: 'VueEasyToast',
+  VueNotification: 'VueNotification'
 }
 
-const currentLib = UI_LIBS.VueToasted
+const currentLib = UI_LIBS.VueNotification
 
 const TOASTS = {
-  miniToastr ({title, message, type, timeout, cb, debugMsg}) {
+  [UI_LIBS.miniToastr] ({title, message, type, timeout, cb, debugMsg}) {
     if (debugMsg) console[type](debugMsg)
     return miniToastr[type](message, title, timeout, cb)
   },
-  VueEasyToast ({title, message, type, timeout, cb, debugMsg, position}) {
-    if (debugMsg) console[type](debugMsg)
-
-    let className = 'et-info'
-    if (type === VueNotifications.type.error) className = 'et-error'
-    if (type === VueNotifications.type.warn) className = 'et-warn'
-
-    return Vue.toast(message, {duration: timeout, className: className, position})
-  },
-  VueToasted ({title, message, type, timeout, cb, debugMsg, position}) {
+  [UI_LIBS.VueToasted] ({title, message, type, timeout, cb, debugMsg, position}) {
     if (debugMsg) console[type](debugMsg)
 
     let method = 'show'
@@ -44,6 +37,30 @@ const TOASTS = {
     if (type === VueNotifications.type.info) method = 'info'
 
     return Vue.toasted[method]('hola billo', {duration: timeout})
+  },
+  [UI_LIBS.VueEasyToast] ({title, message, type, timeout, cb, debugMsg, position}) {
+    if (debugMsg) console[type](debugMsg)
+
+    let method = 'show'
+    if (type === VueNotifications.type.error) method = 'error'
+    if (type === VueNotifications.type.success) method = 'success'
+    if (type === VueNotifications.type.info) method = 'info'
+
+    return Vue.toasted[method]('hola billo', {duration: timeout})
+  },
+  [UI_LIBS.VueNotification] ({title, message, type, timeout, cb, debugMsg, position}) {
+    if (debugMsg) console[type](debugMsg)
+
+    let toastType = ''
+    if (type === VueNotifications.type.warn) toastType = 'warning'
+
+    return this.$notify({
+      title,
+      text: message,
+      type: toastType,
+      duration: timeout,
+      position
+    })
   }
 }
 
@@ -57,6 +74,7 @@ const options = {
 Vue.use(VueNotifications, options)
 Vue.use(VueEasyToast)
 Vue.use(VueToasted)
+Vue.use(VueNotification)
 
 /* eslint-disable no-new */
 new Vue({
