@@ -16,7 +16,7 @@
   "dependencies": {
     "mini-toastr": "0.6.6",
     "vue": "2.4.2",
-    "vue-notifications": "0.8.1",
+    "vue-notifications": "0.8.2",
     "vue-router": "2.7.0"
   },
   "devDependencies": {
