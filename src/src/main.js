@@ -8,7 +8,12 @@ import VueNotifications from 'vue-notifications'
 import VueEasyToast from 'vue-easy-toast' //https://github.com/noru/vue-easy-toast
 import miniToastr from 'mini-toastr' //https://github.com/se-panfilov/mini-toastr
 import VueToasted from 'vue-toasted' //https://github.com/shakee93/vue-toasted
-import VueNotification from 'vue-notification' //https://github.com/euvl/vue-notification
+
+//toastr
+import 'jquery' // required by 'toastr'
+import toastr from 'toastr' //https://github.com/CodeSeven/toastr
+import 'toastr/build/toastr.min.css' //https://github.com/CodeSeven/toastr
+//end toastr
 
 Vue.config.productionTip = false
 
@@ -18,10 +23,10 @@ const UI_LIBS = {
   miniToastr: 'miniToastr',
   VueToasted: 'VueToasted',
   VueEasyToast: 'VueEasyToast',
-  VueNotification: 'VueNotification'
+  toastr: 'toastr'
 }
 
-const currentLib = UI_LIBS.VueNotification
+const currentLib = UI_LIBS.toastr
 
 const TOASTS = {
   [UI_LIBS.miniToastr] ({title, message, type, timeout, cb, debugMsg}) {
@@ -48,19 +53,10 @@ const TOASTS = {
 
     return Vue.toasted[method]('hola billo', {duration: timeout})
   },
-  [UI_LIBS.VueNotification] ({title, message, type, timeout, cb, debugMsg, position}) {
-    if (debugMsg) console[type](debugMsg)
-
-    let toastType = ''
-    if (type === VueNotifications.type.warn) toastType = 'warning'
-
-    return this.$notify({
-      title,
-      text: message,
-      type: toastType,
-      duration: timeout,
-      position
-    })
+  [UI_LIBS.toastr] ({title, message, type, timeout, cb, debugMsg, position}) {
+    // this shit requires jquery, lol
+    if (type === VueNotifications.type.warn) type = 'warning'
+    return toastr[type](message, title, {timeOut: timeout})
   }
 }
 
@@ -74,7 +70,6 @@ const options = {
 Vue.use(VueNotifications, options)
 Vue.use(VueEasyToast)
 Vue.use(VueToasted)
-Vue.use(VueNotification)
 
 /* eslint-disable no-new */
 new Vue({
