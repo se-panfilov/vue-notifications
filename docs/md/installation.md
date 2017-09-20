@@ -14,13 +14,17 @@ yarn add vue-notifications
 
 ### CDN
 
-* ES5: [https://unpkg.com/vue-notifications@0.8.1/dist/vue-notifications.es5.js](https://unpkg.com/vue-notifications@0.8.1/dist/vue-notifications.es5.js)
-* ES5 minified: [https://unpkg.com/vue-notifications@0.8.1/dist/vue-notifications.es5.min.js](https://unpkg.com/vue-notifications@0.8.1/dist/vue-notifications.es5.min.js)
+Basically: [https://unpkg.com/vue-notifications](https://unpkg.com/vue-notifications)
+
+For some specific version:
+
+* ES5: [https://unpkg.com/vue-notifications@x.x.x/dist/vue-notifications.es5.js](https://unpkg.com/vue-notifications@x.x.x/dist/vue-notifications.es5.js)
+* ES5 minified: [https://unpkg.com/vue-notifications@x.x.x/dist/vue-notifications.es5.min.js](https://unpkg.com/vue-notifications@x.x.x/dist/vue-notifications.es5.min.js)
 
 or
 
-* ES6: [https://unpkg.com/vue-notifications@0.8.1/dist/vue-notifications.es6.js](https://www.gitbook.com/book/se-panfilov/vue-notifications/edit#)
-* ES6 minified: [https://unpkg.com/vue-notifications@0.8.1/dist/vue-notifications.es6.min.js](https://www.gitbook.com/book/se-panfilov/vue-notifications/edit#)
+* ES6: [https://unpkg.com/vue-notifications@x.x.x/dist/vue-notifications.es6.js](https://unpkg.com/vue-notifications@x.x.x/dist/vue-notifications.es6.js)
+* ES6 minified: [https://unpkg.com/vue-notifications@x.x.x/dist/vue-notifications.es6.min.js](https://unpkg.com/vue-notifications@x.x.x/dist/vue-notifications.es6.min,js)
 
 ### Bower
 
