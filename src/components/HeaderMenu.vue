@@ -5,8 +5,12 @@
       <span>VueNotifications</span>
     </a>
     <ul class="nav">
-      <li class="nav__item"><a href="#">Documentation</a></li>
-      <li class="nav__item"><a href="https://github.com/se-panfilov/vue-notifications" title="source code">GitHub</a></li>
+      <li class="nav__item">
+        <a href="https://github.com/se-panfilov/vue-notifications/docs/html/index.html" title="Docs">Documentation</a>
+      </li>
+      <li class="nav__item">
+        <a href="https://github.com/se-panfilov/vue-notifications" title="source code">GitHub</a>
+      </li>
     </ul>
   </section>
 </template>
