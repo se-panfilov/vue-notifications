@@ -8,12 +8,14 @@
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
+    "publish": "cpx './dist/**' '../'",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "cpx": "^1.5.0",
     "mini-toastr": "0.6.6",
     "vue": "2.4.2",
     "vue-notifications": "0.8.2",
