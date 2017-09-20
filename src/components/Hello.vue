@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import VueNotifications from '../../../vue-notifications/src/main'
+  import VueNotifications from 'vue-notifications'
 
   export default {
     name: 'hello',
