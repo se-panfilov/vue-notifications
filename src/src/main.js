@@ -7,6 +7,7 @@ import VueNotifications from 'vue-notifications'
 //Third-party UI libs
 import VueEasyToast from 'vue-easy-toast'
 import miniToastr from 'mini-toastr'
+import VueToasted from 'vue-toasted'
 
 Vue.config.productionTip = false
 
@@ -14,10 +15,11 @@ miniToastr.init()
 
 const UI_LIBS = {
   miniToastr: 'miniToastr',
+  VueToasted: 'VueToasted',
   VueEasyToast: 'VueEasyToast'
 }
 
-const currentLib = UI_LIBS.VueEasyToast
+const currentLib = UI_LIBS.VueToasted
 
 const TOASTS = {
   miniToastr ({title, message, type, timeout, cb, debugMsg}) {
@@ -32,6 +34,16 @@ const TOASTS = {
     if (type === VueNotifications.type.warn) className = 'et-warn'
 
     return Vue.toast(message, {duration: timeout, className: className, position})
+  },
+  VueToasted ({title, message, type, timeout, cb, debugMsg, position}) {
+    if (debugMsg) console[type](debugMsg)
+
+    let method = 'show'
+    if (type === VueNotifications.type.error) method = 'error'
+    if (type === VueNotifications.type.success) method = 'success'
+    if (type === VueNotifications.type.info) method = 'info'
+
+    return Vue.toasted[method]('hola billo', {duration: timeout})
   }
 }
 
@@ -44,6 +56,7 @@ const options = {
 
 Vue.use(VueNotifications, options)
 Vue.use(VueEasyToast)
+Vue.use(VueToasted)
 
 /* eslint-disable no-new */
 new Vue({
