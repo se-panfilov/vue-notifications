@@ -6,7 +6,7 @@
     </a>
     <ul class="nav">
       <li class="nav__item">
-        <a href="https://github.com/se-panfilov/vue-notifications/docs/html/index.html" title="Docs">Documentation</a>
+        <a href="https://se-panfilov.github.io/vue-notifications/docs/html/index.html" title="Docs">Documentation</a>
       </li>
       <li class="nav__item">
         <a href="https://github.com/se-panfilov/vue-notifications" title="source code">GitHub</a>
