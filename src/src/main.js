@@ -47,21 +47,13 @@ const TOASTS = {
   [UI_LIBS.VueToasted] ({title, message, type, timeout, cb, debugMsg, position}) {
     if (debugMsg) console[type](debugMsg)
 
-    let method = 'show'
-    if (type === VueNotifications.type.error) method = 'error'
-    if (type === VueNotifications.type.success) method = 'success'
-    if (type === VueNotifications.type.info) method = 'info'
-
-    return Vue.toasted[method]('hola billo', {duration: timeout})
+    if (type === VueNotifications.type.warn) type = 'show'
+    return Vue.toasted[type]('hola billo', {duration: timeout})
   },
   [UI_LIBS.VueEasyToast] ({title, message, type, timeout, cb, debugMsg, position}) {
     if (debugMsg) console[type](debugMsg)
 
-    let method = 'show'
-    if (type === VueNotifications.type.error) method = 'error'
-    if (type === VueNotifications.type.success) method = 'success'
-    if (type === VueNotifications.type.info) method = 'info'
-
+    if (type === VueNotifications.type.warn) type = 'show'
     return Vue.toasted[method]('hola billo', {duration: timeout})
   },
   [UI_LIBS.toastr] ({title, message, type, timeout, cb, debugMsg, position}) {
@@ -75,31 +67,20 @@ const TOASTS = {
     if (debugMsg) console[type](debugMsg)
 
     if (type === VueNotifications.type.warn) type = 'warning'
-
-    return iziToast[type]({
-      title,
-      message,
-      timeout
-    })
+    return iziToast[type]({title, message, timeout})
   },
   [UI_LIBS.Noty] ({title, message, type, timeout, cb, debugMsg, position}) {
     if (debugMsg) console[type](debugMsg)
 
     if (type === VueNotifications.type.warn) type = 'warning'
 
-    return new Noty({
-      text: message,
-      timeout,
-      type
-    }).show()
+    return new Noty({text: message, timeout, type}).show()
   },
   [UI_LIBS.swal] ({title, message, type, timeout, cb, debugMsg, position}) {
     if (debugMsg) console[type](debugMsg)
 
     if (type === VueNotifications.type.warn) type = 'warning'
-
-    const icon = type
-    return swal(title, message, icon)
+    return swal(title, message, type)
   }
 }
 
