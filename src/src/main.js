@@ -18,6 +18,11 @@ import iziToast from 'izitoast' //https://github.com/dolce/iziToast
 import 'izitoast/dist/css/iziToast.min.css'
 //end iziToast
 
+//noty
+import Noty from 'noty' //https://github.com/needim/noty
+import 'noty/lib/noty.css'
+//end noty
+
 Vue.config.productionTip = false
 
 miniToastr.init()
@@ -27,10 +32,11 @@ const UI_LIBS = {
   VueToasted: 'VueToasted',
   VueEasyToast: 'VueEasyToast',
   toastr: 'toastr',
-  iziToast: 'iziToast'
+  iziToast: 'iziToast',
+  Noty: 'Noty'
 }
 
-const currentLib = UI_LIBS.iziToast
+const currentLib = UI_LIBS.Noty
 
 const TOASTS = {
   [UI_LIBS.miniToastr] ({title, message, type, timeout, cb, debugMsg}) {
@@ -74,6 +80,17 @@ const TOASTS = {
       message,
       timeout
     })
+  },
+  [UI_LIBS.Noty] ({title, message, type, timeout, cb, debugMsg, position}) {
+    if (debugMsg) console[type](debugMsg)
+
+    if (type === VueNotifications.type.warn) type = 'warning'
+
+    return new Noty({
+      text: message,
+      timeout,
+      type
+    }).show()
   }
 }
 
