@@ -8,12 +8,15 @@ import VueNotifications from 'vue-notifications'
 import VueEasyToast from 'vue-easy-toast' //https://github.com/noru/vue-easy-toast
 import miniToastr from 'mini-toastr' //https://github.com/se-panfilov/mini-toastr
 import VueToasted from 'vue-toasted' //https://github.com/shakee93/vue-toasted
-
 //toastr
 import 'jquery' // required by 'toastr'
 import toastr from 'toastr' //https://github.com/CodeSeven/toastr
-import 'toastr/build/toastr.min.css' //https://github.com/CodeSeven/toastr
+import 'toastr/build/toastr.min.css'
 //end toastr
+//iziToast
+import iziToast from 'izitoast' //https://github.com/dolce/iziToast
+import 'izitoast/dist/css/iziToast.min.css'
+//end iziToast
 
 Vue.config.productionTip = false
 
@@ -23,10 +26,11 @@ const UI_LIBS = {
   miniToastr: 'miniToastr',
   VueToasted: 'VueToasted',
   VueEasyToast: 'VueEasyToast',
-  toastr: 'toastr'
+  toastr: 'toastr',
+  iziToast: 'iziToast'
 }
 
-const currentLib = UI_LIBS.toastr
+const currentLib = UI_LIBS.iziToast
 
 const TOASTS = {
   [UI_LIBS.miniToastr] ({title, message, type, timeout, cb, debugMsg}) {
@@ -54,9 +58,22 @@ const TOASTS = {
     return Vue.toasted[method]('hola billo', {duration: timeout})
   },
   [UI_LIBS.toastr] ({title, message, type, timeout, cb, debugMsg, position}) {
+    if (debugMsg) console[type](debugMsg)
+
     // this shit requires jquery, lol
     if (type === VueNotifications.type.warn) type = 'warning'
     return toastr[type](message, title, {timeOut: timeout})
+  },
+  [UI_LIBS.iziToast] ({title, message, type, timeout, cb, debugMsg, position}) {
+    if (debugMsg) console[type](debugMsg)
+
+    if (type === VueNotifications.type.warn) type = 'warning'
+
+    return iziToast[type]({
+      title,
+      message,
+      timeout
+    })
   }
 }
 

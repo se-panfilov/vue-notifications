@@ -14,6 +14,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "izitoast": "^1.1.5",
     "jquery": "^3.2.1",
     "mini-toastr": "0.6.6",
     "toastr": "^2.1.2",
