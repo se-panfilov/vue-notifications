@@ -17,10 +17,10 @@ import 'toastr/build/toastr.min.css'
 import iziToast from 'izitoast' //https://github.com/dolce/iziToast
 import 'izitoast/dist/css/iziToast.min.css'
 //end iziToast
-
 //noty
 import Noty from 'noty' //https://github.com/needim/noty
 import 'noty/lib/noty.css'
+import swal from 'sweetalert' //https://github.com/t4t5/sweetalert
 //end noty
 
 Vue.config.productionTip = false
@@ -33,10 +33,11 @@ const UI_LIBS = {
   VueEasyToast: 'VueEasyToast',
   toastr: 'toastr',
   iziToast: 'iziToast',
-  Noty: 'Noty'
+  Noty: 'Noty',
+  swal: 'swal'
 }
 
-const currentLib = UI_LIBS.Noty
+const currentLib = UI_LIBS.swal
 
 const TOASTS = {
   [UI_LIBS.miniToastr] ({title, message, type, timeout, cb, debugMsg}) {
@@ -91,6 +92,14 @@ const TOASTS = {
       timeout,
       type
     }).show()
+  },
+  [UI_LIBS.swal] ({title, message, type, timeout, cb, debugMsg, position}) {
+    if (debugMsg) console[type](debugMsg)
+
+    if (type === VueNotifications.type.warn) type = 'warning'
+
+    const icon = type
+    return swal(title, message, icon)
   }
 }
 
