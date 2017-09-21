@@ -15,7 +15,7 @@ var PLUGIN_NAME = 'VueNotifications';
 var PACKAGE_NAME = 'vue-notifications';
 var PROPERTY_NAME = 'notifications';
 
-var TYPE = {
+var TYPES = {
   error: 'error',
   warn: 'warn',
   info: 'info',
@@ -23,67 +23,55 @@ var TYPE = {
 };
 
 var EVANGELION = 1;
-var GHOST_IN_THE_SHELL = 2;
 
 var MESSAGES = {
   alreadyInstalled: PLUGIN_NAME + ': plugin already installed',
   methodNameConflict: PLUGIN_NAME + ': names conflict - '
 };
 
-function getMajorVersion(Vue) {
+function getVersion(Vue) {
   var version = Vue.version.match(/(\d+)/g);
   return +version[0];
-}
-
-function showInConsole(msg, type, types) {
-  if (type === types.error) console.error(msg);else if (type === types.warn) console.warn(msg);else console.log(msg);
 }
 
 function showDefaultMessage(_ref) {
   var type = _ref.type,
       message = _ref.message,
-      title = _ref.title,
-      debugMsg = _ref.debugMsg;
+      title = _ref.title;
 
-  var msg = 'Title: ' + title + ' Message: ' + message + ' DebugMsg: ' + debugMsg + ' type: ' + type;
-
-  showInConsole(msg, type, TYPE);
-
-  return msg;
+  var msg = 'Title: ' + title + ', Message: ' + message + ', Type: ' + type;
+  if (type === TYPES.error) console.error(msg);else if (type === TYPES.warn) console.warn(msg);else console.log(msg);
 }
 
 function getValues(vueApp, config) {
   var result = {};
-  var keepFnFields = ['cb'];
 
   Object.keys(config).forEach(function (field) {
-    keepFnFields.forEach(function (fnField) {
-      if (field === fnField) {
-        result[field] = config[field].bind(vueApp);
-      } else {
-        result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
-      }
-    });
+    if (field === 'cb') {
+      result[field] = config[field].bind(vueApp);
+    } else {
+      result[field] = typeof config[field] === 'function' ? config[field].call(vueApp) : config[field];
+    }
   });
 
   return result;
 }
 
-function showMessage(config, options, vueApp) {
+function showMessage(config, vueApp) {
   var valuesObj = getValues(vueApp, config);
-  var isMethodOverridden = options && options[valuesObj.type];
-  var method = isMethodOverridden ? options[valuesObj.type] : showDefaultMessage;
+  var isMethodOverridden = VueNotifications.pluginOptions[valuesObj.type];
+  var method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : showDefaultMessage;
   method(valuesObj, vueApp);
 
   if (config.cb) return config.cb();
 }
 
-function addMethods(targetObj, typesObj, options) {
+function addMethods(targetObj, typesObj) {
   Object.keys(typesObj).forEach(function (v) {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v];
 
-      return showMessage(config, options);
+      return showMessage(config);
     };
   });
 }
@@ -98,10 +86,7 @@ function setMethod(vueApp, name, options, pluginOptions) {
 
 function makeMethod(vueApp, configName, options, pluginOptions) {
   return function (config) {
-    var newConfig = {};
-    Object.assign(newConfig, VueNotifications.config);
-    Object.assign(newConfig, options[VueNotifications.propertyName][configName]);
-    Object.assign(newConfig, config);
+    var newConfig = Object.assign({}, VueNotifications.config, options[VueNotifications.propertyName][configName], config);
 
     return showMessage(newConfig, pluginOptions, vueApp);
   };
@@ -110,9 +95,8 @@ function makeMethod(vueApp, configName, options, pluginOptions) {
 function initVueNotificationPlugin(vueApp, notifications, pluginOptions) {
   if (!notifications) return;
   Object.keys(notifications).forEach(function (name) {
-    setMethod(vueApp, name, vueApp.$options, pluginOptions);
+    return setMethod(vueApp, name, vueApp.$options, pluginOptions);
   });
-
   vueApp.$emit(PACKAGE_NAME + '-initiated');
 }
 
@@ -132,42 +116,25 @@ function unlinkVueNotificationPlugin(vueApp, notifications) {
 function makeMixin(Vue, pluginOptions) {
   var _ref2;
 
-  var hooks = {
-    init: '',
-    destroy: 'beforeDestroy',
-    mounted: ''
-  };
+  var init = getVersion(Vue) === EVANGELION ? 'init' : 'beforeCreate';
 
-  if (getMajorVersion(Vue) === EVANGELION) {
-    hooks.init = 'init';
-    hooks.mounted = 'compiled';
-  }
-  if (getMajorVersion(Vue) === GHOST_IN_THE_SHELL) {
-    hooks.init = 'beforeCreate';
-    hooks.mounted = 'mounted';
-  }
-
-  return _ref2 = {}, _defineProperty(_ref2, hooks.init, function () {
-    var vueApp = this;
-    var vueAppOptions = this.$options;
-    var notificationsField = vueAppOptions[VueNotifications.propertyName];
-
-    initVueNotificationPlugin(vueApp, notificationsField, pluginOptions);
-  }), _defineProperty(_ref2, hooks.destroy, function () {
-    var vueApp = this;
-    var vueAppOptions = this.$options;
-    var notificationsField = vueAppOptions[VueNotifications.propertyName];
-    unlinkVueNotificationPlugin(vueApp, notificationsField);
+  return _ref2 = {}, _defineProperty(_ref2, init, function () {
+    var notificationsField = this.$options[VueNotifications.propertyName];
+    initVueNotificationPlugin(this, notificationsField, pluginOptions);
+  }), _defineProperty(_ref2, 'beforeDestroy', function beforeDestroy() {
+    var notificationsField = this.$options[VueNotifications.propertyName];
+    unlinkVueNotificationPlugin(this, notificationsField);
   }), _ref2;
 }
 
 var VueNotifications = {
-  type: TYPE,
+  types: TYPES,
   propertyName: PROPERTY_NAME,
   config: {
-    type: TYPE.info,
+    type: TYPES.info,
     timeout: 3000
   },
+  pluginOptions: {},
   installed: false,
   install: function install(Vue) {
     var pluginOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -176,9 +143,16 @@ var VueNotifications = {
     var mixin = makeMixin(Vue, pluginOptions);
     Vue.mixin(mixin);
 
-    addMethods(this, this.type, pluginOptions);
+    this.setPluginOptions(pluginOptions);
+    addMethods(this, this.types);
 
     this.installed = true;
+  },
+  setPluginOptions: function setPluginOptions() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    console.info(options.success.toString());
+    this.pluginOptions = options;
   }
 };
 

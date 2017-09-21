@@ -2,7 +2,7 @@ const PLUGIN_NAME = 'VueNotifications'
 const PACKAGE_NAME = 'vue-notifications'
 const PROPERTY_NAME = 'notifications'
 
-const TYPE = {
+const TYPES = {
   error: 'error',
   warn: 'warn',
   info: 'info',
@@ -10,64 +10,53 @@ const TYPE = {
 }
 
 const EVANGELION = 1
-const GHOST_IN_THE_SHELL = 2
 
 const MESSAGES = {
   alreadyInstalled: `${PLUGIN_NAME}: plugin already installed`,
   methodNameConflict: `${PLUGIN_NAME}: names conflict - `
 }
 
-function getMajorVersion (Vue) {
+function getVersion (Vue) {
   const version = Vue.version.match(/(\d+)/g)
   return +version[0]
 }
 
-function showInConsole (msg, type, types) {
-  if (type === types.error) console.error(msg)
-  else if (type === types.warn) console.warn(msg)
+function showDefaultMessage ({type, message, title}) {
+  let msg = `Title: ${title}, Message: ${message}, Type: ${type}`
+  if (type === TYPES.error) console.error(msg)
+  else if (type === TYPES.warn) console.warn(msg)
   else console.log(msg)
-}
-
-function showDefaultMessage ({type, message, title, debugMsg}) {
-  let msg = `Title: ${title} Message: ${message} DebugMsg: ${debugMsg} type: ${type}`
-
-  showInConsole(msg, type, TYPE)
-
-  return msg
 }
 
 function getValues (vueApp, config) {
   const result = {}
-  const keepFnFields = ['cb']
 
   Object.keys(config).forEach(field => {
-    keepFnFields.forEach(fnField => {
-      if (field === fnField) {
-        result[field] = config[field].bind(vueApp)
-      } else {
-        result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
-      }
-    })
+    if (field === 'cb') {
+      result[field] = config[field].bind(vueApp)
+    } else {
+      result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
+    }
   })
 
   return result
 }
 
-function showMessage (config, options, vueApp) {
+function showMessage (config, vueApp) {
   const valuesObj = getValues(vueApp, config)
-  const isMethodOverridden = options && options[valuesObj.type]
-  const method = isMethodOverridden ? options[valuesObj.type] : showDefaultMessage
+  const isMethodOverridden = VueNotifications.pluginOptions[valuesObj.type]
+  const method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : showDefaultMessage
   method(valuesObj, vueApp)
 
   if (config.cb) return config.cb()
 }
 
-function addMethods (targetObj, typesObj, options) {
+function addMethods (targetObj, typesObj) {
   Object.keys(typesObj).forEach(v => {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v]
       // TODO (S.Panfilov) fix 'vueApp' in param
-      return showMessage(config, options)
+      return showMessage(config)
     }
   })
 }
@@ -95,10 +84,10 @@ function setMethod (vueApp, name, options, pluginOptions) {
 
 function makeMethod (vueApp, configName, options, pluginOptions) {
   return function (config) {
-    const newConfig = {}
-    Object.assign(newConfig, VueNotifications.config)
-    Object.assign(newConfig, options[VueNotifications.propertyName][configName])
-    Object.assign(newConfig, config)
+    const newConfig = Object.assign({},
+      VueNotifications.config,
+      options[VueNotifications.propertyName][configName],
+      config)
 
     return showMessage(newConfig, pluginOptions, vueApp)
   }
@@ -106,10 +95,7 @@ function makeMethod (vueApp, configName, options, pluginOptions) {
 
 function initVueNotificationPlugin (vueApp, notifications, pluginOptions) {
   if (!notifications) return
-  Object.keys(notifications).forEach(name => {
-    setMethod(vueApp, name, vueApp.$options, pluginOptions)
-  })
-
+  Object.keys(notifications).forEach(name => setMethod(vueApp, name, vueApp.$options, pluginOptions))
   vueApp.$emit(`${PACKAGE_NAME}-initiated`)
 }
 
@@ -127,45 +113,30 @@ function unlinkVueNotificationPlugin (vueApp, notifications) {
 }
 
 function makeMixin (Vue, pluginOptions) {
-  let hooks = {
-    init: '',
-    destroy: 'beforeDestroy',
-    mounted: ''
-  }
-
-  if (getMajorVersion(Vue) === EVANGELION) {
-    hooks.init = 'init'
-    hooks.mounted = 'compiled'
-  }
-  if (getMajorVersion(Vue) === GHOST_IN_THE_SHELL) {
-    hooks.init = 'beforeCreate'
-    hooks.mounted = 'mounted'
-  }
+  const init = getVersion(Vue) === EVANGELION ? 'init' : 'beforeCreate'
 
   return {
-    [hooks.init]: function () {
-      const vueApp = this
-      const vueAppOptions = this.$options
-      const notificationsField = vueAppOptions[VueNotifications.propertyName]
-
-      initVueNotificationPlugin(vueApp, notificationsField, pluginOptions)
+    [init]: function () {
+      //this === vueApp
+      const notificationsField = this.$options[VueNotifications.propertyName]
+      initVueNotificationPlugin(this, notificationsField, pluginOptions)
     },
-    [hooks.destroy]: function () {
-      const vueApp = this
-      const vueAppOptions = this.$options
-      const notificationsField = vueAppOptions[VueNotifications.propertyName]
-      unlinkVueNotificationPlugin(vueApp, notificationsField)
+    'beforeDestroy': function () {
+      //this === vueApp
+      const notificationsField = this.$options[VueNotifications.propertyName]
+      unlinkVueNotificationPlugin(this, notificationsField)
     }
   }
 }
 
 const VueNotifications = {
-  type: TYPE,
+  types: TYPES,
   propertyName: PROPERTY_NAME,
   config: {
-    type: TYPE.info,
+    type: TYPES.info,
     timeout: 3000
   },
+  pluginOptions: {},
   installed: false,
   /**
    * Plugin | vue-notifications
@@ -178,9 +149,14 @@ const VueNotifications = {
     const mixin = makeMixin(Vue, pluginOptions)
     Vue.mixin(mixin)
 
-    addMethods(this, this.type, pluginOptions)
+    this.setPluginOptions(pluginOptions)
+    addMethods(this, this.types)
 
     this.installed = true
+  },
+  setPluginOptions (options = {}) {
+    console.info(options.success.toString())
+    this.pluginOptions = options
   }
 
   //TODO (S.Panfilov) add ability to access this.notifications.someError.message

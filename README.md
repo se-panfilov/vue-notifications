@@ -127,7 +127,7 @@ export default {
       showLoginError: {
         title: 'Login Failed',
         message: 'Failed to authenticate',
-        type: 'error' //Default: 'info', also you can use VueNotifications.type.error instead of 'error'
+        type: 'error' //Default: 'info', also you can use VueNotifications.types.error instead of 'error'
       }
     },
     vuex: {
@@ -186,7 +186,7 @@ As other option, you can specify as much custom fields as you want in `notificat
     notifications: {
       showLoginError: {
         message: 'Failed to authenticate',
-        type: 'error', //Also you can use VueNotifications.type.error instead of 'error'
+        type: 'error', //Also you can use VueNotifications.types.error instead of 'error'
         consoleMessage: 'let it be in console',
         consoleMessage2: 'let it be in console too',
         //etc
