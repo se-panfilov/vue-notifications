@@ -13,7 +13,7 @@ export default {
       showLoginError: { // You can have any name you want instead of 'showLoginError'
         title: 'Login Failed',
         message: 'Failed to authenticate',
-        type: 'error' // You also can use 'VueNotifications.type.error' instead of 'error'
+        type: 'error' // You also can use 'VueNotifications.types.error' instead of 'error'
       }
     }
   }

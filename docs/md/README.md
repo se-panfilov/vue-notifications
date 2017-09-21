@@ -25,7 +25,7 @@ export default {
       showLoginError: { // You can have any name you want instead of 'showLoginError'
         title: 'Login Failed',
         message: 'Failed to authenticate',
-        type: 'error' // You also can use 'VueNotifications.type.error' instead of 'error'
+        type: 'error' // You also can use 'VueNotifications.types.error' instead of 'error'
       }
     }
   }
@@ -35,6 +35,6 @@ And then call it via `this`: `this.showLoginError()`, and also with some overrid
 
 ### Why do we need third-party UI lib \(like [mini-toastr](https://github.com/se-panfilov/mini-toastr)\)?
 
-Well, because we want to be agnostic.  
+Well, because we want to be agnostic.
 That's mean that if at some step you would be fucked up with your UI library, `vue-notifications` will allow you to replace it as much easy as possible. Basically you would be required to replace `vue-notifications`'s config. And that's all.
 

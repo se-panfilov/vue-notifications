@@ -281,14 +281,15 @@
       showLoginError: { <span class="hljs-comment">// You can have any name you want instead of &apos;showLoginError&apos;</span>
         title: <span class="hljs-string">&apos;Login Failed&apos;</span>,
         message: <span class="hljs-string">&apos;Failed to authenticate&apos;</span>,
-        type: <span class="hljs-string">&apos;error&apos;</span> <span class="hljs-comment">// You also can use &apos;VueNotifications.type.error&apos; instead of &apos;error&apos;</span>
+        type: <span class="hljs-string">&apos;error&apos;</span> <span class="hljs-comment">// You also can use &apos;VueNotifications.types.error&apos; instead of &apos;error&apos;</span>
       }
     }
   }
 </code></pre>
 <p>And then call it via <code>this</code>: <code>this.showLoginError()</code>, and also with some override props: <code>this.showLoginError({message: &apos;whatever&apos;})</code>.</p>
 <h3 id="why-do-we-need-third-party-ui-lib-like-mini-toastr">Why do we need third-party UI lib (like <a href="https://github.com/se-panfilov/mini-toastr" target="_blank">mini-toastr</a>)?</h3>
-<p>Well, because we want to be agnostic.<br>That&apos;s mean that if at some step you would be fucked up with your UI library, <code>vue-notifications</code> will allow you to replace it as much easy as possible. Basically you would be required to replace <code>vue-notifications</code>&apos;s config. And that&apos;s all.</p>
+<p>Well, because we want to be agnostic.
+That&apos;s mean that if at some step you would be fucked up with your UI library, <code>vue-notifications</code> will allow you to replace it as much easy as possible. Basically you would be required to replace <code>vue-notifications</code>&apos;s config. And that&apos;s all.</p>
 
                                 
                                 </section>
@@ -328,7 +329,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Introduction and WTF is it?","level":"1.1","depth":1,"next":{"title":"Installation","level":"1.2","depth":1,"path":"installation.md","ref":"installation.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2017-09-18T11:53:17.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-09-20T11:36:38.380Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Introduction and WTF is it?","level":"1.1","depth":1,"next":{"title":"Installation","level":"1.2","depth":1,"path":"installation.md","ref":"installation.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2017-09-21T17:02:12.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-09-21T17:02:27.626Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

@@ -25,6 +25,15 @@
         <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
       </li>
     </ul>
+    <ul>
+      <li v-for="lib in libs" @change="setCurrentLib(lib)">
+        <label>
+          <input type="radio" name="lib"/>
+          <span v-text="lib"></span>
+        </label>
+
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -68,49 +77,56 @@
     swal: 'swal'
   }
 
-  const currentLib = UI_LIBS.miniToastr
+  let currentLib = UI_LIBS.miniToastr
 
   const TOASTS = {
     [UI_LIBS.miniToastr] ({title, message, type, timeout, cb, debugMsg}) {
+      console.info(1)
       if (debugMsg) console[type](debugMsg)
       return miniToastr[type](message, title, timeout, cb)
     },
     [UI_LIBS.VueToasted] ({title, message, type, timeout, cb, debugMsg, position}) {
+      console.info(2)
       if (debugMsg) console[type](debugMsg)
 
-      if (type === VueNotifications.type.warn) type = 'show'
+      if (type === VueNotifications.types.warn) type = 'show'
       return Vue.toasted[type]('hola billo', {duration: timeout})
     },
     [UI_LIBS.VueEasyToast] ({title, message, type, timeout, cb, debugMsg, position}) {
+      console.info(3)
       if (debugMsg) console[type](debugMsg)
 
-      if (type === VueNotifications.type.warn) type = 'show'
+      if (type === VueNotifications.types.warn) type = 'show'
       return Vue.toasted[type](message, {duration: timeout})
     },
     [UI_LIBS.toastr] ({title, message, type, timeout, cb, debugMsg, position}) {
+      console.info(4)
       if (debugMsg) console[type](debugMsg)
 
       // this shit requires jquery, lol
-      if (type === VueNotifications.type.warn) type = 'warning'
+      if (type === VueNotifications.types.warn) type = 'warning'
       return toastr[type](message, title, {timeOut: timeout})
     },
     [UI_LIBS.iziToast] ({title, message, type, timeout, cb, debugMsg, position}) {
+      console.info(5)
       if (debugMsg) console[type](debugMsg)
 
-      if (type === VueNotifications.type.warn) type = 'warning'
+      if (type === VueNotifications.types.warn) type = 'warning'
       return iziToast[type]({title, message, timeout})
     },
     [UI_LIBS.Noty] ({title, message, type, timeout, cb, debugMsg, position}) {
+      console.info(6)
       if (debugMsg) console[type](debugMsg)
 
-      if (type === VueNotifications.type.warn) type = 'warning'
+      if (type === VueNotifications.types.warn) type = 'warning'
 
       return new Noty({text: message, timeout, type}).show()
     },
     [UI_LIBS.swal] ({title, message, type, timeout, cb, debugMsg, position}) {
+      console.info(7)
       if (debugMsg) console[type](debugMsg)
 
-      if (type === VueNotifications.type.warn) type = 'warning'
+      if (type === VueNotifications.types.warn) type = 'warning'
       return swal(title, message, type)
     }
   }
@@ -122,37 +138,108 @@
     warn: TOASTS[currentLib]
   }
 
-  Vue.use(VueNotifications, options)
   Vue.use(VueEasyToast)
   Vue.use(VueToasted)
+  Vue.use(VueNotifications, options)
 
   export default {
     name: 'showcase',
     data () {
       return {
-        notificationsSetup: JSON.stringify(this.notifications)
+        notificationsSetup: JSON.stringify(this.notifications),
+        libs: UI_LIBS,
+        currentLib: currentLib
       }
     },
     notifications: {
       showSuccessMsg: {
-        type: VueNotifications.type.success,
+        type: VueNotifications.types.success,
         title: 'Hello there',
         message: 'That\'s the success!'
       },
       showInfoMsg: {
-        type: VueNotifications.type.info,
+        type: VueNotifications.types.info,
         title: 'Hey you',
         message: 'Here is some info for you'
       },
       showWarnMsg: {
-        type: VueNotifications.type.warn,
+        type: VueNotifications.types.warn,
         title: 'Wow, man',
         message: 'That\'s the kind of warning'
       },
       showErrorMsg: {
-        type: VueNotifications.type.error,
+        type: VueNotifications.types.error,
         title: 'Wow-wow',
         message: 'That\'s the error'
+      }
+    },
+    methods: {
+      setCurrentLib (lib) {
+        this.currentLib = lib
+        currentLib = lib
+        console.info(currentLib)
+
+        const TOASTS = {
+          [UI_LIBS.miniToastr] ({title, message, type, timeout, cb, debugMsg}) {
+            console.info(1)
+            if (debugMsg) console[type](debugMsg)
+            return miniToastr[type](message, title, timeout, cb)
+          },
+          [UI_LIBS.VueToasted] ({title, message, type, timeout, cb, debugMsg, position}) {
+            console.info(2)
+            if (debugMsg) console[type](debugMsg)
+
+            if (type === VueNotifications.types.warn) type = 'show'
+            return Vue.toasted[type]('hola billo', {duration: timeout})
+          },
+          [UI_LIBS.VueEasyToast] ({title, message, type, timeout, cb, debugMsg, position}) {
+            console.info(3)
+            if (debugMsg) console[type](debugMsg)
+
+            if (type === VueNotifications.types.warn) type = 'show'
+            return Vue.toasted[type](message, {duration: timeout})
+          },
+          [UI_LIBS.toastr] ({title, message, type, timeout, cb, debugMsg, position}) {
+            console.info(4)
+            if (debugMsg) console[type](debugMsg)
+
+            // this shit requires jquery, lol
+            if (type === VueNotifications.types.warn) type = 'warning'
+            return toastr[type](message, title, {timeOut: timeout})
+          },
+          [UI_LIBS.iziToast] ({title, message, type, timeout, cb, debugMsg, position}) {
+            console.info(5)
+            if (debugMsg) console[type](debugMsg)
+
+            if (type === VueNotifications.types.warn) type = 'warning'
+            return iziToast[type]({title, message, timeout})
+          },
+          [UI_LIBS.Noty] ({title, message, type, timeout, cb, debugMsg, position}) {
+            console.info(6)
+            if (debugMsg) console[type](debugMsg)
+
+            if (type === VueNotifications.types.warn) type = 'warning'
+
+            return new Noty({text: message, timeout, type}).show()
+          },
+          [UI_LIBS.swal] ({title, message, type, timeout, cb, debugMsg, position}) {
+            console.info(7)
+            if (debugMsg) console[type](debugMsg)
+
+            if (type === VueNotifications.types.warn) type = 'warning'
+            return swal(title, message, type)
+          }
+        }
+
+        const options = {
+          success: TOASTS[currentLib],
+          error: TOASTS[currentLib],
+          info: TOASTS[currentLib],
+          warn: TOASTS[currentLib]
+        }
+
+//        console.dir(VueNotifications.pluginOptions)
+        VueNotifications.setPluginOptions(options)
       }
     }
   }

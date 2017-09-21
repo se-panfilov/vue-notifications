@@ -30,22 +30,22 @@
     },
     notifications: {
       showSuccessMsg: {
-        type: VueNotifications.type.success,
+        type: VueNotifications.types.success,
         title: 'Hello there',
         message: 'That\'s the success!'
       },
       showInfoMsg: {
-        type: VueNotifications.type.info,
+        type: VueNotifications.types.info,
         title: 'Hey you',
         message: 'Here is some info for you'
       },
       showWarnMsg: {
-        type: VueNotifications.type.warn,
+        type: VueNotifications.types.warn,
         title: 'Wow, man',
         message: 'That\'s the kind of warning'
       },
       showErrorMsg: {
-        type: VueNotifications.type.error,
+        type: VueNotifications.types.error,
         title: 'Wow-wow',
         message: 'That\'s the error'
       }
