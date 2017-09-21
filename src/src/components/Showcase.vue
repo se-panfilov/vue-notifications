@@ -68,7 +68,7 @@
     swal: 'swal'
   }
 
-  const currentLib = UI_LIBS.swal
+  const currentLib = UI_LIBS.miniToastr
 
   const TOASTS = {
     [UI_LIBS.miniToastr] ({title, message, type, timeout, cb, debugMsg}) {
