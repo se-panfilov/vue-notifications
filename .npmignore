@@ -16,10 +16,7 @@ bower.json
 gulpfile.js
 build/
 .idea
-docs/
 TODO.md
 yarn.lock
 package-lock.json
-test/
-src/
 vue-not
