@@ -54,7 +54,7 @@ const TOASTS = {
     if (debugMsg) console[type](debugMsg)
 
     if (type === VueNotifications.type.warn) type = 'show'
-    return Vue.toasted[method]('hola billo', {duration: timeout})
+    return Vue.toasted[type](message, {duration: timeout})
   },
   [UI_LIBS.toastr] ({title, message, type, timeout, cb, debugMsg, position}) {
     if (debugMsg) console[type](debugMsg)
