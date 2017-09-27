@@ -52,7 +52,7 @@
   import VueNotifications from 'vue-notifications'
   import VueHighlightJS from 'vue-highlightjs'
   import 'highlight.js/styles/atom-one-light.css'
-  import ExampleFuncSetup from '../misc/example_func_setup'
+  import ExampleFuncSetup from '../misc/example_setup'
 
   //Third-party UI libs
   import VueEasyToast from 'vue-easy-toast' // https://github.com/noru/vue-easy-toast
