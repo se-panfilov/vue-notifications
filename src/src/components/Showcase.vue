@@ -12,10 +12,17 @@
       </p>
     </section>
 
-    <section>
-      <pre v-highlightjs="ExampleFuncSetup[currentLib]">
+    <section class="code-samples">
+      <div class="code-samples__sample -func">
+      <pre v-highlightjs="ExampleSetup[currentLib]">
         <code class="javascript"></code>
       </pre>
+      </div>
+      <div class="code-samples__sample -config">
+      <pre v-highlightjs="ExampleConfig.config">
+        <code class="javascript"></code>
+      </pre>
+      </div>
     </section>
 
     <section>
@@ -52,7 +59,8 @@
   import VueNotifications from 'vue-notifications'
   import VueHighlightJS from 'vue-highlightjs'
   import 'highlight.js/styles/atom-one-light.css'
-  import ExampleFuncSetup from '../misc/example_setup'
+  import ExampleSetup from '../misc/example_setup'
+  import ExampleConfig from '../misc/example_config'
 
   //Third-party UI libs
   import VueEasyToast from 'vue-easy-toast' // https://github.com/noru/vue-easy-toast
@@ -136,7 +144,8 @@
     name: 'showcase',
     data () {
       return {
-        ExampleFuncSetup: ExampleFuncSetup,
+        ExampleSetup: ExampleSetup,
+        ExampleConfig: ExampleConfig,
         libs: UI_LIBS,
         currentLib: UI_LIBS.VueEasyToast
       }
@@ -217,4 +226,14 @@
       cursor pointer
       &:hover
         background-color lighten(primary_color, 5)
+
+  .code-samples
+    justify-content space-around
+    flex-direction row
+    display flex
+    &__sample
+      flex-basis: 450px
+      background-color #fafafa
+      &.-func
+        width: 550px
 </style>

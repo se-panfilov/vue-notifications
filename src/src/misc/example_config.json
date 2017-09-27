@@ -1,0 +1,3 @@
+{
+  "config": "export default {\n  name: 'MyComponent',\n  data () {\n    return {}\n  },\n  notifications: {\n    showSuccessMsg: {\n      type: VueNotifications.types.success,\n      title: 'Hello there',\n      message: 'That\\'s the success!'\n    },\n    showInfoMsg: {\n      type: VueNotifications.types.info,\n      title: 'Hey you',\n      message: 'Here is some info for you'\n    },\n    showWarnMsg: {\n      type: VueNotifications.types.warn,\n      title: 'Wow, man',\n      message: 'That\\'s the kind of warning'\n    },\n    showErrorMsg: {\n      type: VueNotifications.types.error,\n      title: 'Wow-wow',\n      message: 'That\\'s the error'\n    }\n  }\n}"
+}
