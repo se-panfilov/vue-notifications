@@ -18,4 +18,5 @@ exclude_paths:
 - test/
 - build/
 - docs/
+- examples/
 - gulpfile.js

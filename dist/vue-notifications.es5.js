@@ -151,7 +151,6 @@ var VueNotifications = {
   setPluginOptions: function setPluginOptions() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    console.info(options.success.toString());
     this.pluginOptions = options;
   }
 };

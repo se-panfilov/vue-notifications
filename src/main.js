@@ -155,7 +155,6 @@ const VueNotifications = {
     this.installed = true
   },
   setPluginOptions (options = {}) {
-    console.info(options.success.toString())
     this.pluginOptions = options
   }
 
