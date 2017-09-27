@@ -1,9 +1,9 @@
 {
-  "miniToastr": "function miniToastr ({title, message, type, timeout, cb, debugMsg}) {if (debugMsg) console[type](debugMsg) return miniToastr[type](message, title, timeout, cb)}",
-  "VueToasted": "function VueToasted ({title, message, type, timeout, cb, debugMsg, position}) {if (debugMsg) console[type](debugMsg) if (type === VueNotifications.types.warn) type = 'show' return Vue.toasted[type](message, {duration: timeout}) }",
-  "VueEasyToast": "function VueEasyToast ({title, message, type, timeout, cb, debugMsg, position}) {if (debugMsg) console[type](debugMsg)if (type === VueNotifications.types.warn) type = 'show' return Vue.toasted[type](message, {duration: timeout})}",
-  "toastr": "function toastr ({title, message, type, timeout, cb, debugMsg, position}) { if (debugMsg) console[type](debugMsg) if (type === VueNotifications.types.warn) type = 'warning' return toastr[type](message, title, {timeOut: timeout})}",
-  "iziToast": "function iziToast ({title, message, type, timeout, cb, debugMsg, position}) { if (debugMsg) console[type](debugMsg) if (type === VueNotifications.types.warn) type = 'warning' return iziToast[type]({title, message, timeout}) }",
-  "Noty": "function Noty ({title, message, type, timeout, cb, debugMsg, position}) { if (debugMsg) console[type](debugMsg) if (type === VueNotifications.types.warn) type = 'warning' return new Noty({text: message, timeout, type}).show() }",
-  "swal": "function swal ({title, message, type, timeout, cb, debugMsg, position}) { if (debugMsg) console[type](debugMsg) if (type === VueNotifications.types.warn) type = 'warning' return swal(title, message, type) }"
+  "miniToastr": "function toast ({title, message, type, timeout, cb}) {\n  return miniToastr[type](message, title, timeout, cb)\n}",
+  "VueToasted": "function toast ({title, message, type, timeout, cb}) {\n  if (type === VueNotifications.types.warn) type = 'show'\n  return Vue.toasted[type](message, {duration: timeout})\n}",
+  "VueEasyToast": "function toast ({title, message, type, timeout, cb}) {\n  let className = 'et-info'\n  if (type === VueNotifications.types.warn) className = 'et-warn'\n  else if (type === VueNotifications.types.error) className = 'et-alert'\n\n  return Vue.toast(message, {duration: timeout, className})\n}",
+  "toastr": "function toast ({title, message, type, timeout, cb}) {\n  if (type === VueNotifications.types.warn) type = 'warning'\n  return toastr[type](message, title, {timeOut: timeout})\n}",
+  "iziToast": "function toast ({title, message, type, timeout, cb}) {\n  if (type === VueNotifications.types.warn) type = 'warning'\n  return iziToast[type]({title, message, timeout})\n}",
+  "Noty": "function toast ({title, message, type, timeout, cb}) {\n  if (type === VueNotifications.types.warn) type = 'warning'\n  return new Noty({text: message, timeout, type}).show()\n}",
+  "swal": "function toast ({title, message, type, timeout, cb}) {\n  if (type === VueNotifications.types.warn) type = 'warning'\n  return swal(title, message, type)\n}"
 }
