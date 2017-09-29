@@ -1,54 +1,62 @@
 <template>
-  <div class="showcase">
+  <div class="showcase-page">
 
     <section class="hello">
       <h1>Showcase</h1>
       <img src="../assets/logo.png">
       <h2><a href="https://vuejs.org">vue.js</a> agnostic non-blocking notifications library</h2>
       <p>
-        VueNotifications connects your app with notification UI library. <br/>
-        That's also means you can have any look and feel of notifications you want to! <br/>
+        VueNotifications connects your app with notification UI library. <br />
+        That's also means you can have any look and feel of notifications you want to! <br />
         And it would be easy to replace it =)
       </p>
     </section>
 
-    <section class="code-samples">
-      <div class="code-samples__sample -func">
-      <pre v-highlightjs="ExampleSetup[currentLib]">
-        <code class="javascript"></code>
-      </pre>
-      </div>
-      <div class="code-samples__sample -config">
-      <pre v-highlightjs="ExampleConfig.config">
-        <code class="javascript"></code>
-      </pre>
-      </div>
-    </section>
+    <section class="showcase">
+      <ol class="showcase__list">
+        <li class="showcase__item">
+          <h3 class="showcase__header">Setup VueNotifications</h3>
+          <div class="code-samples__sample -func">
+            <pre v-highlightjs="ExampleSetup[currentLib]">
+              <code class="javascript"></code>
+            </pre>
+          </div>
+        </li>
+        <li>
+          <h3 class="showcase__header">Define your notifications</h3>
+          <pre v-highlightjs="ExampleConfig.config">
+            <code class="javascript"></code>
+          </pre>
+        </li>
+        <li class="showcase__item">
+          <h3 class="showcase__header">Try it live</h3>
+          <ul class="msg-buttons">
+            <li>
+              <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
+            </li>
+            <li>
+              <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
+            </li>
+            <li>
+              <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
+            </li>
+            <li>
+              <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
+            </li>
+          </ul>
+          <ul class="showcase-lib">
+            <li v-for="(value, key) in libs"
+                class="showcase-lib__item"
+                @change="setCurrentLib(key)">
+              <label>
+                <input type="radio" v-model="checked" :value="key" name="lib"/>
+                <span v-text="value"></span>
+              </label>
 
-    <section>
-      <ul class="msg-buttons">
-        <li>
-          <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
+            </li>
+          </ul>
         </li>
-        <li>
-          <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
-        </li>
-        <li>
-          <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
-        </li>
-        <li>
-          <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
-        </li>
-      </ul>
-      <ul>
-        <li v-for="lib in libs" @change="setCurrentLib(lib)">
-          <label>
-            <input type="radio" name="lib"/>
-            <span v-text="lib"></span>
-          </label>
-
-        </li>
-      </ul>
+      </ol>
     </section>
 
   </div>
@@ -147,7 +155,8 @@
         ExampleSetup: ExampleSetup,
         ExampleConfig: ExampleConfig,
         libs: UI_LIBS,
-        currentLib: UI_LIBS.VueEasyToast
+        currentLib: UI_LIBS.VueEasyToast,
+        checked: ''
       }
     },
 //    init () {
@@ -176,8 +185,9 @@
       }
     },
     methods: {
-      setCurrentLib (lib) {
-        this.currentLib = lib
+      setCurrentLib (libKey) {
+        this.currentLib = libKey
+        this.checked = libKey
 
         const options = {
           success: TOASTS[this.currentLib],
@@ -196,16 +206,8 @@
 <style lang="stylus" type="text/stylus" scoped>
   primary_color = #41b883
 
-  h1, h2
+  h1, h2, h3
     font-weight normal
-
-  ul
-    list-style-type none
-    padding 0
-
-  li
-    display inline-block
-    margin 0 10px
 
   a
     color #42b983
@@ -213,9 +215,17 @@
   .hello
     text-align center
 
+  ul
+    padding 0
+    list-style-type none
+
   .msg-buttons
+    list-style-type none
+    padding 0
     margin 10px
     &__btn
+      display inline-block
+      margin 5px 10px
       color white
       font-size 14px
       background-color primary_color
@@ -227,13 +237,12 @@
       &:hover
         background-color lighten(primary_color, 5)
 
-  .code-samples
-    justify-content space-around
-    flex-direction row
-    display flex
-    &__sample
-      flex-basis: 450px
+  .showcase
+    &__list
+      justify-content space-around
+      flex-direction row
+      display flex
+    &showcase__item
+      flex-basis: 350px
       background-color #fafafa
-      &.-func
-        width: 550px
 </style>
