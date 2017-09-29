@@ -1,7 +1,7 @@
 <template>
   <div class="showcase-page">
 
-    <section class="hello">
+    <section class="overview">
       <h1>Showcase</h1>
       <img src="../assets/logo.png">
       <h2><a href="https://vuejs.org">vue.js</a> agnostic non-blocking notifications library</h2>
@@ -12,51 +12,78 @@
       </p>
     </section>
 
-    <section class="showcase">
-      <ol class="showcase__list">
-        <li class="showcase__item">
-          <h3 class="showcase__header">Setup VueNotifications</h3>
-          <div class="code-samples__sample -func">
-            <pre v-highlightjs="ExampleSetup[currentLib]">
-              <code class="javascript"></code>
-            </pre>
-          </div>
+    <hr />
+
+    <h2>See it in action</h2>
+    <div>
+      <span>You have to do 3 things</span>
+      <ol>
+        <li>Config VueNotifications to work with third-party lib you want (you may try this one: <a
+          href="https://github.com/se-panfilov/mini-toastr">mini-toastr</a>)
         </li>
-        <li>
-          <h3 class="showcase__header">Define your notifications</h3>
-          <pre v-highlightjs="ExampleConfig.config">
+        <li>Add notifications to any component at your choice</li>
+        <li>Enjoy!</li>
+      </ol>
+
+      <span>Exapmles below</span>
+    </div>
+
+    <section class="showcase">
+
+      <section class="showcase__entry -try-live">
+        <h3 class="showcase__header">Try it live</h3>
+        <p>We have 4 predefined types of messages: error, success, warn and info, but you can specify your owns</p>
+        <ul class="msg-buttons">
+          <li>
+            <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
+          </li>
+          <li>
+            <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
+          </li>
+          <li>
+            <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
+          </li>
+          <li>
+            <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
+          </li>
+        </ul>
+
+        <p>You can easily replace any UI third-party that draws notifications for you. And here you can switch between
+          any of them easily. <br /> P.S. Pay attention that demo config will be updated</p>
+        <ul class="showcase-lib">
+          <li v-for="(value, key) in libs"
+              class="showcase-lib__items"
+              @change="setCurrentLib(key)">
+            <label>
+              <input type="radio" v-model="checked" :value="key" name="lib" />
+              <span v-text="value"></span>
+              <span class="showcase-lib__third-party-home-ling">
+                <a v-bind:href="ExampleSetup[key].home" v-bind:title="'go to ' + value + ' home'" target="_blank">
+                  <i class="fa fa-home" aria-hidden="true"></i>
+                </a>
+              </span>
+            </label>
+
+          </li>
+        </ul>
+      </section>
+
+      <section class="showcase__entry -setup">
+        <h3 class="showcase__header">Config VueNotifications</h3>
+        <div class="code-samples__sample -func">
+          <pre v-highlightjs="ExampleSetup[currentLib].code">
             <code class="javascript"></code>
           </pre>
-        </li>
-        <li class="showcase__item">
-          <h3 class="showcase__header">Try it live</h3>
-          <ul class="msg-buttons">
-            <li>
-              <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
-            </li>
-            <li>
-              <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
-            </li>
-            <li>
-              <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
-            </li>
-            <li>
-              <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
-            </li>
-          </ul>
-          <ul class="showcase-lib">
-            <li v-for="(value, key) in libs"
-                class="showcase-lib__item"
-                @change="setCurrentLib(key)">
-              <label>
-                <input type="radio" v-model="checked" :value="key" name="lib"/>
-                <span v-text="value"></span>
-              </label>
+        </div>
+      </section>
 
-            </li>
-          </ul>
-        </li>
-      </ol>
+      <section class="showcase__entry -definition">
+        <h3 class="showcase__header">Define your notifications</h3>
+        <pre v-highlightjs="ExampleConfig.config">
+          <code class="javascript"></code>
+        </pre>
+      </section>
+
     </section>
 
   </div>
@@ -206,13 +233,20 @@
 <style lang="stylus" type="text/stylus" scoped>
   primary_color = #41b883
 
+  .showcase-page
+    padding 15px
+
+  hr
+    border-color #bfbfbf
+    border-style dashed
+
   h1, h2, h3
     font-weight normal
 
   a
     color #42b983
 
-  .hello
+  .overview
     text-align center
 
   ul
@@ -238,11 +272,14 @@
         background-color lighten(primary_color, 5)
 
   .showcase
-    &__list
-      justify-content space-around
-      flex-direction row
-      display flex
-    &showcase__item
+    justify-content space-around
+    flex-direction row
+    display flex
+    &__entry
       flex-basis: 350px
       background-color #fafafa
+
+  .showcase-lib
+    &__third-party-home-ling
+      font-size 14px
 </style>
