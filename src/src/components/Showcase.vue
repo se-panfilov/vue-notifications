@@ -25,31 +25,39 @@
         <li>Enjoy!</li>
       </ol>
 
-      <span>Exapmles below</span>
+      <span>Examples below</span>
     </div>
 
     <section class="showcase">
 
       <section class="showcase__entry -try-live">
         <h3 class="showcase__header">Try it live</h3>
-        <p>We have 4 predefined types of messages: error, success, warn and info, but you can specify your owns</p>
+        <p>We have 4 predefined types of messages:
+          <span class="highlighted-text">error</span>,
+          <span class="highlighted-text">success</span>,
+          <span class="highlighted-text">warn</span> and
+          <span class="highlighted-text">info</span>,
+          but you can specify your owns</p>
         <ul class="msg-buttons">
-          <li>
+          <li class="msg-buttons__list-item">
             <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
           </li>
-          <li>
+          <li class="msg-buttons__list-item">
             <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
           </li>
-          <li>
+          <li class="msg-buttons__list-item">
             <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
           </li>
-          <li>
+          <li class="msg-buttons__list-item">
             <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
           </li>
         </ul>
 
-        <p>You can easily replace any UI third-party that draws notifications for you. And here you can switch between
-          any of them easily. <br /> P.S. Pay attention that demo config will be updated</p>
+        <p>You can easily replace any <span class="highlighted-text">UI third-party</span> that draws notifications for
+          you. And here you can switch between
+          any of them easily.
+          <br /><br /> <strong>P.S.</strong> Pay attention: Initial config will be changed.<br />
+          But Notification definition will be the same.</p>
         <ul class="showcase-lib">
           <li v-for="(value, key) in libs"
               class="showcase-lib__items"
@@ -253,6 +261,12 @@
     padding 0
     list-style-type none
 
+  .highlighted-text
+    background-color #f1f1ed
+    border 1px dotted #d0d0d0
+    padding 0 3px
+    border-radius 2px
+
   .msg-buttons
     list-style-type none
     padding 0
@@ -268,8 +282,11 @@
       border 1px solid transparent
       transition background .4s ease
       cursor pointer
+      min-width 85px
       &:hover
         background-color lighten(primary_color, 5)
+    &__list-item
+      display inline-block
 
   .showcase
     justify-content space-around
@@ -278,6 +295,16 @@
     &__entry
       flex-basis: 350px
       background-color #fafafa
+      min-width 1px
+      flex-grow 1
+      &.-try-live
+        flex-basis: 280px
+      &.-setup
+        flex-basis: 350px
+        flex-grow 2
+      &.-definition
+        flex-basis: 300px
+        flex-grow 1.2
 
   .showcase-lib
     &__third-party-home-ling
