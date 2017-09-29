@@ -63,7 +63,7 @@
               class="showcase-lib__items"
               @change="setCurrentLib(key)">
             <label>
-              <input type="radio" v-model="checked" :value="key" name="lib" />
+              <input type="radio" :checked="currentLib === value" :value="key" name="lib" />
               <span v-text="value"></span>
               <span class="showcase-lib__third-party-home-ling">
                 <a v-bind:href="ExampleSetup[key].home" v-bind:title="'go to ' + value + ' home'" target="_blank">
@@ -190,13 +190,10 @@
         ExampleSetup: ExampleSetup,
         ExampleConfig: ExampleConfig,
         libs: UI_LIBS,
-        currentLib: UI_LIBS.VueEasyToast,
+        currentLib: UI_LIBS.miniToastr,
         checked: ''
       }
     },
-//    init () {
-//      console.info(12312)
-//    },
     notifications: {
       showSuccessMsg: {
         type: VueNotifications.types.success,
