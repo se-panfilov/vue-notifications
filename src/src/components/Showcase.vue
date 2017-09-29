@@ -2,11 +2,10 @@
   <div class="showcase-page">
 
     <section class="overview">
-      <h1>Showcase</h1>
       <img src="../assets/logo.png">
       <h2><a href="https://vuejs.org">vue.js</a> agnostic non-blocking notifications library</h2>
       <p>
-        VueNotifications connects your app with notification UI library. <br />
+        <span class="highlighted-text">VueNotifications</span> connects your app with notification UI library. <br />
         That's also means you can have any look and feel of notifications you want to! <br />
         And it would be easy to replace it =)
       </p>
@@ -14,12 +13,13 @@
 
     <hr />
 
-    <h2>See it in action</h2>
+    <h2>Showcase: See it in action</h2>
     <div>
       <span>You have to do 3 things</span>
       <ol>
-        <li>Config VueNotifications to work with third-party lib you want (you may try this one: <a
-          href="https://github.com/se-panfilov/mini-toastr">mini-toastr</a>)
+        <li>Config <span class="highlighted-text">VueNotifications</span> to work with third-party lib you want (you may
+          try this one: <a
+            href="https://github.com/se-panfilov/mini-toastr">mini-toastr</a>)
         </li>
         <li>Add notifications to any component at your choice</li>
         <li>Enjoy!</li>
@@ -94,6 +94,96 @@
 
     </section>
 
+    <hr />
+
+    <section class="getting-started">
+      <h1>Getting started</h1>
+
+      <ol>
+        <li>
+          <h3>Install</h3>
+          <pre v-highlightjs>
+            <code class="shell">npm i vue-notifications --save</code>
+          </pre>
+          <p>check the documentation for other options:
+            <a href="https://se-panfilov.github.io/vue-notifications/docs/html/installation.html">Installation</a></p>
+          <p>And install UI third-party library, for example <a href="https://github.com/se-panfilov/mini-toastr">miniToastr</a>.
+          </p>
+          <pre v-highlightjs>
+            <code class="shell">npm i mini-toastr --save</code>
+          </pre>
+          <p>But you are free to use any other, like the libs above (VueToasted, iziToast, etc).</p>
+        </li>
+        <li>
+          <h3>Setup & config</h3>
+          <p>Check the one of examples above (in "Showcase" section), or check the docs:
+            <a href="https://se-panfilov.github.io/vue-notifications/docs/html/getting-started.html">Getting Started</a>
+          </p>
+          <p>It's gonna be something like this:</p>
+          <pre v-highlightjs="ExampleSetup.miniToastr.code">
+            <code class="javascript"></code>
+          </pre>
+        </li>
+        <li>
+          <h3>Add actual notifications to any component:</h3>
+          <pre v-highlightjs="ExampleConfig.config">
+            <code class="javascript"></code>
+          </pre>
+          <p>Now you can call any of this configs like a common vue method: via <span
+            class="highlighted-text">this</span>, like
+            <span class="highlighted-text">this.showSuccessMsg()</span>, <span class="highlighted-text">this.showInfoMsg()</span>
+            and etc.
+            Don't forget that you can override them, like <span class="highlighted-text">this.showWarnMsg({message:
+              'Brand new message'})</span>
+          </p>
+          <p>Check the docs for more info: <a
+            href="https://se-panfilov.github.io/vue-notifications/docs/html/usage.html">Usage</a></p>
+        </li>
+      </ol>
+
+    </section>
+
+    <hr />
+
+    <section class="misc">
+      <a href="https://github.com/se-panfilov/vue-notifications">
+        <i class="fa fa-github" aria-hidden="true"></i>
+        Source code
+      </a> |
+      <a href="https://se-panfilov.github.io/vue-notifications/docs/html/index.html">
+        <i class="fa fa-book" aria-hidden="true"></i>
+        Docs
+      </a> |
+      <a href="https://github.com/se-panfilov/vue-notifications/tree/master/examples">
+        <i class="fa fa-free-code-camp" aria-hidden="true"></i>
+        Examples
+      </a> |
+      <a href="https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE">
+        <i class="fa fa-balance-scale" aria-hidden="true"></i>
+        MIT Licence
+      </a> |
+      <a href="https://github.com/se-panfilov/vue-notifications/releases">
+        <i class="fa fa-rocket" aria-hidden="true"></i>
+        Release notes
+      </a> |
+      <a href="https://se-panfilov.github.io/vue-notifications/docs/html/browsers-support.html">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        Browsers support
+      </a> |
+      <a href="https://se-panfilov.github.io/vue-notifications/docs/html/vuejs-versions-support.html">Vue.js versions
+        support</a> |
+      <a href="https://github.com/se-panfilov/vue-notifications/issues">
+        <i class="fa fa-bolt" aria-hidden="true"></i>
+        Issues
+      </a>
+      <br />
+      Author: <a href="https://se-panfilov.github.io/">
+      <i class="fa fa-globe" aria-hidden="true"></i>
+      Sergei Panfilov</a> |
+      Email: <a href="mailto:se-panfilov@ya.ru">
+      <i class="fa fa-envelope-o" aria-hidden="true"></i> se-panfilov@ya.ru
+    </a>
+    </section>
   </div>
 </template>
 
@@ -306,4 +396,10 @@
   .showcase-lib
     &__third-party-home-ling
       font-size 14px
+
+  .misc
+    text-align center
+    padding 15px 25%
+    a
+      text-decoration none
 </style>

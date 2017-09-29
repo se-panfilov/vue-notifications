@@ -6,13 +6,16 @@
     </a>
     <ul class="nav">
       <li class="nav__item">
-        <a href="https://se-panfilov.github.io/vue-notifications/docs/html/index.html" title="Docs">Documentation</a>
+        <a href="https://se-panfilov.github.io/vue-notifications/docs/html/index.html" title="Docs">
+          <i class="fa fa-book" aria-hidden="true"></i>
+          Documentation
+        </a>
       </li>
       <li class="nav__item">
-        <router-link to="showcase">Showcase</router-link>
-      </li>
-      <li class="nav__item">
-        <a href="https://github.com/se-panfilov/vue-notifications" title="source code">GitHub</a>
+        <a href="https://github.com/se-panfilov/vue-notifications" title="source code">
+          <i class="fa fa-github" aria-hidden="true"></i>
+          GitHub
+        </a>
       </li>
     </ul>
   </section>
