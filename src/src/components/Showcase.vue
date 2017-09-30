@@ -3,7 +3,7 @@
 
     <section class="overview">
       <img src="../assets/logo.png">
-      <h2><a href="https://vuejs.org">vue.js</a> agnostic non-blocking notifications library</h2>
+      <h2><a href="https://vuejs.org">vue.js</a> agnostic library for non-blocking notifications</h2>
       <p>
         <span class="highlighted-text">VueNotifications</span> connects your app with notification UI library. <br />
         That's also means you can have any look and feel of notifications you want to! <br />
