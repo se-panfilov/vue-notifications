@@ -4185,8 +4185,8 @@ vue-loader@13.0.4:
     vue-template-es2015-compiler "^1.5.3"
 
 vue-notifications@0.9.0:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/vue-notifications/-/vue-notifications-0.8.2.tgz#a3895d717a9dc6b0bd1f1f93e30bfce9bef8d09b"
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/vue-notifications/-/vue-notifications-0.9.0.tgz#7d25e19a5e4872442e3527f252007d538af4ba6e"
 
 vue-style-loader@3.0.1:
   version "3.0.1"
