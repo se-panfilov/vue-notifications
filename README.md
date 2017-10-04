@@ -11,11 +11,55 @@
 
 # vue-notifications
 
-**VueNotifications** - agnostic non-blocking notifications library, that allow you to use notifications in declaration style.
+**VueNotifications** - agnostic library for non-blocking notifications.
 
 ----
 
+## Introduction and WTF is it?
+
+`vue-notifications` is "Vue.js agnostic non-blocking notifications library"... and it's a lie \)\) Seriously.
+
+`vue-notifications`it's basically **a bridge** between your actual app and UI-notfications libs, like [mini-toastr](https://github.com/se-panfilov/mini-toastr).
+
+### Why do we need this?
+
+Because we want to have a way to show notifications and a way to easy replace UI library that show them without rewrite the code.
+
+### What `vue-notifications` actually do?
+
+It's allow you to declare your notifications in blocks like this one:
+
+```js
+export default {
+    name: 'DemoView',
+    data () {
+      //...
+    },
+    methods: {
+      //...
+    },
+    notifications: {
+      showLoginError: { // You can have any name you want instead of 'showLoginError'
+        title: 'Login Failed',
+        message: 'Failed to authenticate',
+        type: 'error' // You also can use 'VueNotifications.types.error' instead of 'error'
+      }
+    }
+  }
+```
+
+And then call it via `this`: `this.showLoginError()`, and also with some override props: `this.showLoginError({message: 'whatever'})`.
+
+### Why do we need third-party UI lib \(like [mini-toastr](https://github.com/se-panfilov/mini-toastr)\)?
+
+Well, because we want to be agnostic.
+That's mean that if at some step you would be fucked up with your UI library, `vue-notifications` will allow you to replace it as much easy as possible. Basically you would be required to replace `vue-notifications`'s config. And that's all.
+
+
+
 ## Installation
+
+Check the Docs: [Installation](https://se-panfilov.github.io/vue-notifications/docs/html/installation.html)
 
 via npm:
 
@@ -32,26 +76,100 @@ or download [latest release][1]
 
 include in project:
 
-```JS
-import VueNotifications from 'vue-notifications'
-```
+## Getting started
+
+Check the Docs: [Getting started](https://se-panfilov.github.io/vue-notifications/docs/html/getting-started.html)
 
 ```JS
+import VueNotifications from 'vue-notifications'
+
 Vue.use(VueNotifications, options)
 ```
 
-## Setup and configuration
+### Setup and configuration \(necessary\)
 
-**Attention:** By default VueNotification send all messages _to console_. To activate non-blocking notifiction you've got to use third-party library, like toasr. I suggest you to use [mini-toastr][2] (`npm i mini-toastr --save`)
+As I said above - you have to use UI library that would draw actual notifications for you.
 
-```JS
-// Include Plugin in project
+For this example I will use [mini-toastr](https://github.com/se-panfilov/mini-toastr)
+
+##### Step-by-step guide
+
+Let's do everything together
+
+> If you don't want spend too much time with this shit - you can go ahead and copy-past whole code from the bottom of this page
+
+Anyway
+
+* Import `vue-notifications`
+
+Here we're including `vue-notifications` and  `mini-toaster` in our project
+
+```js
+import VueNotifications from 'vue-notifications'
+import miniToastr from 'mini-toastr'
+```
+
+P.S. don't forget to install `mini-toaste` \(`npm i mini-toastr --save`\)
+
+* Setup types of the messages
+
+This one is mostly related to `mini-toastr`. We basically want `mini-toastr` to have these 4 types of messages. Basically 'error' should be red and success - 'green'
+
+```js
+const toastTypes = {
+  success: 'success',
+  error: 'error',
+  info: 'info',
+  warn: 'warn'
+}
+```
+
+* Activate `mini-toastr`
+
+Here we make `mini-toasr` initialization with types from above
+
+```js
+miniToastr.init({types: toastTypes})
+```
+
+* Map `vue-notification` to `mini-toastr`
+
+We want our messages to be called via `vue-notification`but be shown by `mini-toastr`, So :
+
+```js
+function toast ({title, message, type, timeout, cb}) {
+  return miniToastr[type](message, title, timeout, cb)
+}
+
+const options = {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+}
+```
+
+This stuff will forward our messages, so in case of 'success', it will call `miniToastr.success(message, title, timeout, cb)`, in case of 'error' it will call `miniToastr.error(message, title, timeout, cb)` and etc. Keep in mind that the types\(like "success", "error" and etc\) could be whatever you want. In this example we just use default stuff for both libs.
+
+* Activate the plugin
+
+Okay, now we have to pass our `options` into the plugin. Actually `vue-notification` has auto-install, but we want to pass options from above to it, so that's the case why do we do this manually
+
+```js
+Vue.use(VueNotifications, options)
+```
+
+##### All together
+
+You can just copy-paste code below
+
+```js
 import VueNotifications from 'vue-notifications'
 
-// Include mini-toaster (or any other UI-notification library
+// Include mini-toaster (or any other UI-notification library)
 import miniToastr from 'mini-toastr'
 
-// If using mini-toastr, provide additional configuration
+// We shall setup types of the messages. ('error' type - red and 'success' - green in mini-toastr)
 const toastTypes = {
   success: 'success',
   error: 'error',
@@ -59,16 +177,21 @@ const toastTypes = {
   warn: 'warn'
 }
 
+// This step requires only for mini-toastr, just an initialization
 miniToastr.init({types: toastTypes})
 
-// Here we setup messages output to `mini-toastr`
+// Here we are seting up messages output to `mini-toastr`
+// This mean that in case of 'success' message we will call miniToastr.success(message, title, timeout, cb)
+// In case of 'error' we will call miniToastr.error(message, title, timeout, cb)
+// and etc.
 function toast ({title, message, type, timeout, cb}) {
   return miniToastr[type](message, title, timeout, cb)
 }
 
-// Binding for methods .success(), .error() and etc. You can specify and map your own methods here.
-// Required to pipe our output to UI library (mini-toastr in example here)
-// All not-specified events (types) would be piped to output in console.
+// Here we map vue-notifications method to function abowe (to mini-toastr)
+// By default vue-notifications can have 4 methods: 'success', 'error', 'info' and 'warn'
+// But you can specify whatever methods you want.
+// If you won't specify some method here, output would be sent to the browser's console
 const options = {
   success: toast,
   error: toast,
@@ -77,145 +200,88 @@ const options = {
 }
 
 // Activate plugin
-Vue.use(VueNotifications, options)// VueNotifications have auto install but if we want to specify options we've got to do it manually.
-```
-
-```JS
-// THIS ISN'T REQUIRED IF YOU DON'T USE 'mini-toastr'
-// and if you would use "miniToastr" you have to init in in your App.vue
-import miniToastr from 'mini-toastr'// don't forget to make "npm i mini-toastr --save"
-
-//in 'ready section
-//  ...
-    ready () { //'mounted' instade of ready for Vue 2.0
-      miniToastr.init()//or "miniToastr.init(miniToastrConfig)" if you want to specify configuration
-    },
-//  ...
-```
-
-If you want to setup VueNotification's global configuration, you can do it simple:
-
-```JS
-VueNotifications.config.timeout = 4000
-Vue.use(VueNotifications, options)
-```
-
-Also you can use any other word instead of `notifications` for configs:
-
-```JS
-VueNotifications.propertyName = 'messages'
+// VueNotifications have auto install but if we want to specify options we've got to do it manually.
 Vue.use(VueNotifications, options)
 ```
 
 ## Usage
 
-You've got to specify notifications config:
+Check the Docs: [Usage](https://se-panfilov.github.io/vue-notifications/docs/html/usage.html)
 
-```JS
+# Usage
+
+```js
 export default {
     name: 'DemoView',
     data () {
-      //...
-    },
-    computed: {
       //...
     },
     methods: {
       //...
     },
     notifications: {
-      showLoginError: {
+      showLoginError: { // You can have any name you want instead of 'showLoginError'
         title: 'Login Failed',
         message: 'Failed to authenticate',
-        type: 'error' //Default: 'info', also you can use VueNotifications.types.error instead of 'error'
+        type: 'error' // You also can use 'VueNotifications.types.error' instead of 'error'
       }
-    },
-    vuex: {
-      //...
     }
   }
 ```
-Now you can call `this.showLoginError()` in any place of this page (i.e. in methods, or whatever).
 
-You also can call `.success()`, `.error()` and other methods directly (for example in JavaScript files):
+Now you can call `showLoginError` as a common method via this:
 
-In `some.js`:
-
-```JS
-  import VueNotifications from 'vue-notifications'
-  VueNotifications.error({message: 'Some Error'})
-```
-#### Overriding config.
-
-Even if you have specify config, you can ovverride it in any call simple by sending config object: `this.showLoginError({type: 'warn'})`. i.e.:
-
-```JS
- notifications: {
-      showLoginError: {
-        message: 'Failed to authenticate',
-        type: 'error'
-      }
-    }
-
-this.showLoginError() //error message
-this.showLoginError({type: 'warn'}) //info message
-
-//Also you can send here whatever params. All would be passed down to `mini-toastr` or any other lib.
-Keep in mind that configs merging by `Object.assign` (no deep copying).
+```js
+this.showLoginError()
 ```
 
-## Options
+> **PRO tip**: Technically there is no difference between methods defined in `notifications: {...}` section and in `methods: {...}` section - they are all the same. So that's basically mean that** you shall not define methods with same name in those sections**, because they would overlap each other.
 
-**VueNotification** can work fine with any of your custom options, but by default it would be:
+So, now you can do something like that:
 
-| Name  | Type |  Default |  Description |
-|---|---|---|---|
-| `title`  | `String`  | `undefined`  |  Notification's title |
-| `message`  | `String`  |  `undefined` | Notification's body message. Normally should be set up;  |
-| `timeout`  | `Number`  |  `3000` |  time before notifications gone |
-| `cb`  |  `Function` | `undefined` |  Callback function; |
-
-#### How to add custom field?
-
-Simple: `this.showLoginError({consoleMessage: 'let it be in console'})`. You've passed a custom config here (`{consoleMessage: 'let it be in console'}`) that will be merged with config from `notifications.showLoginError` and with `global config` via `Object.assign` (beware of shallow copy).
-
-As other option, you can specify as much custom fields as you want in `notifications` section:
-
-```JS
-      //...
-    notifications: {
-      showLoginError: {
-        message: 'Failed to authenticate',
-        type: 'error', //Also you can use VueNotifications.types.error instead of 'error'
-        consoleMessage: 'let it be in console',
-        consoleMessage2: 'let it be in console too',
-        //etc
-      }
-    }
-      //...
-```
-
-And do whatever you want after that:
-
-```JS
-function toast ({title, message, type, timeout, cb, consoleMessage}) {
-  if (consoleMessage) console[type](consoleMessage) //Here we go!
-  return miniToastr[type](message, title, timeout, cb)
+```js
+methods: {
+  login () {
+    loginUtil.login(err => if (err) this.showLoginError())
+  }
 }
-
-const options = {
-  success: toast,
-  error: toast,
-  info: toast,
-  warn: toast
-}
-
-Vue.use(VueNotifications, options)
 ```
 
-## Browser support.
-All modern browsers (`ES5` support require). See [ECMAScript 5 compliant browsers][3].
-You can use `ES5` or `ES6` versions as well.
+But wait. What if I want to show some custom message in example above?
+
+Well, in this case you can override `showLoginError()` method:
+
+```js
+this.showLoginError({message: err.message})
+```
+
+In the same way you can override all the others properties
+
+```js
+this.showLoginError({title: 'my title', message: 'just an error', type: 'warn', timeout: 1000})
+```
+
+### Options to override
+
+As I said above, you can specify any of following properties
+
+| Name | Type | Default value | Description |
+| :--- | :--- | :--- | :--- |
+| title | String | undefined | Notification's title \(can be empty\) |
+| messaeg | String | undefined | Notification's body message. Normally should be set up |
+| timeout | Number | 3000 | time before notifications gone |
+| cb | undefined | undefined | Callback function |
+
+But actually you can add your own properties as well, if you want. Why and how? You can check it in [Advanced Setup](/advanced-setup.md) section.
+
+## Browsers support.
+
+Check the Docs: [Browsers support](https://se-panfilov.github.io/vue-notifications/docs/html/browsers-support.html)
+
+All `ES5-compatable` browsers are supported \(i.g. starting from `IE11`\).
+For more information, please chech [ECMAScript 5 compliant browsers](http://caniuse.com/#feat=es5)
+
+If you don't give a fuck about browsers support, it would be better to use `ES6-version`
 
 ## License
 
