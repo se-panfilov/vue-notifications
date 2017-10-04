@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import VueNotifications from 'vue-notifications'
-import miniToastr from 'mini-toastr'
+import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
 
 Vue.config.productionTip = false
 
