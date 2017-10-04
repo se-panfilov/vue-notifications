@@ -130,7 +130,7 @@
     },
     notifications: {
       showSuccessMsg: {
-        type: VueNotifications.types.success,
+        type: VueNotifications.types.success, // or just 'success' or any other string
         title: 'Hello there',
         message: 'That\'s the success!'
       },
@@ -162,6 +162,7 @@
           warn: TOASTS[this.currentLib]
         }
 
+        //Changing options dynamically
         VueNotifications.setPluginOptions(options)
       }
     }
