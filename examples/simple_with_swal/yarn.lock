@@ -2802,10 +2802,6 @@ normalize-url@^1.4.0:
     query-string "^4.1.0"
     sort-keys "^1.0.0"
 
-noty@3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/noty/-/noty-3.1.3.tgz#4fbc8068b9b6b29386f73c902a9ff84ad612ab14"
-
 npmlog@^4.0.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-4.1.2.tgz#08a7f2a8bf734604779a9efa4ad5cc717abb954b"
@@ -3968,6 +3964,10 @@ svgo@^0.7.0:
     mkdirp "~0.5.1"
     sax "~1.2.1"
     whet.extend "~0.9.9"
+
+sweetalert@2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/sweetalert/-/sweetalert-2.0.4.tgz#20e51358e416d483c7b501a34286d3543beb7cac"
 
 tapable@^0.2.7, tapable@~0.2.5:
   version "0.2.8"
