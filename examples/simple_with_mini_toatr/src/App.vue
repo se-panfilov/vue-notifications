@@ -1,17 +1,13 @@
 <template>
   <div id="app">
-    <header-menu></header-menu>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-  import HeaderMenu from './components/HeaderMenu'
   export default {
     name: 'app',
-    components: {
-      HeaderMenu
-    }
+    components: {}
   }
 </script>
 

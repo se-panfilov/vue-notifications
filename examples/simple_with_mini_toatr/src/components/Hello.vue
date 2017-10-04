@@ -17,11 +17,15 @@
         <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
       </li>
     </ul>
+    <section>
+      <button type="button" @click="makeRequest()">Ajax call</button>
+    </section>
   </div>
 </template>
 
 <script>
   import VueNotifications from 'vue-notifications'
+
   export default {
     name: 'hello',
     data () {
@@ -48,6 +52,17 @@
         title: 'Wow-wow',
         message: 'That\'s the error'
       }
+    },
+    methods: {
+      makeRequest (url) {
+        return fetch('whatever', {}).then(response => {
+          //Some error message overridings
+          if (response.loginError) return this.showErrorMsg({message: 'Login error'})
+          if (!response.ok) return this.showErrorMsg({message: response.message})
+
+          this.showSuccessMsg()
+        })
+      }
     }
   }
 </script>
@@ -56,16 +71,21 @@
   primary_color = #41b883
   h1, h2
     font-weight normal
+
   ul
     list-style-type none
     padding 0
+
   li
     display inline-block
     margin 0 10px
+
   a
     color #42b983
+
   .hello
     text-align center
+
   .msg-buttons
     margin 10px
     &__btn
