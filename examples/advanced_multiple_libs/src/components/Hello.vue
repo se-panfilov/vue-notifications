@@ -1,39 +1,8 @@
 <template>
   <div class="showcase-page">
 
-    <section class="overview">
-      <img src="../assets/logo.png">
-      <h2><a href="https://vuejs.org">vue.js</a> agnostic library for non-blocking notifications</h2>
-    </section>
-
-    <hr />
-
-    <h2>Showcase: See it in action</h2>
-    <div>
-      <span>You have to do 3 things</span>
-      <ol>
-        <li>Config <span class="highlighted-text">VueNotifications</span> to work with third-party lib you want (you may
-          try this one: <a
-            href="https://github.com/se-panfilov/mini-toastr">mini-toastr</a>)
-        </li>
-        <li>Add notifications to any component at your choice</li>
-        <li>Enjoy!</li>
-      </ol>
-
-      <span>Examples below</span>
-    </div>
-
     <section class="showcase">
-
       <section class="showcase__entry -try-live">
-        <h3 class="showcase__header">Try it live</h3>
-        <p>We have 4 predefined types of messages:
-          <span class="highlighted-text">error</span>,
-          <span class="highlighted-text">success</span>,
-          <span class="highlighted-text">warn</span> and
-          <span class="highlighted-text">info</span>,
-          but you can specify your owns</p>
-
         <section class="showcase__actions">
           <ul class="showcase__actions-item msg-buttons">
             <li class="msg-buttons__list-item">
@@ -62,11 +31,6 @@
           </ul>
         </section>
 
-        <p>You can easily replace any <span class="highlighted-text">UI third-party</span> that draws notifications for
-          you. And here you can switch between
-          any of them easily.
-          <br /><br /> <strong>P.S.</strong> Pay attention: Initial config will be changed.<br />
-          But Notification definition will be the same.</p>
       </section>
 
     </section>
@@ -77,7 +41,6 @@
 <script>
   import Vue from 'vue'
   import VueNotifications from 'vue-notifications'
-  import 'highlight.js/styles/atom-one-light.css'
 
   //Third-party UI libs
   import VueEasyToast from 'vue-easy-toast' // https://github.com/noru/vue-easy-toast
@@ -228,12 +191,6 @@
     padding 0
     list-style-type none
 
-  .highlighted-text
-    background-color #f1f1ed
-    border 1px dotted #d0d0d0
-    padding 0 3px
-    border-radius 2px
-
   .msg-buttons
     list-style-type none
     padding 0
@@ -277,10 +234,4 @@
   .showcase-lib
     &__third-party-home-ling
       font-size 14px
-
-  .misc
-    text-align center
-    padding 15px 25%
-    a
-      text-decoration none
 </style>
