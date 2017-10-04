@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>VueNotifications</h1>
-    <img src="../assets/logo.png">
     <h2><a href="https://vuejs.org">vue.js</a> agnostic non-blocking notifications library</h2>
     <ul class="msg-buttons">
       <li>
@@ -18,7 +17,7 @@
       </li>
     </ul>
     <section>
-      <button type="button" @click="makeRequest()">Ajax call</button>
+      <button type="button" class="msg-buttons__btn" @click="makeRequest()">Demo Ajax call</button>
     </section>
   </div>
 </template>
@@ -55,12 +54,19 @@
     },
     methods: {
       makeRequest (url) {
-        return fetch('whatever', {}).then(response => {
-          //Some error message overridings
+        return this.ajaxCall('whatever').then(response => {
+          // Some error message overridings
           if (response.loginError) return this.showErrorMsg({message: 'Login error'})
           if (!response.ok) return this.showErrorMsg({message: response.message})
 
           this.showSuccessMsg()
+        })
+      },
+      ajaxCall (url) {
+        return new Promise((resolve, reject) => {
+          resolve({loginError: true})
+          // resolve({ok: false})
+          // resolve({ok: true})
         })
       }
     }

@@ -56,7 +56,7 @@
     methods: {
       makeRequest (url) {
         return fetch('whatever', {}).then(response => {
-          //Some error message overridings
+          // Some error message overridings
           if (response.loginError) return this.showErrorMsg({message: 'Login error'})
           if (!response.ok) return this.showErrorMsg({message: response.message})
 
