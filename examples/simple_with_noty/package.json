@@ -2,7 +2,7 @@
   "name": "simple_with_noty",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "Sergei Panfilov <se-panfilov@ya.ru>",
+  "author": "Sergei Panfilov <se-panfilov@ya.ru> (https://se-panfilov.github.io)",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
