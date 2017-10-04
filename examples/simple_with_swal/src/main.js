@@ -3,13 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import VueNotifications from 'vue-notifications'
-import VueToasted from 'vue-toasted'// https://github.com/shakee93/vue-toasted
+import swal from 'sweetalert'// https://github.com/t4t5/sweetalert
 
 Vue.config.productionTip = false
 
 function toast ({title, message, type, timeout, cb}) {
-  if (type === VueNotifications.types.warn) type = 'show'
-  return Vue.toasted[type](message, {duration: timeout})
+  if (type === VueNotifications.types.warn) type = 'warning'
+  return swal(title, message, type)
 }
 
 const options = {
@@ -19,7 +19,6 @@ const options = {
   warn: toast
 }
 
-Vue.use(VueToasted)
 Vue.use(VueNotifications, options)
 
 /* eslint-disable no-new */

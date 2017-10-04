@@ -3,13 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import VueNotifications from 'vue-notifications'
-import VueToasted from 'vue-toasted'// https://github.com/shakee93/vue-toasted
+import VueEasyToast from 'vue-easy-toast' // https://github.com/noru/vue-easy-toast
 
 Vue.config.productionTip = false
 
 function toast ({title, message, type, timeout, cb}) {
-  if (type === VueNotifications.types.warn) type = 'show'
-  return Vue.toasted[type](message, {duration: timeout})
+  let className = 'et-info'
+  if (type === VueNotifications.types.warn) className = 'et-warn'
+  else if (type === VueNotifications.types.error) className = 'et-alert'
+
+  return Vue.toast(message, {duration: timeout, className})
 }
 
 const options = {
@@ -19,7 +22,7 @@ const options = {
   warn: toast
 }
 
-Vue.use(VueToasted)
+Vue.use(VueEasyToast)
 Vue.use(VueNotifications, options)
 
 /* eslint-disable no-new */

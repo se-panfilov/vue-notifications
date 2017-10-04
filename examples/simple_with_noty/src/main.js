@@ -3,13 +3,14 @@
 import Vue from 'vue'
 import App from './App'
 import VueNotifications from 'vue-notifications'
-import VueToasted from 'vue-toasted'// https://github.com/shakee93/vue-toasted
+import Noty from 'noty'// https://github.com/needim/noty
+import 'noty/lib/noty.css'
 
 Vue.config.productionTip = false
 
 function toast ({title, message, type, timeout, cb}) {
-  if (type === VueNotifications.types.warn) type = 'show'
-  return Vue.toasted[type](message, {duration: timeout})
+  if (type === VueNotifications.types.warn) type = 'warning'
+  return new Noty({text: message, timeout, type}).show()
 }
 
 const options = {
@@ -19,7 +20,6 @@ const options = {
   warn: toast
 }
 
-Vue.use(VueToasted)
 Vue.use(VueNotifications, options)
 
 /* eslint-disable no-new */
