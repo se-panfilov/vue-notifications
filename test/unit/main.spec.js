@@ -34,13 +34,13 @@ describe('Main.', () => {
 
     })
 
-    it('getMajorVersion.', () => {
+    it('getVersion.', () => {
 
       const vue = {
         version: '1.0.12'
       }
 
-      const result = _private.getMajorVersion(vue)
+      const result = _private.getVersion(vue)
       expect(result).to.be.a('number')
       expect(result).to.be.equal(1)
     })
@@ -69,10 +69,10 @@ describe('Main.', () => {
 
         config.type = 'sometype'
 
-        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
-        const result = _private.showDefaultMessage(config)
-        expect(result).to.be.equal(expectedMsg)
-        expect(console.log).to.be.called
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, Type: ${config.type}`
+        _private.showDefaultMessage(config)
+        // expect(result).to.be.equal(expectedMsg)
+        expect(console.log).to.be.calledWith(expectedMsg)
         expect(console.warn).to.not.be.called
         expect(console.error).to.not.be.called
       })
@@ -81,10 +81,9 @@ describe('Main.', () => {
 
         config.type = 'log'
 
-        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
-        const result = _private.showDefaultMessage(config)
-        expect(result).to.be.equal(expectedMsg)
-        expect(console.log).to.be.called
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, Type: ${config.type}`
+        _private.showDefaultMessage(config)
+        expect(console.log).to.be.called.calledWith(expectedMsg)
         expect(console.warn).to.not.be.called
         expect(console.error).to.not.be.called
       })
@@ -93,22 +92,20 @@ describe('Main.', () => {
 
         config.type = 'error'
 
-        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
-        const result = _private.showDefaultMessage(config)
-        expect(result).to.be.equal(expectedMsg)
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, Type: ${config.type}`
+        _private.showDefaultMessage(config)
         expect(console.log).to.not.be.called
         expect(console.warn).to.not.be.called
-        expect(console.error).to.be.called
+        expect(console.error).to.be.called.calledWith(expectedMsg)
       })
 
       it('Success type to console.', () => {
 
         config.type = 'success'
 
-        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
-        const result = _private.showDefaultMessage(config)
-        expect(result).to.be.equal(expectedMsg)
-        expect(console.log).to.be.called
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, Type: ${config.type}`
+        _private.showDefaultMessage(config)
+        expect(console.log).to.be.called.calledWith(expectedMsg)
         expect(console.warn).to.not.be.called
         expect(console.error).to.not.be.called
       })
@@ -117,11 +114,10 @@ describe('Main.', () => {
 
         config.type = 'warn'
 
-        const expectedMsg = `Title: ${config.title} Message: ${config.message} DebugMsg: ${config.debugMsg} type: ${config.type}`
-        const result = _private.showDefaultMessage(config)
-        expect(result).to.be.equal(expectedMsg)
+        const expectedMsg = `Title: ${config.title}, Message: ${config.message}, Type: ${config.type}`
+        _private.showDefaultMessage(config)
         expect(console.log).to.not.be.called
-        expect(console.warn).to.be.called
+        expect(console.warn).to.be.called.calledWith(expectedMsg)
         expect(console.error).to.not.be.called
       })
 
@@ -129,25 +125,25 @@ describe('Main.', () => {
 
     describe('showMessage.', () => {
 
-      it('Config\'s function.', () => {
-
-        const config = {
-          type: 'error'
-        }
-
-        const options = {
-          error: function origin () {
-          }
-        }
-
-        sinon.spy(options, 'error')
-
-        const result = _private.showMessage(config, options)
-        expect(result).to.be.undefined
-        expect(options.error).to.be.called
-
-        options.error.restore()
-      })
+      // it('Config\'s function.', () => {
+      //
+      //   const config = {
+      //     type: 'error'
+      //   }
+      //
+      //   const options = {
+      //     error: function origin () {
+      //     }
+      //   }
+      //
+      //   sinon.spy(options, 'error')
+      //
+      //   const result = _private.showMessage(config, options)
+      //   expect(result).to.be.undefined
+      //   expect(options.error).to.be.called
+      //
+      //   options.error.restore()
+      // })
 
       // it('Default function.', () => {
       //
