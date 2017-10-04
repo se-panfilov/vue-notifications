@@ -83,16 +83,16 @@
       <section class="showcase__entry -setup">
         <h3 class="showcase__header">Config VueNotifications</h3>
         <div class="code-samples__sample -func">
-          <pre v-highlightjs="ExampleSetup[currentLib].code">
-            <code class="javascript"></code>
+          <pre>
+            <code class="javascript" v-text="ExampleSetup[currentLib].code"></code>
           </pre>
         </div>
       </section>
 
       <section class="showcase__entry -definition">
         <h3 class="showcase__header">Define your notifications</h3>
-        <pre v-highlightjs="ExampleConfig.config">
-          <code class="javascript"></code>
+        <pre>
+          <code class="javascript" v-text="ExampleConfig.config"></code>
         </pre>
       </section>
 
@@ -106,14 +106,14 @@
       <ol>
         <li>
           <h3>Install</h3>
-          <pre v-highlightjs>
+          <pre>
             <code class="shell">npm i vue-notifications --save</code>
           </pre>
           <p>check the documentation for other options:
             <a href="https://se-panfilov.github.io/vue-notifications/docs/html/installation.html">Installation</a></p>
           <p>And install UI third-party library, for example <a href="https://github.com/se-panfilov/mini-toastr">miniToastr</a>.
           </p>
-          <pre v-highlightjs>
+          <pre>
             <code class="shell">npm i mini-toastr --save</code>
           </pre>
           <p>But you are free to use any other, like the libs above (VueToasted, iziToast, etc).</p>
@@ -124,14 +124,14 @@
             <a href="https://se-panfilov.github.io/vue-notifications/docs/html/getting-started.html">Getting Started</a>
           </p>
           <p>It's gonna be something like this:</p>
-          <pre v-highlightjs="ExampleSetup.miniToastr.code">
-            <code class="javascript"></code>
+          <pre>
+            <code class="javascript" v-text="ExampleSetup.miniToastr.code"></code>
           </pre>
         </li>
         <li>
           <h3>Add actual notifications to any component:</h3>
-          <pre v-highlightjs="ExampleConfig.config">
-            <code class="javascript"></code>
+          <pre>
+            <code class="javascript" v-text="ExampleConfig.config"></code>
           </pre>
           <p>Now you can call any of this configs like a common vue method: via <span
             class="highlighted-text">this</span>, like
@@ -194,7 +194,8 @@
 <script>
   import Vue from 'vue'
   import VueNotifications from 'vue-notifications'
-  import VueHighlightJS from 'vue-highlightjs'
+  import HighlightJS from 'highlight.js/lib/highlight'
+  import JsLang from 'highlight.js/lib/languages/javascript'
   import 'highlight.js/styles/atom-one-light.css'
   import ExampleSetup from '../misc/example_setup'
   import ExampleConfig from '../misc/example_config'
@@ -222,6 +223,9 @@
 
   //sweetalert
   import swal from 'sweetalert' // https://github.com/t4t5/sweetalert
+
+  HighlightJS.registerLanguage('javascript', JsLang)
+  HighlightJS.initHighlightingOnLoad()
 
   Vue.config.productionTip = false
 
@@ -275,7 +279,6 @@
   Vue.use(VueEasyToast)
   Vue.use(VueToasted)
   //  Vue.use(VueNotifications, options)
-  Vue.use(VueHighlightJS)
 
   export default {
     name: 'showcase',
