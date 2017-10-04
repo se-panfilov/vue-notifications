@@ -325,7 +325,6 @@
           warn: TOASTS[this.currentLib]
         }
 
-        console.dir(this)
         VueNotifications.setPluginOptions(options)
       }
     }
