@@ -208,8 +208,6 @@ Vue.use(VueNotifications, options)
 
 Check the Docs: [Usage](https://se-panfilov.github.io/vue-notifications/docs/html/usage.html)
 
-# Usage
-
 ```js
 export default {
     name: 'DemoView',
