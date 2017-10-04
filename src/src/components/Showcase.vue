@@ -38,42 +38,46 @@
           <span class="highlighted-text">warn</span> and
           <span class="highlighted-text">info</span>,
           but you can specify your owns</p>
-        <ul class="msg-buttons">
-          <li class="msg-buttons__list-item">
-            <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
-          </li>
-          <li class="msg-buttons__list-item">
-            <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
-          </li>
-          <li class="msg-buttons__list-item">
-            <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
-          </li>
-          <li class="msg-buttons__list-item">
-            <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
-          </li>
-        </ul>
+
+        <section class="showcase__actions">
+          <ul class="showcase__actions-item msg-buttons">
+            <li class="msg-buttons__list-item">
+              <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
+            </li>
+            <li class="msg-buttons__list-item">
+              <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
+            </li>
+            <li class="msg-buttons__list-item">
+              <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
+            </li>
+            <li class="msg-buttons__list-item">
+              <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
+            </li>
+          </ul>
+
+          <ul class="showcase__actions-item showcase-lib">
+            <li v-for="(value, key) in libs"
+                class="showcase-lib__items"
+                @change="setCurrentLib(key)">
+              <label>
+                <input type="radio" :checked="currentLib === value" :value="key" name="lib" />
+                <span v-text="value"></span>
+                <span class="showcase-lib__third-party-home-ling">
+                  <a v-bind:href="ExampleSetup[key].home" v-bind:title="'go to ' + value + ' home'" target="_blank">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                  </a>
+                </span>
+              </label>
+
+            </li>
+          </ul>
+        </section>
 
         <p>You can easily replace any <span class="highlighted-text">UI third-party</span> that draws notifications for
           you. And here you can switch between
           any of them easily.
           <br /><br /> <strong>P.S.</strong> Pay attention: Initial config will be changed.<br />
           But Notification definition will be the same.</p>
-        <ul class="showcase-lib">
-          <li v-for="(value, key) in libs"
-              class="showcase-lib__items"
-              @change="setCurrentLib(key)">
-            <label>
-              <input type="radio" :checked="currentLib === value" :value="key" name="lib" />
-              <span v-text="value"></span>
-              <span class="showcase-lib__third-party-home-ling">
-                <a v-bind:href="ExampleSetup[key].home" v-bind:title="'go to ' + value + ' home'" target="_blank">
-                  <i class="fa fa-home" aria-hidden="true"></i>
-                </a>
-              </span>
-            </label>
-
-          </li>
-        </ul>
       </section>
 
       <section class="showcase__entry -setup">
@@ -372,8 +376,6 @@
       min-width 85px
       &:hover
         background-color lighten(primary_color, 5)
-    &__list-item
-      display inline-block
 
   .showcase
     justify-content space-around
@@ -392,6 +394,9 @@
       &.-definition
         flex-basis: 300px
         flex-grow 1.2
+    &__actions-item
+      display inline-block
+      max-width 50%
 
   .showcase-lib
     &__third-party-home-ling
