@@ -111,11 +111,11 @@
           </pre>
           <p>check the documentation for other options:
             <a href="https://se-panfilov.github.io/vue-notifications/docs/html/installation.html">Installation</a></p>
-          <p>And install UI third-party library, for example <a href="https://github.com/se-panfilov/mini-toastr">miniToastr</a>.
+
+          <p>
+            And install UI third-party library, for example <a href="https://github.com/se-panfilov/mini-toastr">miniToastr</a>
+            (<span class="highlighted-text">npm i mini-toastr --save</span>).
           </p>
-          <pre>
-            <code class="shell">npm i mini-toastr --save</code>
-          </pre>
           <p>But you are free to use any other, like the libs above (VueToasted, iziToast, etc).</p>
         </li>
         <li>
