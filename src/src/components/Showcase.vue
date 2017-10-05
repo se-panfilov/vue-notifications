@@ -150,33 +150,34 @@
     <hr />
 
     <section class="misc">
-      <a href="https://github.com/se-panfilov/vue-notifications">
+      <a class="misc__item" href="https://github.com/se-panfilov/vue-notifications">
         <i class="fa fa-github" aria-hidden="true"></i>
         Source code
       </a> |
-      <a href="https://se-panfilov.github.io/vue-notifications/docs/html/index.html">
+      <a class="misc__item" href="https://se-panfilov.github.io/vue-notifications/docs/html/index.html">
         <i class="fa fa-book" aria-hidden="true"></i>
         Docs
       </a> |
-      <a href="https://github.com/se-panfilov/vue-notifications/tree/master/examples">
+      <a class="misc__item" href="https://github.com/se-panfilov/vue-notifications/tree/master/examples">
         <i class="fa fa-free-code-camp" aria-hidden="true"></i>
         Examples
       </a> |
-      <a href="https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE">
+      <a class="misc__item" href="https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE">
         <i class="fa fa-balance-scale" aria-hidden="true"></i>
         MIT Licence
-      </a> |
-      <a href="https://github.com/se-panfilov/vue-notifications/releases">
+      </a>
+      <br />
+      <a class="misc__item" href="https://github.com/se-panfilov/vue-notifications/releases">
         <i class="fa fa-rocket" aria-hidden="true"></i>
         Release notes
       </a> |
-      <a href="https://se-panfilov.github.io/vue-notifications/docs/html/browsers-support.html">
+      <a class="misc__item" href="https://se-panfilov.github.io/vue-notifications/docs/html/browsers-support.html">
         <i class="fa fa-search" aria-hidden="true"></i>
         Browsers support
       </a> |
-      <a href="https://se-panfilov.github.io/vue-notifications/docs/html/vuejs-versions-support.html">Vue.js versions
+      <a class="misc__item" href="https://se-panfilov.github.io/vue-notifications/docs/html/vuejs-versions-support.html">Vue.js versions
         support</a> |
-      <a href="https://github.com/se-panfilov/vue-notifications/issues">
+      <a class="misc__item" href="https://github.com/se-panfilov/vue-notifications/issues">
         <i class="fa fa-bolt" aria-hidden="true"></i>
         Issues
       </a>
@@ -408,6 +409,8 @@
   .misc
     text-align center
     padding 15px 25%
-    a
+    font-size 14px
+    &__item
       text-decoration none
+      padding 5px
 </style>
