@@ -83,7 +83,7 @@
       <section class="showcase__entry -setup">
         <h3 class="showcase__header">Config VueNotifications</h3>
         <div class="code-samples__sample -func">
-          <pre>
+          <pre id="toast_func">
             <code class="javascript" v-text="ExampleSetup[currentLib].code"></code>
           </pre>
         </div>
@@ -325,6 +325,7 @@
           warn: TOASTS[this.currentLib]
         }
 
+        HighlightJS.highlightBlock(document.getElementById('toast_func'))
         VueNotifications.setPluginOptions(options)
       }
     }
