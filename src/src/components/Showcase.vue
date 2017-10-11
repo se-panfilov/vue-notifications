@@ -84,7 +84,7 @@
         <h3 class="showcase__header">Config VueNotifications</h3>
         <div class="code-samples__sample -func">
           <pre id="toast_func">
-            <code class="javascript" v-text="ExampleSetup[currentLib].code"></code>
+            <code id="toast_func_code" class="javascript" v-text="ExampleSetup[currentLib].code"></code>
           </pre>
         </div>
       </section>
@@ -175,7 +175,8 @@
         <i class="fa fa-search" aria-hidden="true"></i>
         Browsers support
       </a> |
-      <a class="misc__item" href="https://se-panfilov.github.io/vue-notifications/docs/html/vuejs-versions-support.html">Vue.js versions
+      <a class="misc__item"
+         href="https://se-panfilov.github.io/vue-notifications/docs/html/vuejs-versions-support.html">Vue.js versions
         support</a> |
       <a class="misc__item" href="https://github.com/se-panfilov/vue-notifications/issues">
         <i class="fa fa-bolt" aria-hidden="true"></i>
@@ -326,7 +327,11 @@
           warn: TOASTS[this.currentLib]
         }
 
+        //dirty hack for HighlightJS
+        const codeElem = document.getElementById('toast_func_code')
+        codeElem.innerHTML = this.ExampleSetup[this.currentLib].code
         HighlightJS.highlightBlock(document.getElementById('toast_func'))
+
         VueNotifications.setPluginOptions(options)
       }
     }
