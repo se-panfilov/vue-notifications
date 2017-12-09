@@ -7,7 +7,7 @@
 [![NPM](https://nodei.co/npm/vue-notifications.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/vue-notifications/)
 [![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
-| [SITE](https://se-panfilov.github.io/vue-notifications/) | [DOCS](https://se-panfilov.github.io/vue-notifications/docs/html/index.html) | [EXAMPLES](https://se-panfilov.github.io/vue-notifications/examples) | [GITHUB](https://github.com/se-panfilov/vue-notifications) | [LICENSE](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE) |
+| [SITE](https://se-panfilov.github.io/vue-notifications/) | [DOCS](https://se-panfilov.github.io/vue-notifications/docs/html/index.html) | [EXAMPLES](https://github.com/se-panfilov/vue-notifications/tree/master/examples) | [GITHUB](https://github.com/se-panfilov/vue-notifications) | [LICENSE](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE) |
 
 # vue-notifications
 
