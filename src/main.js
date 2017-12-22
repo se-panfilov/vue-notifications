@@ -21,11 +21,12 @@ function getVersion (Vue) {
   return +version[0]
 }
 
-function showDefaultMessage ({type, message, title}) {
+function showDefaultMessage ({type, message, title, cb}) {
   let msg = `Title: ${title}, Message: ${message}, Type: ${type}`
   if (type === TYPES.error) console.error(msg)
   else if (type === TYPES.warn) console.warn(msg)
   else console.log(msg)
+  if (cb) return cb()
 }
 
 function getValues (vueApp, config) {
@@ -46,9 +47,7 @@ function showMessage (config, vueApp) {
   const valuesObj = getValues(vueApp, config)
   const isMethodOverridden = VueNotifications.pluginOptions[valuesObj.type]
   const method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : showDefaultMessage
-  method(valuesObj, vueApp)
-
-  if (config.cb) return config.cb()
+  return method(valuesObj, vueApp)
 }
 
 function addMethods (targetObj, typesObj) {
