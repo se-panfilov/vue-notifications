@@ -266,7 +266,7 @@ As I said above, you can specify any of following properties
 | Name | Type | Default value | Description |
 | :--- | :--- | :--- | :--- |
 | title | String | undefined | Notification's title \(can be empty\) |
-| messaeg | String | undefined | Notification's body message. Normally should be set up |
+| message | String | undefined | Notification's body message. Normally should be set up |
 | timeout | Number | 3000 | time before notifications gone |
 | cb | undefined | undefined | Callback function |
 
