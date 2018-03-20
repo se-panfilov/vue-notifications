@@ -11,6 +11,8 @@
 
 # vue-notifications
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/se-panfilov/vue-notifications.svg)](https://greenkeeper.io/)
+
 **VueNotifications** - agnostic library for non-blocking notifications.
 
 ----
