@@ -1,20 +1,7 @@
-const PLUGIN_NAME = 'VueNotifications'
-const PACKAGE_NAME = 'vue-notifications'
-const PROPERTY_NAME = 'notifications'
-
-const TYPES = {
-  error: 'error',
-  warn: 'warn',
-  info: 'info',
-  success: 'success'
-}
-
-const EVANGELION = 1
-
-const MESSAGES = {
-  alreadyInstalled: `${PLUGIN_NAME}: plugin already installed`,
-  methodNameConflict: `${PLUGIN_NAME}: names conflict - `
-}
+import {error, info, success, warn} from './type.constant'
+import {PACKAGE_NAME, PROPERTY_NAME} from './package.constant'
+import {EVANGELION} from './version.constant'
+import {ALREADY_INSTALLED} from './message.constant'
 
 function getVersion (Vue) {
   const version = Vue.version.match(/(\d+)/g)
@@ -23,8 +10,8 @@ function getVersion (Vue) {
 
 function showDefaultMessage ({type, message, title}) {
   let msg = `Title: ${title}, Message: ${message}, Type: ${type}`
-  if (type === TYPES.error) console.error(msg)
-  else if (type === TYPES.warn) console.warn(msg)
+  if (type === error) console.error(msg)
+  else if (type === warn) console.warn(msg)
   else console.log(msg)
 }
 
@@ -130,10 +117,10 @@ function makeMixin (Vue, pluginOptions) {
 }
 
 const VueNotifications = {
-  types: TYPES,
+  types: {error, warn, info, success},
   propertyName: PROPERTY_NAME,
   config: {
-    type: TYPES.info,
+    type: info,
     timeout: 3000
   },
   pluginOptions: {},
@@ -145,7 +132,7 @@ const VueNotifications = {
    * @this VueNotifications
    */
   install (Vue, pluginOptions = {}) {
-    if (this.installed) throw console.error(MESSAGES.alreadyInstalled)
+    if (this.installed) throw console.error(ALREADY_INSTALLED)
     const mixin = makeMixin(Vue, pluginOptions)
     Vue.mixin(mixin)
 
@@ -178,12 +165,6 @@ VueNotifications._private.makeMethod = makeMethod
 VueNotifications._private.initVueNotificationPlugin = initVueNotificationPlugin
 VueNotifications._private.unlinkVueNotificationPlugin = unlinkVueNotificationPlugin
 VueNotifications._private.makeMixin = makeMixin
-VueNotifications._private.TYPES = TYPES
-VueNotifications._private.PLUGIN_NAME = PLUGIN_NAME
-VueNotifications._private.PACKAGE_NAME = PACKAGE_NAME
-VueNotifications._private.PROPERTY_NAME = PROPERTY_NAME
-VueNotifications._private.EVANGELION = EVANGELION
-VueNotifications._private.MESSAGES = MESSAGES
 
 export default VueNotifications
 /*END.TESTS_ONLY*/

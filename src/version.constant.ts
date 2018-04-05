@@ -1,0 +1,1 @@
+export const EVANGELION: Number = 1
