@@ -3,19 +3,19 @@ import {PACKAGE_NAME, PROPERTY_NAME} from './package.constant'
 import {EVANGELION} from './version.constant'
 import {ALREADY_INSTALLED} from './message.constant'
 
-function getVersion (Vue) {
+function getVersion (Vue): Number {
   const version = Vue.version.match(/(\d+)/g)
   return +version[0]
 }
 
-function showDefaultMessage ({type, message, title}) {
+function showDefaultMessage ({type, message, title}: { type: string, message: string, title: string }): void {
   let msg = `Title: ${title}, Message: ${message}, Type: ${type}`
   if (type === error) console.error(msg)
   else if (type === warn) console.warn(msg)
   else console.log(msg)
 }
 
-function getValues (vueApp, config) {
+function getValues (vueApp, config): Object {
   const result = {}
 
   Object.keys(config).forEach(field => {
@@ -29,6 +29,7 @@ function getValues (vueApp, config) {
   return result
 }
 
+// TODO (S.Panfilov) type
 function showMessage (config, vueApp) {
   const valuesObj = getValues(vueApp, config)
   const isMethodOverridden = VueNotifications.pluginOptions[valuesObj.type]
@@ -38,7 +39,7 @@ function showMessage (config, vueApp) {
   if (config.cb) return config.cb()
 }
 
-function addMethods (targetObj, typesObj) {
+function addMethods (targetObj, typesObj): void {
   Object.keys(typesObj).forEach(v => {
     targetObj[typesObj[v]] = function (config) {
       config.type = typesObj[v]
@@ -48,7 +49,7 @@ function addMethods (targetObj, typesObj) {
   })
 }
 
-function setMethod (vueApp, name, options, pluginOptions) {
+function setMethod (vueApp, name: string, options, pluginOptions): void {
   if (!options.methods) options.methods = {}
 
   // ///////////////////////////////////////////////////////////////////////
@@ -69,7 +70,8 @@ function setMethod (vueApp, name, options, pluginOptions) {
   }
 }
 
-function makeMethod (vueApp, configName, options, pluginOptions) {
+// TODO (S.Panfilov) type
+function makeMethod (vueApp, configName: string, options, pluginOptions): Function {
   return function (config) {
     const newConfig = Object.assign({},
       VueNotifications.config,
@@ -80,13 +82,13 @@ function makeMethod (vueApp, configName, options, pluginOptions) {
   }
 }
 
-function initVueNotificationPlugin (vueApp, notifications, pluginOptions) {
+function initVueNotificationPlugin (vueApp, notifications, pluginOptions): void {
   if (!notifications) return
   Object.keys(notifications).forEach(name => setMethod(vueApp, name, vueApp.$options, pluginOptions))
   vueApp.$emit(`${PACKAGE_NAME}-initiated`)
 }
 
-function unlinkVueNotificationPlugin (vueApp, notifications) {
+function unlinkVueNotificationPlugin (vueApp, notifications): void {
   if (!notifications) return
   const attachedMethods = vueApp.$options.methods
   Object.keys(notifications).forEach(name => {
@@ -99,7 +101,12 @@ function unlinkVueNotificationPlugin (vueApp, notifications) {
   vueApp.$emit(`${PACKAGE_NAME}-unlinked`)
 }
 
-function makeMixin (Vue, pluginOptions) {
+declare interface Mixin {
+  ['init' | 'beforeCreate']: Function
+  beforeDestroy: Function
+}
+
+function makeMixin (Vue, pluginOptions): Mixin {
   const init = getVersion(Vue) === EVANGELION ? 'init' : 'beforeCreate'
 
   return {
