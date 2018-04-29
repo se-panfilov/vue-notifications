@@ -74,7 +74,7 @@
     "gulp-strip-code": "0.1.4",
     "gulp-todo": "5.5.0",
     "gulp-uglify": "3.0.0",
-    "gulp-umd": "0.2.1",
+    "gulp-umd": "1.0.0",
     "gulp-watch": "5.0.0",
     "mocha": "5.1.1",
     "require-dir": "1.0.0",
