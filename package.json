@@ -81,7 +81,7 @@
     "rimraf": "^2.6.2",
     "run-sequence": "2.2.1",
     "sinon": "5.0.5",
-    "sinon-chai": "3.0.0",
+    "sinon-chai": "3.1.0",
     "source": "0.0.3",
     "through2": "2.0.3",
     "to-case": "2.0.0",
