@@ -20,3 +20,14 @@ yarn.lock
 package-lock.json
 vue-not
 examples
+src
+test
+tsconfig.json
+tsconfig.module.json
+tslint.json
+.github
+.prettierignore
+build/docs
+**/*.spec.*
+coverage
+.nyc_output

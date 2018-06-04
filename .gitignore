@@ -3,3 +3,9 @@ node_modules
 .idea
 .tmp
 .DS_Store
+build
+test
+src/**.js
+coverage
+.nyc_output
+package-lock.json
