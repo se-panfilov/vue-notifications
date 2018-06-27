@@ -105,7 +105,7 @@ Anyway
 
 * Import `vue-notifications`
 
-Here we're including `vue-notifications` and  `mini-toaster` in our project
+Here we're including `vue-notifications` and  `mini-toastr` in our project
 
 ```js
 import VueNotifications from 'vue-notifications'
