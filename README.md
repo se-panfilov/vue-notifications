@@ -112,7 +112,7 @@ import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'
 ```
 
-P.S. don't forget to install `mini-toaste` \(`npm i mini-toastr --save`\)
+P.S. don't forget to install `mini-toastr` \(`npm i mini-toastr --save`\)
 
 * Setup types of the messages
 
