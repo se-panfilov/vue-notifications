@@ -1,14 +1,13 @@
 sudo: false
 language: node_js
 node_js:
-  - 8
-  - 9
+- 10
 notifications:
   email: false
-# keep the npm cache to speed up installs
+  # keep the npm cache to speed up installs
 cache:
   directories:
   - "$HOME/.npm"
 after_success:
-  - npx nyc report --reporter=lcov | npx codecov
-  - npm run cov:check
+- npx nyc report --reporter=lcov | npx codecov
+- npm run cov:check
