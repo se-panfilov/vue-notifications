@@ -28,14 +28,14 @@ Anyway
 
 * Import `vue-notifications`
 
-Here we're including `vue-notifications` and  `mini-toaster` in our project
+Here we're including `vue-notifications` and  `mini-toastr` in our project
 
 ```js
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'
 ```
 
-P.S. don't forget to install `mini-toaste` \(`npm i mini-toastr --save`\)
+P.S. don't forget to install `mini-toastr` \(`npm i mini-toastr --save`\)
 
 * Setup types of the messages
 
