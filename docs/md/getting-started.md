@@ -92,7 +92,7 @@ You can just copy-paste code below
 ```js
 import VueNotifications from 'vue-notifications'
 
-// Include mini-toaster (or any other UI-notification library)
+// Include mini-toastr (or any other UI-notification library)
 import miniToastr from 'mini-toastr'
 
 // We shall setup types of the messages. ('error' type - red and 'success' - green in mini-toastr)
