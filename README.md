@@ -1,9 +1,8 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8a6dee4e21d04653b53c0a9618a2cc84)](https://www.codacy.com/app/se-panfilov/vue-notifications?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=se-panfilov/vue-notifications&amp;utm_campaign=Badge_Grade)
-[![bitHound Overall Score](https://www.bithound.io/github/se-panfilov/vue-notifications/badges/score.svg)](https://www.bithound.io/github/se-panfilov/vue-notifications) [![bitHound Code](https://www.bithound.io/github/se-panfilov/vue-notifications/badges/code.svg)](https://www.bithound.io/github/se-panfilov/vue-notifications)
 [![](https://api.codeclimate.com/v1/badges/a4d945aeb21c32fc4bdf/maintainability)](https://codeclimate.com/github/se-panfilov/vue-notifications/maintainability)
 [![Build Status](https://travis-ci.org/se-panfilov/vue-notifications.svg?branch=master)](https://travis-ci.org/se-panfilov/vue-notifications)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE)
-
+[![Known Vulnerabilities](https://snyk.io/test/github/se-panfilov/vue-notifications/badge.svg?targetFile=examples%2Fsimple_with_swal%2Fpackage.json)](https://snyk.io/test/github/se-panfilov/vue-notifications?targetFile=examples%2Fsimple_with_swal%2Fpackage.json)
 [![NPM](https://nodei.co/npm/vue-notifications.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/vue-notifications/)
 [![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 [![Package Quality](http://npm.packagequality.com/badge/vue-notifications.png)](http://packagequality.com/#?package=vue-notifications)
