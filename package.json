@@ -1,6 +1,6 @@
 {
   "name": "vue-notifications",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Vuejs notifications",
   "main": "dist/vue-notifications.es5.js",
   "scripts": {
@@ -78,7 +78,7 @@
     "gulp-watch": "5.0.1",
     "mocha": "5.2.0",
     "require-dir": "1.0.0",
-    "rimraf": "^2.6.2",
+    "rimraf": "2.6.2",
     "run-sequence": "2.2.1",
     "sinon": "6.0.1",
     "sinon-chai": "3.2.0",
