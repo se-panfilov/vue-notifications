@@ -32,10 +32,17 @@ function getValues (vueApp, config) {
   const result = {}
 
   Object.keys(config).forEach(field => {
-    if (field === 'cb') {
-      result[field] = config[field].bind(vueApp)
-    } else {
-      result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
+    switch(field) {
+      case 'cb':
+        result[field] = config[field].bind(vueApp)
+        break
+      case 'message':
+      case 'title':
+      case 'timeout':
+        result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
+        break
+      default:
+        result[field] = (typeof config[field] === 'function') ? config[field].bind(vueApp) : config[field]
     }
   })
 
