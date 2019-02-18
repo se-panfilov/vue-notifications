@@ -80,7 +80,7 @@
     "require-dir": "1.1.0",
     "rimraf": "2.6.2",
     "run-sequence": "2.2.1",
-    "sinon": "6.1.4",
+    "sinon": "7.2.4",
     "sinon-chai": "3.2.0",
     "source": "0.0.3",
     "through2": "2.0.4",
