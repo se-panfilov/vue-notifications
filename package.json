@@ -70,7 +70,7 @@
     "gulp-plumber": "1.2.1",
     "gulp-rename": "1.4.0",
     "gulp-size": "3.0.0",
-    "gulp-sourcemaps": "2.6.4",
+    "gulp-sourcemaps": "2.6.5",
     "gulp-strip-code": "0.1.4",
     "gulp-todo": "7.0.0",
     "gulp-uglify": "3.0.1",
