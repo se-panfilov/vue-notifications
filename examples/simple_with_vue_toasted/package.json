@@ -10,7 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "vue": "2.4.2",
+    "vue": "2.5.17",
     "vue-notifications": "0.9.0",
     "vue-toasted": "1.1.21"
   },
