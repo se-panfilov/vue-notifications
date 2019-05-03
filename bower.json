@@ -1,6 +1,6 @@
 {
   "name": "vue-notifications",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Vuejs notifications",
   "main": "dist/vue-notifications.js",
   "repository": {
@@ -26,6 +26,5 @@
   },
   "homepage": "https://github.com/se-panfilov/vue-notifications#readme",
   "devDependencies": {},
-  "dependencies": {
-  }
+  "dependencies": {}
 }
