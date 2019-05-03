@@ -1,7 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-- 10
+  - '8'
+  - '9'
+  - '10'
 notifications:
   email: false
   # keep the npm cache to speed up installs

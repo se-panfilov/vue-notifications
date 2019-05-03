@@ -1,5 +1,4 @@
 .babelrc
-.eslintrc
 .bithoundrc
 .eslintignore
 .gitattributes
@@ -12,8 +11,6 @@ node_modules/
 .editorconfig
 .nvmrc
 .travis.yml
-bower.json
-gulpfile.js
 .idea
 TODO.md
 yarn.lock
@@ -26,8 +23,6 @@ tsconfig.json
 tsconfig.module.json
 tslint.json
 .github
-.prettierignore
-build/docs
 **/*.spec.*
 coverage
 .nyc_output

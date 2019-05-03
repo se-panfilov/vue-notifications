@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2018",
     "outDir": "dist",
+    "outFile": "./dist/asdsad.js",
     "rootDir": "src",
     "moduleResolution": "node",
-    "module": "commonjs",
+    "module": "amd",
     "declaration": true,
     "inlineSourceMap": true,
     "esModuleInterop": true
