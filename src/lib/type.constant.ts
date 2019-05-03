@@ -1,4 +1,6 @@
-export const error: string = 'error'
-export const warn: string = 'warn'
-export const info: string = 'info'
-export const success: string = 'success'
+export enum MESSAGE_TYPE {
+  error = 'error',
+  warn = 'warn',
+  info = 'info',
+  success = 'success'
+}

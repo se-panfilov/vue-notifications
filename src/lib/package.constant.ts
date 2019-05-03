@@ -1,3 +1,5 @@
-export const PLUGIN_NAME: string = 'VueNotifications'
-export const PACKAGE_NAME: string = 'vue-notifications'
-export const PROPERTY_NAME: string = 'notifications'
+export enum PACKAGE {
+  PLUGIN_NAME = 'VueNotifications',
+  PACKAGE_NAME = 'vue-notifications',
+  PROPERTY_NAME = 'notifications'
+}

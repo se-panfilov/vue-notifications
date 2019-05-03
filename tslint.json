@@ -35,6 +35,14 @@
         "timeEnd",
         "trace"
       ]
-    }
+    },
+    "curly": [
+      true,
+      "ignore-same-line"
+    ],
+    "no-angle-bracket-type-assertion": false,
+    "prefer-conditional-expression": false,
+    "object-literal-sort-keys": false,
+    "comment-format": false
   }
 }
