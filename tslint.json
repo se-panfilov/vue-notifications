@@ -9,8 +9,6 @@
       true,
       "never-prefix"
     ],
-    // TODO: allow devDependencies only in **/*.spec.ts files:
-    // waiting on https://github.com/palantir/tslint/pull/3708
     "no-implicit-dependencies": [
       true,
       "dev"
@@ -44,5 +42,30 @@
     "prefer-conditional-expression": false,
     "object-literal-sort-keys": false,
     "comment-format": false
-  }
+  },
+  "prefer-const": true,
+  "quotemark": [
+    true,
+    "single"
+  ],
+  "semicolon": [
+    true,
+    "never"
+  ],
+  "whitespace": [
+    true,
+    "check-branch",
+    "check-decl",
+    "check-operator",
+    "check-separator",
+    "check-type",
+    "check-rest-spread"
+  ],
+  "one-line": [
+    true,
+    "check-open-brace",
+    "check-catch",
+    "check-else",
+    "check-whitespace"
+  ]
 }
