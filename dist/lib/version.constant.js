@@ -1,0 +1,4 @@
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.EVANGELION = 1
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidmVyc2lvbi5jb25zdGFudC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9saWIvdmVyc2lvbi5jb25zdGFudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFhLFFBQUEsVUFBVSxHQUFXLENBQUMsQ0FBQSJ9
