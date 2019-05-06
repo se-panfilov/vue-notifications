@@ -26,9 +26,9 @@
   import VueNotifications from 'vue-notifications'
 
   export default {
-    name: 'hello',
-    data () {
-      return {}
+    name: 'HelloWorld',
+    props: {
+      msg: String
     },
     notifications: {
       showSuccessMsg: {
@@ -56,15 +56,15 @@
       makeRequest (url) {
         return this.ajaxCall('whatever').then(response => {
           // Some error message overridings
-          if (response.loginError) return this.showErrorMsg({message: 'Login error'})
-          if (!response.ok) return this.showErrorMsg({message: response.message})
+          if (response.loginError) return this.showErrorMsg({ message: 'Login error' })
+          if (!response.ok) return this.showErrorMsg({ message: response.message })
 
           this.showSuccessMsg()
         })
       },
       ajaxCall (url) {
         return new Promise((resolve, reject) => {
-          resolve({loginError: true})
+          resolve({ loginError: true })
           // resolve({ok: false})
           // resolve({ok: true})
         })
@@ -73,36 +73,46 @@
   }
 </script>
 
-<style lang="stylus" type="text/stylus" scoped>
-  primary_color = #41b883
-  h1, h2
-    font-weight normal
+<style scoped>
+  h3 {
+    margin: 40px 0 0;
+  }
 
-  ul
-    list-style-type none
-    padding 0
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
-  li
-    display inline-block
-    margin 0 10px
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
 
-  a
-    color #42b983
+  a {
+    color: #42b983;
+  }
 
-  .hello
-    text-align center
+  .hello {
+    text-align: center
+  }
 
-  .msg-buttons
-    margin 10px
-    &__btn
-      color white
-      font-size 14px
-      background-color primary_color
-      border-radius 3px
-      padding 7px 12px
-      border 1px solid transparent
-      transition background .4s ease
-      cursor pointer
-      &:hover
-        background-color lighten(primary_color, 5)
+  .msg-buttons {
+    margin: 10px;
+  }
+
+  .msg-buttons__btn {
+    color: white;
+    font-size: 14px;
+    background-color: #41b883;
+    border-radius: 3px;
+    padding: 7px 12px;
+    border: 1px solid transparent;
+    transition: background .4s ease;
+    cursor: pointer;
+  }
+
+  .msg-buttons__btn:hover {
+    background-color: #71b999;
+  }
+
 </style>
