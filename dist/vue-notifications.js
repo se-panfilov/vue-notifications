@@ -27,7 +27,7 @@ function showMessage (config, vueApp) {
   const method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : console.log
   method(valuesObj, vueApp)
   if (config.cb)
-    return config.cb()
+    config.cb()
 }
 // TODO (S.Panfilov) do we need this method?
 // TODO (S.Panfilov) any
@@ -48,12 +48,11 @@ function setMethod (vueApp, name, componentOptions) {
     componentOptions.methods[name] = makeMethod(vueApp, name, componentOptions)
   }
 }
-// TODO (S.Panfilov) any
-function makeMethod (vueApp, configName, componentOptions) {
-  // TODO (S.Panfilov) any
+
+function makeMethod (vueApp, methodName, componentOptions) {
   return (config) => {
-    const newConfig = Object.assign({}, VueNotifications.config, componentOptions[VueNotifications.propertyName][configName], config)
-    return showMessage(newConfig, vueApp)
+    const newConfig = Object.assign({}, VueNotifications.config, componentOptions[VueNotifications.propertyName][methodName], config)
+    showMessage(newConfig, vueApp)
   }
 }
 

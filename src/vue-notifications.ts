@@ -26,7 +26,7 @@ function getValues(vueApp: Vue, config: any): object {
 }
 
 // TODO (S.Panfilov) any
-function showMessage(config: any, vueApp: Vue): any {
+function showMessage(config: MessageData, vueApp: Vue): void {
   const valuesObj: any = getValues(vueApp, config)
   // TODO (S.Panfilov) any
   const isMethodOverridden: boolean = (<any>VueNotifications.pluginOptions)[valuesObj.type]
@@ -34,7 +34,7 @@ function showMessage(config: any, vueApp: Vue): any {
   const method = isMethodOverridden ? (<any>VueNotifications.pluginOptions)[valuesObj.type] : console.log
   method(valuesObj, vueApp)
 
-  if (config.cb) return config.cb()
+  if (config.cb) config.cb()
 }
 
 // TODO (S.Panfilov) do we need this method?
@@ -58,19 +58,17 @@ function setMethod(vueApp: Vue, name: string, componentOptions: ComponentOptions
   }
 }
 
-// TODO (S.Panfilov) any
-function makeMethod(vueApp: Vue, configName: string, componentOptions: ComponentOptions<Vue>): (config: any) => any {
-// TODO (S.Panfilov) any
-  return (config: any) => {
-    const newConfig = {
+function makeMethod(vueApp: Vue, methodName: string, componentOptions: ComponentOptions<Vue>): (config: MessageData) => void {
+  return (config: MessageData): void => {
+    const newConfig: MessageData = {
       ...VueNotifications.config,
       // TODO (S.Panfilov)  ts ignore
       // @ts-ignore
-      ...componentOptions[VueNotifications.propertyName][configName],
+      ...componentOptions[VueNotifications.propertyName][methodName],
       ...config
     }
 
-    return showMessage(newConfig, vueApp)
+    showMessage(newConfig, vueApp)
   }
 }
 
@@ -157,35 +155,35 @@ export interface NotificationsObject {
 }
 
 export interface MessageData {
-  type: string,
-  message: string,
-  title: string
+  type: MESSAGE_TYPE | string,
+  timeout?: number,
+  message?: string,
+  title?: string
+  cb?: () => any
 }
 
 // TODO (S.Panfilov)  any
 export interface VueNotificationsPlugin extends PluginObject<any> {
-  types: { [key: string]: MESSAGE_TYPE | string },
+  types: MessageTypes,
   propertyName: string,
-  config: {
-    type: MESSAGE_TYPE | string,
-    timeout: number
-  },
+  config: MessageData,
   pluginOptions: ComponentOptions<Vue>,
   installed: boolean,
   install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void,
-  // TODO (S.Panfilov) any
-  setPluginOptions: (options: any) => void
+  setPluginOptions: (options: ComponentOptions<Vue>) => void
+}
+
+export interface MessageTypes {
+  [key: string]: MESSAGE_TYPE | string
+}
+
+export interface Mixin {
+  beforeCreate: () => void
+  beforeDestroy: () => void
 }
 
 if (typeof window !== 'undefined' && (window as any).Vue) {
   (window as any).Vue.use(VueNotifications)
-}
-
-export interface Mixin {
-  // TODO (S.Panfilov) any
-  beforeCreate: () => any
-  // TODO (S.Panfilov) any
-  beforeDestroy: () => any
 }
 
 export default VueNotifications

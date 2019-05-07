@@ -13,11 +13,13 @@
       true,
       "dev"
     ],
-    "max-line-length": {
-      "options": [
-        140
-      ]
-    },
+    "max-line-length": [
+      true,
+      {
+        "limit": 240,
+        "ignore-pattern": "^import |^export {(.*?)}"
+      }
+    ],
     "new-parens": true,
     "no-arg": true,
     "no-bitwise": true,
@@ -101,13 +103,6 @@
   ],
   "interface-over-type-literal": true,
   "label-position": true,
-  "max-line-length": [
-    true,
-    {
-      "limit": 240,
-      "ignore-pattern": "^import |^export {(.*?)}"
-    }
-  ],
   "member-access": false,
   "no-arg": true,
   "no-bitwise": true,
