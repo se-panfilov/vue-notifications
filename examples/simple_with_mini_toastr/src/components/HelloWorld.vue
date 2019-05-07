@@ -25,13 +25,8 @@
 <script>
   import VueNotifications from 'vue-notifications'
 
-  console.info('VueNotifications', VueNotifications)
-
   export default {
     name: 'HelloWorld',
-    props: {
-      msg: String
-    },
     notifications: {
       showSuccessMsg: {
         type: VueNotifications.types.success, // or just 'success' or any other string

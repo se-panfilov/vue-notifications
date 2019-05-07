@@ -24,7 +24,7 @@
                 class="showcase-lib__items"
                 @change="setCurrentLib(key)">
               <label>
-                <input type="radio" :checked="currentLib === value" :value="key" name="lib" />
+                <input type="radio" :checked="currentLib === value" :value="key" name="lib"/>
                 <span v-text="value"></span>
               </label>
             </li>
@@ -76,35 +76,35 @@
   }
 
   const TOASTS = {
-    [UI_LIBS.miniToastr] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.miniToastr] ({ title, message, type, timeout, cb }) {
       return miniToastr[type](message, title, timeout, cb)
     },
-    [UI_LIBS.VueToasted] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.VueToasted] ({ title, message, type, timeout, cb }) {
       if (type === VueNotifications.types.warn) type = 'show'
-      return Vue.toasted[type](message, {duration: timeout})
+      return Vue.toasted[type](message, { duration: timeout })
     },
-    [UI_LIBS.VueEasyToast] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.VueEasyToast] ({ title, message, type, timeout, cb }) {
       let className = 'et-info'
       if (type === VueNotifications.types.warn) className = 'et-warn'
       else if (type === VueNotifications.types.error) className = 'et-alert'
 
-      return Vue.toast(message, {duration: timeout, className})
+      return Vue.toast(message, { duration: timeout, className })
     },
-    [UI_LIBS.toastr] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.toastr] ({ title, message, type, timeout, cb }) {
       // this shit requires jquery, lol
       if (type === VueNotifications.types.warn) type = 'warning'
-      return toastr[type](message, title, {timeOut: timeout})
+      return toastr[type](message, title, { timeOut: timeout })
     },
-    [UI_LIBS.iziToast] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.iziToast] ({ title, message, type, timeout, cb }) {
       if (type === VueNotifications.types.warn) type = 'warning'
-      return iziToast[type]({title, message, timeout})
+      return iziToast[type]({ title, message, timeout })
     },
-    [UI_LIBS.Noty] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.Noty] ({ title, message, type, timeout, cb }) {
       if (type === VueNotifications.types.warn) type = 'warning'
 
-      return new Noty({text: message, timeout, type}).show()
+      return new Noty({ text: message, timeout, type }).show()
     },
-    [UI_LIBS.swal] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.swal] ({ title, message, type, timeout, cb }) {
       if (type === VueNotifications.types.warn) type = 'warning'
       return swal(title, message, type)
     }
@@ -164,70 +164,83 @@
   }
 </script>
 
-<style lang="stylus" type="text/stylus" scoped>
-  primary_color = #41b883
+<style scoped>
+  h3 {
+    margin: 40px 0 0;
+  }
 
-  .showcase-page
-    padding 15px
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
-  hr
-    border-color #bfbfbf
-    border-style dashed
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
 
-  h1, h2, h3
-    font-weight normal
+  a {
+    color: #42b983;
+  }
 
-  a
-    color #42b983
+  .hello {
+    text-align: center
+  }
 
-  .overview
-    text-align center
+  .msg-buttons {
+    margin: 10px;
+  }
 
-  ul
-    padding 0
-    list-style-type none
+  .msg-buttons__btn {
+    color: white;
+    font-size: 14px;
+    background-color: #41b883;
+    border-radius: 3px;
+    padding: 7px 12px;
+    border: 1px solid transparent;
+    transition: background .4s ease;
+    cursor: pointer;
+  }
 
-  .msg-buttons
-    list-style-type none
-    padding 0
-    margin 10px
-    &__btn
-      display inline-block
-      margin 5px 10px
-      color white
-      font-size 14px
-      background-color primary_color
-      border-radius 3px
-      padding 7px 12px
-      border 1px solid transparent
-      transition background .4s ease
-      cursor pointer
-      min-width 85px
-      &:hover
-        background-color lighten(primary_color, 5)
+  .msg-buttons__btn:hover {
+    background-color: #71b999;
+  }
 
-  .showcase
-    justify-content space-around
-    flex-direction row
-    display flex
-    &__entry
-      flex-basis: 350px
-      background-color #fafafa
-      min-width 1px
-      flex-grow 1
-      &.-try-live
-        flex-basis: 280px
-      &.-setup
-        flex-basis: 350px
-        flex-grow 2
-      &.-definition
-        flex-basis: 300px
-        flex-grow 1.2
-    &__actions-item
-      display inline-block
-      max-width 50%
+  .showcase {
+    justify-content: space-around;
+    flex-direction: row;
+    display: flex;
+  }
 
-  .showcase-lib
-    &__third-party-home-ling
-      font-size 14px
+  .showcase__entry {
+    flex-basis: 350px;
+    background-color: #fafafa;
+    min-width: 1px;
+    flex-grow: 1;
+  }
+
+  .showcase__entry-try-live {
+    flex-basis: 280px;
+  }
+
+  .showcase__entry-setup {
+    flex-basis: 350px;
+    flex-grow: 2;
+  }
+
+  .showcase__entry-definition {
+    flex-basis: 300px;
+    flex-grow: 1.2;
+  }
+
+  .showcase__actions-item {
+    display: inline-block;
+    max-width: 50%;
+  }
+
+  .showcase-lib {
+    font-size: 14px;
+  }
+
+
 </style>
