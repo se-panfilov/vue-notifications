@@ -25,6 +25,8 @@
 <script>
   import VueNotifications from 'vue-notifications'
 
+  console.info('VueNotifications', VueNotifications)
+
   export default {
     name: 'HelloWorld',
     props: {

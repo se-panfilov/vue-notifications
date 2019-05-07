@@ -1,10 +1,19 @@
 import { ComponentOptions, PluginObject, VueConstructor } from 'vue'
 // tslint:disable-next-line:no-submodule-imports
 import { Vue } from 'vue/types/vue'
-import { ALREADY_INSTALLED } from './message.constant'
-import { PACKAGE } from './package.constant'
-import { MESSAGE_TYPE } from './type.constant'
-import { EVANGELION } from './version.constant'
+
+enum PACKAGE {
+  PLUGIN_NAME = 'VueNotifications',
+  PACKAGE_NAME = 'vue-notifications',
+  PROPERTY_NAME = 'notifications'
+}
+
+enum MESSAGE_TYPE {
+  error = 'error',
+  warn = 'warn',
+  info = 'info',
+  success = 'success'
+}
 
 function getVersion(vue: VueConstructor): number {
   const version = vue.version.match(/(\d+)/g)
@@ -141,10 +150,12 @@ declare interface Mixin {
 }
 
 function makeMixin(vue: VueConstructor): Mixin {
-  const init = getVersion(vue) === EVANGELION ? 'init' : 'beforeCreate'
+  const init = getVersion(vue) === 1 ? 'init' : 'beforeCreate'
 
   return {
-    [init]: () => {
+    // TODO (S.Panfilov) I'm not sure nw how to solve issue with "this" properly
+    // tslint:disable-next-line:object-literal-shorthand
+    [init]: function() {
       // TODO (S.Panfilov) ts-ignore
       // @ts-ignore
       const notificationsField = this.$options[VueNotifications.propertyName]
@@ -192,14 +203,8 @@ const VueNotifications: VueNotificationsPlugin = {
   },
   pluginOptions: {},
   installed: false,
-  /**
-   * Plugin | vue-notifications
-   * @param  {Function} vue
-   * @param  {Object} pluginOptions
-   * @this VueNotifications
-   */
   install(vue: VueConstructor, pluginOptions: ComponentOptions<Vue>): void {
-    if (this.installed) throw console.error(ALREADY_INSTALLED)
+    if (this.installed) throw console.error(`${PACKAGE.PLUGIN_NAME}: plugin already installed`)
     const mixin = makeMixin(vue)
     vue.mixin(mixin)
 
@@ -234,5 +239,6 @@ if (typeof window !== 'undefined' && (window as any).Vue) {
 (<any>VueNotifications)._private.unlinkVueNotificationPlugin = unlinkVueNotificationPlugin;
 (<any>VueNotifications)._private.makeMixin = makeMixin
 
-export default VueNotifications
 /*END.TESTS_ONLY*/
+
+export default VueNotifications
