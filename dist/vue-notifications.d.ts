@@ -1,4 +1,4 @@
-import { ComponentOptions, PluginObject } from 'vue'
+import { ComponentOptions, PluginObject, VueConstructor } from 'vue'
 import { Vue } from 'vue/types/vue'
 
 declare enum MESSAGE_TYPE {
@@ -8,26 +8,26 @@ declare enum MESSAGE_TYPE {
   success = 'success'
 }
 
-export interface Message {
-  type: string;
-  message: string;
-  title: string;
-}
+declare const VueNotifications: VueNotificationsPlugin
 
-declare interface VueNotificationsPlugin extends PluginObject<any> {
+export interface VueNotificationsPlugin extends PluginObject<any> {
   types: {
-    [key: string]: MESSAGE_TYPE;
+    [key: string]: MESSAGE_TYPE | string;
   };
   propertyName: string;
   config: {
-    type: MESSAGE_TYPE;
+    type: MESSAGE_TYPE | string;
     timeout: number;
   };
   pluginOptions: ComponentOptions<Vue>;
   installed: boolean;
-  install: (vue: typeof Vue, pluginOptions: ComponentOptions<Vue>) => void;
+  install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void;
   setPluginOptions: (options: any) => void;
 }
 
-declare const VueNotifications: VueNotificationsPlugin
+export interface Mixin {
+  beforeCreate: () => any;
+  beforeDestroy: () => any;
+}
+
 export default VueNotifications

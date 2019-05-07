@@ -2,12 +2,6 @@ import { ComponentOptions, PluginObject, VueConstructor } from 'vue'
 // tslint:disable-next-line:no-submodule-imports
 import { Vue } from 'vue/types/vue'
 
-enum PACKAGE {
-  PLUGIN_NAME = 'VueNotifications',
-  PACKAGE_NAME = 'vue-notifications',
-  PROPERTY_NAME = 'notifications'
-}
-
 enum MESSAGE_TYPE {
   error = 'error',
   warn = 'warn',
@@ -15,19 +9,8 @@ enum MESSAGE_TYPE {
   success = 'success'
 }
 
-function isDefined<T>(value: T | undefined | null): value is T {
-  return <T>value !== undefined && <T>value !== null
-}
-
-function showDefaultMessage({ type, message, title }: Message): void {
-  const msg = `Title: ${title}, Message: ${message}, Type: ${type}`
-  // TODO (S.Panfilov) any
-  if (type === MESSAGE_TYPE.error || type === MESSAGE_TYPE.warn) (<any>console)[type](msg)
-  else console.log(msg)
-}
-
-// TODO (S.Panfilov) any
-function getValues(vueApp: any, config: any): object {
+// TODO (S.Panfilov) return type object
+function getValues(vueApp: Vue, config: any): object {
   // TODO (S.Panfilov) any
   const result: any = {}
 
@@ -48,24 +31,24 @@ function showMessage(config: any, vueApp: Vue): any {
   // TODO (S.Panfilov) any
   const isMethodOverridden: boolean = (<any>VueNotifications.pluginOptions)[valuesObj.type]
   // TODO (S.Panfilov) any
-  const method = isMethodOverridden ? (<any>VueNotifications.pluginOptions)[valuesObj.type] : showDefaultMessage
+  const method = isMethodOverridden ? (<any>VueNotifications.pluginOptions)[valuesObj.type] : console.log
   method(valuesObj, vueApp)
 
   if (config.cb) return config.cb()
 }
 
+// TODO (S.Panfilov) do we need this method?
 // TODO (S.Panfilov) any
-function addMethods(targetObj: any, typesObj: any, vueApp: Vue): void {
-  // TODO (S.Panfilov) any
-  Object.keys(typesObj).forEach((v: any) => {
-    // TODO (S.Panfilov) any
-    targetObj[typesObj[v]] = (config: any) => {
-      config.type = typesObj[v]
-      // TODO (S.Panfilov) fix 'vueApp' in param
-      return showMessage(config, vueApp)
-    }
-  })
-}
+// function addMethods(targetObj: any, typesObj: any, vueConstructor: VueConstructor): void {
+//   // TODO (S.Panfilov) any
+//   Object.keys(typesObj).forEach((v: any) => {
+//     // TODO (S.Panfilov) any
+//     targetObj[typesObj[v]] = (config: any) => {
+//       config.type = typesObj[v]
+//       return showMessage(config, vueConstructor as any)
+//     }
+//   })
+// }
 
 // TODO (S.Panfilov) any
 function setMethod(vueApp: Vue, name: string, options: any): void {
@@ -108,14 +91,14 @@ function makeMethod(vueApp: Vue, configName: string, options: any): (config: any
 function initVueNotificationPlugin(vueApp: Vue, notifications: any): void {
   if (!notifications) return
   Object.keys(notifications).forEach(name => setMethod(vueApp, name, vueApp.$options))
-  vueApp.$emit(`${PACKAGE.PACKAGE_NAME}-initiated`)
+  vueApp.$emit('vue-notifications-initiated')
 }
 
 // TODO (S.Panfilov) any
 function unlinkVueNotificationPlugin(vueApp: Vue, notifications: any): void {
   if (!notifications) return
   const { methods } = vueApp.$options
-  if (!isDefined(methods)) return
+  if (!methods) return
 
   Object.keys(notifications).forEach(name => {
     if (methods[name]) {
@@ -125,7 +108,7 @@ function unlinkVueNotificationPlugin(vueApp: Vue, notifications: any): void {
     }
   })
 
-  vueApp.$emit(`${PACKAGE.PACKAGE_NAME}-unlinked`)
+  vueApp.$emit('vue-notifications-unlinked')
 }
 
 function makeMixin(): Mixin {
@@ -141,7 +124,7 @@ function makeMixin(): Mixin {
       // @ts-ignore
       initVueNotificationPlugin(this, notificationsField)
     },
-    'beforeDestroy': () => {
+    beforeDestroy: () => {
       // TODO (S.Panfilov) ts-ignore
       // @ts-ignore
       const notificationsField = this.$options[VueNotifications.propertyName]
@@ -159,21 +142,21 @@ const VueNotifications: VueNotificationsPlugin = {
     info: MESSAGE_TYPE.info,
     success: MESSAGE_TYPE.success
   },
-  propertyName: PACKAGE.PROPERTY_NAME,
+  propertyName: 'notifications',
   config: {
     type: MESSAGE_TYPE.info,
     timeout: 3000
   },
   pluginOptions: {},
   installed: false,
-  install(vue: VueConstructor, pluginOptions: ComponentOptions<Vue>): void {
-    if (this.installed) throw console.error(`${PACKAGE.PLUGIN_NAME}: plugin already installed`)
+  install(vueConstructor: VueConstructor, pluginOptions: ComponentOptions<Vue>): void {
+    if (this.installed) throw console.error('VueNotifications: plugin already installed')
     const mixin = makeMixin()
-    vue.mixin(mixin)
+    vueConstructor.mixin(mixin)
 
     this.setPluginOptions(pluginOptions)
-    // TODO (S.Panfilov) any
-    addMethods(this, this.types, vue as any)
+    // TODO (S.Panfilov) do we need addMethods method?
+    // addMethods(this, this.types, vueConstructor)
 
     this.installed = true
   },
@@ -185,23 +168,23 @@ const VueNotifications: VueNotificationsPlugin = {
   //TODO (S.Panfilov) add "noCall:true" property
 }
 
-export interface Message {
-  type: string,
-  message: string,
-  title: string
-}
+// export interface Message {
+//   type: string,
+//   message: string,
+//   title: string
+// }
 
 // TODO (S.Panfilov)  any
 export interface VueNotificationsPlugin extends PluginObject<any> {
-  types: { [key: string]: MESSAGE_TYPE },
+  types: { [key: string]: MESSAGE_TYPE | string },
   propertyName: string,
   config: {
-    type: MESSAGE_TYPE,
+    type: MESSAGE_TYPE | string,
     timeout: number
   },
   pluginOptions: ComponentOptions<Vue>,
   installed: boolean,
-  install: (vue: typeof Vue, pluginOptions: ComponentOptions<Vue>) => void,
+  install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void,
   // TODO (S.Panfilov) any
   setPluginOptions: (options: any) => void
 }
@@ -216,19 +199,5 @@ export interface Mixin {
   // TODO (S.Panfilov) any
   beforeDestroy: () => any
 }
-
-/*START.TESTS_ONLY*/
-(<any>VueNotifications)._private = {};
-(<any>VueNotifications)._private.showDefaultMessage = showDefaultMessage;
-(<any>VueNotifications)._private.getValues = getValues;
-(<any>VueNotifications)._private.showMessage = showMessage;
-(<any>VueNotifications)._private.addMethods = addMethods;
-(<any>VueNotifications)._private.setMethod = setMethod;
-(<any>VueNotifications)._private.makeMethod = makeMethod;
-(<any>VueNotifications)._private.initVueNotificationPlugin = initVueNotificationPlugin;
-(<any>VueNotifications)._private.unlinkVueNotificationPlugin = unlinkVueNotificationPlugin;
-(<any>VueNotifications)._private.makeMixin = makeMixin
-
-/*END.TESTS_ONLY*/
 
 export default VueNotifications
