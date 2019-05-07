@@ -5,22 +5,26 @@ var MESSAGE_TYPE;
   MESSAGE_TYPE['info'] = 'info'
   MESSAGE_TYPE['success'] = 'success'
 })(MESSAGE_TYPE || (MESSAGE_TYPE = {}))
-// TODO (S.Panfilov) return type object
-function getValues (vueApp, config) {
+
+function getValues (config, vueApp) {
   // TODO (S.Panfilov) any
   const result = {}
   Object.keys(config).forEach((field) => {
     if (field === 'cb') {
+      // TODO (S.Panfilov) tslint ignore
+      // @ts-ignore
       result[field] = config[field].bind(vueApp)
     } else {
+      // TODO (S.Panfilov) tslint ignore
+      // @ts-ignore
       result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
     }
   })
   return result
 }
-// TODO (S.Panfilov) any
+
 function showMessage (config, vueApp) {
-  const valuesObj = getValues(vueApp, config)
+  const valuesObj = getValues(config, vueApp)
   // TODO (S.Panfilov) any
   const isMethodOverridden = VueNotifications.pluginOptions[valuesObj.type]
   // TODO (S.Panfilov) any

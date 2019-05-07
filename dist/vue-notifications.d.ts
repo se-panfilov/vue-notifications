@@ -23,14 +23,17 @@ export interface VueNotificationsPlugin extends PluginObject<any> {
   types: MessageTypes;
   propertyName: string;
   config: MessageData;
-  pluginOptions: ComponentOptions<Vue>;
+  pluginOptions: VueNotificationsPluginOptions;
   installed: boolean;
   install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void;
   setPluginOptions: (options: ComponentOptions<Vue>) => void;
 }
 
+export interface VueNotificationsPluginOptions {
+  readonly [key: string]: any;
+}
 export interface MessageTypes {
-  [key: string]: MESSAGE_TYPE | string;
+  readonly [key: string]: MESSAGE_TYPE | string;
 }
 export interface Mixin {
   beforeCreate: () => void;

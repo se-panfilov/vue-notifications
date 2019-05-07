@@ -9,15 +9,17 @@ enum MESSAGE_TYPE {
   success = 'success'
 }
 
-// TODO (S.Panfilov) return type object
-function getValues(vueApp: Vue, config: any): object {
-  // TODO (S.Panfilov) any
-  const result: any = {}
+function getValues(config: MessageData, vueApp: Vue): MessageData {
+  const result: MessageData = { type: MESSAGE_TYPE.info }
 
   Object.keys(config).forEach((field: string) => {
     if (field === 'cb') {
+      // TODO (S.Panfilov) tslint ignore
+      // @ts-ignore
       result[field] = config[field].bind(vueApp)
     } else {
+      // TODO (S.Panfilov) tslint ignore
+      // @ts-ignore
       result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
     }
   })
@@ -25,13 +27,10 @@ function getValues(vueApp: Vue, config: any): object {
   return result
 }
 
-// TODO (S.Panfilov) any
 function showMessage(config: MessageData, vueApp: Vue): void {
-  const valuesObj: any = getValues(vueApp, config)
-  // TODO (S.Panfilov) any
-  const isMethodOverridden: boolean = (<any>VueNotifications.pluginOptions)[valuesObj.type]
-  // TODO (S.Panfilov) any
-  const method = isMethodOverridden ? (<any>VueNotifications.pluginOptions)[valuesObj.type] : console.log
+  const valuesObj: MessageData = getValues(config, vueApp)
+  const isMethodOverridden: boolean = VueNotifications.pluginOptions[valuesObj.type]
+  const method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : console.log
   method(valuesObj, vueApp)
 
   if (config.cb) config.cb()
@@ -78,15 +77,13 @@ function initVueNotificationPlugin(vueApp: Vue, notifications: NotificationsObje
   vueApp.$emit('vue-notifications-initiated')
 }
 
-// TODO (S.Panfilov) any
-function unlinkVueNotificationPlugin(vueApp: Vue, notifications: any): void {
+function unlinkVueNotificationPlugin(vueApp: Vue, notifications: NotificationsObject): void {
   if (!notifications) return
   const { methods } = vueApp.$options
   if (!methods) return
 
   Object.keys(notifications).forEach(name => {
     if (methods[name]) {
-      // TODO (S.Panfilov) this is not allowed, let's see if we can live without this string
       (<any>methods)[name] = undefined
       delete methods[name]
     }
@@ -134,7 +131,7 @@ const VueNotifications: VueNotificationsPlugin = {
   },
   pluginOptions: {},
   installed: false,
-  install(vueConstructor: VueConstructor, pluginOptions: ComponentOptions<Vue>): void {
+  install(vueConstructor: VueConstructor, pluginOptions: VueNotificationsPluginOptions): void {
     if (this.installed) throw console.error('VueNotifications: plugin already installed')
     const mixin = makeMixin()
     vueConstructor.mixin(mixin)
@@ -145,7 +142,7 @@ const VueNotifications: VueNotificationsPlugin = {
 
     this.installed = true
   },
-  setPluginOptions(pluginOptions: ComponentOptions<Vue>): void {
+  setPluginOptions(pluginOptions: VueNotificationsPluginOptions): void {
     this.pluginOptions = pluginOptions
   }
 }
@@ -167,14 +164,19 @@ export interface VueNotificationsPlugin extends PluginObject<any> {
   types: MessageTypes,
   propertyName: string,
   config: MessageData,
-  pluginOptions: ComponentOptions<Vue>,
+  pluginOptions: VueNotificationsPluginOptions,
   installed: boolean,
   install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void,
   setPluginOptions: (options: ComponentOptions<Vue>) => void
 }
 
+export interface VueNotificationsPluginOptions {
+  // TODO (S.Panfilov) any
+  readonly [key: string]: any
+}
+
 export interface MessageTypes {
-  [key: string]: MESSAGE_TYPE | string
+  readonly [key: string]: MESSAGE_TYPE | string
 }
 
 export interface Mixin {
