@@ -33,7 +33,7 @@
     notifications: {
       showSuccessMsg: {
         type: VueNotifications.types.success, // or just 'success' or any other string
-        title: 'Hello there',
+        title: 'HelloWorld there',
         message: 'That\'s the success!'
       },
       showInfoMsg: {
@@ -56,15 +56,15 @@
       makeRequest (url) {
         return this.ajaxCall('whatever').then(response => {
           // Some error message overridings
-          if (response.loginError) return this.showErrorMsg({message: 'Login error'})
-          if (!response.ok) return this.showErrorMsg({message: response.message})
+          if (response.loginError) return this.showErrorMsg({ message: 'Login error' })
+          if (!response.ok) return this.showErrorMsg({ message: response.message })
 
           this.showSuccessMsg()
         })
       },
       ajaxCall (url) {
         return new Promise((resolve, reject) => {
-          resolve({loginError: true})
+          resolve({ loginError: true })
           // resolve({ok: false})
           // resolve({ok: true})
         })
@@ -94,6 +94,7 @@
 
   .msg-buttons
     margin 10px
+
     &__btn
       color white
       font-size 14px
@@ -103,6 +104,7 @@
       border 1px solid transparent
       transition background .4s ease
       cursor pointer
+
       &:hover
         background-color lighten(primary_color, 5)
 </style>

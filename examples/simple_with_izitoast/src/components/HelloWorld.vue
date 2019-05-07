@@ -33,7 +33,7 @@
     notifications: {
       showSuccessMsg: {
         type: VueNotifications.types.success, // or just 'success' or any other string
-        title: 'Hello there',
+        title: 'HelloWorld there',
         message: 'That\'s the success!'
       },
       showInfoMsg: {

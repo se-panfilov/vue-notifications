@@ -41,30 +41,25 @@
 <script>
   import Vue from 'vue'
   import VueNotifications from 'vue-notifications'
-
   //Third-party UI libs
   import VueEasyToast from 'vue-easy-toast' // https://github.com/noru/vue-easy-toast
   import miniToastr from 'mini-toastr' // https://github.com/se-panfilov/mini-toastr
   import VueToasted from 'vue-toasted' // https://github.com/shakee93/vue-toasted
-
   //toastr
   import 'jquery' // required by 'toastr'
   import toastr from 'toastr' // https://github.com/CodeSeven/toastr
   import 'toastr/build/toastr.min.css'
-  //end toastr
-
   //iziToast
   import iziToast from 'izitoast' // https://github.com/dolce/iziToast
   import 'izitoast/dist/css/iziToast.min.css'
-  //end iziToast
-
   //noty
   import Noty from 'noty' // https://github.com/needim/noty
   import 'noty/lib/noty.css'
-  //end noty
-
   //sweetalert
   import swal from 'sweetalert' // https://github.com/t4t5/sweetalert
+  //end toastr
+  //end iziToast
+  //end noty
 
   Vue.config.productionTip = false
 
@@ -131,7 +126,7 @@
     notifications: {
       showSuccessMsg: {
         type: VueNotifications.types.success, // or just 'success' or any other string
-        title: 'Hello there',
+        title: 'HelloWorld there',
         message: 'That\'s the success!'
       },
       showInfoMsg: {
