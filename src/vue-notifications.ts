@@ -15,12 +15,6 @@ enum MESSAGE_TYPE {
   success = 'success'
 }
 
-function getVersion(vue: VueConstructor): number {
-  const version = vue.version.match(/(\d+)/g)
-  if (!isDefined(version)) throw new Error('Can\'t understand VueJS version')
-  return Number(version[0])
-}
-
 function isDefined<T>(value: T | undefined | null): value is T {
   return <T>value !== undefined && <T>value !== null
 }
@@ -30,12 +24,6 @@ function showDefaultMessage({ type, message, title }: Message): void {
   // TODO (S.Panfilov) any
   if (type === MESSAGE_TYPE.error || type === MESSAGE_TYPE.warn) (<any>console)[type](msg)
   else console.log(msg)
-}
-
-export interface Message {
-  type: string,
-  message: string,
-  title: string
 }
 
 // TODO (S.Panfilov) any
@@ -140,22 +128,12 @@ function unlinkVueNotificationPlugin(vueApp: Vue, notifications: any): void {
   vueApp.$emit(`${PACKAGE.PACKAGE_NAME}-unlinked`)
 }
 
-declare interface Mixin {
-  // TODO (S.Panfilov) any
-  init?: () => any
-  // TODO (S.Panfilov) any
-  beforeCreate?: () => any
-  // TODO (S.Panfilov) any
-  beforeDestroy: () => any
-}
-
-function makeMixin(vue: VueConstructor): Mixin {
-  const init = getVersion(vue) === 1 ? 'init' : 'beforeCreate'
+function makeMixin(): Mixin {
 
   return {
     // TODO (S.Panfilov) I'm not sure nw how to solve issue with "this" properly
     // tslint:disable-next-line:object-literal-shorthand
-    [init]: function() {
+    beforeCreate: function() {
       // TODO (S.Panfilov) ts-ignore
       // @ts-ignore
       const notificationsField = this.$options[VueNotifications.propertyName]
@@ -174,21 +152,6 @@ function makeMixin(vue: VueConstructor): Mixin {
   }
 }
 
-// TODO (S.Panfilov)  any
-declare interface VueNotificationsPlugin extends PluginObject<any> {
-  types: { [key: string]: MESSAGE_TYPE },
-  propertyName: string,
-  config: {
-    type: MESSAGE_TYPE,
-    timeout: number
-  },
-  pluginOptions: ComponentOptions<Vue>,
-  installed: boolean,
-  install: (vue: typeof Vue, pluginOptions: ComponentOptions<Vue>) => void,
-  // TODO (S.Panfilov) any
-  setPluginOptions: (options: any) => void
-}
-
 const VueNotifications: VueNotificationsPlugin = {
   types: {
     error: MESSAGE_TYPE.error,
@@ -205,7 +168,7 @@ const VueNotifications: VueNotificationsPlugin = {
   installed: false,
   install(vue: VueConstructor, pluginOptions: ComponentOptions<Vue>): void {
     if (this.installed) throw console.error(`${PACKAGE.PLUGIN_NAME}: plugin already installed`)
-    const mixin = makeMixin(vue)
+    const mixin = makeMixin()
     vue.mixin(mixin)
 
     this.setPluginOptions(pluginOptions)
@@ -222,13 +185,40 @@ const VueNotifications: VueNotificationsPlugin = {
   //TODO (S.Panfilov) add "noCall:true" property
 }
 
+export interface Message {
+  type: string,
+  message: string,
+  title: string
+}
+
+// TODO (S.Panfilov)  any
+export interface VueNotificationsPlugin extends PluginObject<any> {
+  types: { [key: string]: MESSAGE_TYPE },
+  propertyName: string,
+  config: {
+    type: MESSAGE_TYPE,
+    timeout: number
+  },
+  pluginOptions: ComponentOptions<Vue>,
+  installed: boolean,
+  install: (vue: typeof Vue, pluginOptions: ComponentOptions<Vue>) => void,
+  // TODO (S.Panfilov) any
+  setPluginOptions: (options: any) => void
+}
+
 if (typeof window !== 'undefined' && (window as any).Vue) {
   (window as any).Vue.use(VueNotifications)
 }
 
+export interface Mixin {
+  // TODO (S.Panfilov) any
+  beforeCreate: () => any
+  // TODO (S.Panfilov) any
+  beforeDestroy: () => any
+}
+
 /*START.TESTS_ONLY*/
 (<any>VueNotifications)._private = {};
-(<any>VueNotifications)._private.getVersion = getVersion;
 (<any>VueNotifications)._private.showDefaultMessage = showDefaultMessage;
 (<any>VueNotifications)._private.getValues = getValues;
 (<any>VueNotifications)._private.showMessage = showMessage;
