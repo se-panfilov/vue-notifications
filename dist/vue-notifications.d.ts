@@ -10,6 +10,15 @@ declare enum MESSAGE_TYPE {
 
 declare const VueNotifications: VueNotificationsPlugin
 
+export interface NotificationsObject {
+  readonly [key: string]: MessageData;
+}
+
+export interface MessageData {
+  type: string;
+  message: string;
+  title: string;
+}
 export interface VueNotificationsPlugin extends PluginObject<any> {
   types: {
     [key: string]: MESSAGE_TYPE | string;
@@ -24,7 +33,6 @@ export interface VueNotificationsPlugin extends PluginObject<any> {
   install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void;
   setPluginOptions: (options: any) => void;
 }
-
 export interface Mixin {
   beforeCreate: () => any;
   beforeDestroy: () => any;

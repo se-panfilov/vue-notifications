@@ -5,7 +5,6 @@ var MESSAGE_TYPE;
   MESSAGE_TYPE['info'] = 'info'
   MESSAGE_TYPE['success'] = 'success'
 })(MESSAGE_TYPE || (MESSAGE_TYPE = {}))
-
 // TODO (S.Panfilov) return type object
 function getValues (vueApp, config) {
   // TODO (S.Panfilov) any
@@ -30,7 +29,6 @@ function showMessage (config, vueApp) {
   if (config.cb)
     return config.cb()
 }
-
 // TODO (S.Panfilov) do we need this method?
 // TODO (S.Panfilov) any
 // function addMethods(targetObj: any, typesObj: any, vueConstructor: VueConstructor): void {
@@ -43,34 +41,22 @@ function showMessage (config, vueApp) {
 //     }
 //   })
 // }
-// TODO (S.Panfilov) any
-function setMethod (vueApp, name, options) {
-  if (!options.methods)
-    options.methods = {}
-  // ///////////////////////////////////////////////////////////////////////
-  // TODO (S.Panfilov) We can't check if method already exist,
-  // cause it won't allow us to use same component more then one tine in the same page
-  // But it would be good to check somehow if it's already exist a method that was created not from this plugin
-  // if (options.methods[name]) {
-  // console.error(MESSAGES.methodNameConflict + name)
-  // } else {
-  //   options.methods[name] = makeMethod(vueApp, name, options, pluginOptions)
-  // }
-  // ///////////////////////////////////////////////////////////////////////
-  if (!options.methods[name]) {
-    options.methods[name] = makeMethod(vueApp, name, options)
+function setMethod (vueApp, name, componentOptions) {
+  if (!componentOptions.methods)
+    componentOptions.methods = {}
+  if (!componentOptions.methods[name]) {
+    componentOptions.methods[name] = makeMethod(vueApp, name, componentOptions)
   }
 }
 // TODO (S.Panfilov) any
-function makeMethod (vueApp, configName, options) {
+function makeMethod (vueApp, configName, componentOptions) {
   // TODO (S.Panfilov) any
   return (config) => {
-    // TODO (S.Panfilov) Object assign
-    const newConfig = Object.assign({}, VueNotifications.config, options[VueNotifications.propertyName][configName], config)
+    const newConfig = Object.assign({}, VueNotifications.config, componentOptions[VueNotifications.propertyName][configName], config)
     return showMessage(newConfig, vueApp)
   }
 }
-// TODO (S.Panfilov) any
+
 function initVueNotificationPlugin (vueApp, notifications) {
   if (!notifications)
     return
@@ -96,7 +82,7 @@ function unlinkVueNotificationPlugin (vueApp, notifications) {
 
 function makeMixin () {
   return {
-    // TODO (S.Panfilov) I'm not sure nw how to solve issue with "this" properly
+    // TODO (S.Panfilov) I'm not sure now how to solve issue with "this" properly
     // tslint:disable-next-line:object-literal-shorthand
     beforeCreate: function() {
       // TODO (S.Panfilov) ts-ignore
@@ -104,9 +90,11 @@ function makeMixin () {
       const notificationsField = this.$options[VueNotifications.propertyName]
       // TODO (S.Panfilov) ts-ignore
       // @ts-ignore
-      initVueNotificationPlugin(this, notificationsField)
+      if (notificationsField)
+        initVueNotificationPlugin(this, notificationsField)
     },
-    beforeDestroy: () => {
+    // tslint:disable-next-line:object-literal-shorthand
+    beforeDestroy: function() {
       // TODO (S.Panfilov) ts-ignore
       // @ts-ignore
       const notificationsField = this.$options[VueNotifications.propertyName]
@@ -143,8 +131,6 @@ const VueNotifications = {
   setPluginOptions (pluginOptions) {
     this.pluginOptions = pluginOptions
   }
-  //TODO (S.Panfilov) add ability to access this.notifications.someError.message
-  //TODO (S.Panfilov) add "noCall:true" property
 };
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueNotifications)

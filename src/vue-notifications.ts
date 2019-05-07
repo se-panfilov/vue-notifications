@@ -50,36 +50,23 @@ function showMessage(config: any, vueApp: Vue): any {
 //   })
 // }
 
-// TODO (S.Panfilov) any
-function setMethod(vueApp: Vue, name: string, options: any): void {
-  if (!options.methods) options.methods = {}
+function setMethod(vueApp: Vue, name: string, componentOptions: ComponentOptions<Vue>): void {
+  if (!componentOptions.methods) componentOptions.methods = {}
 
-  // ///////////////////////////////////////////////////////////////////////
-  // TODO (S.Panfilov) We can't check if method already exist,
-  // cause it won't allow us to use same component more then one tine in the same page
-  // But it would be good to check somehow if it's already exist a method that was created not from this plugin
-
-  // if (options.methods[name]) {
-  // console.error(MESSAGES.methodNameConflict + name)
-  // } else {
-  //   options.methods[name] = makeMethod(vueApp, name, options, pluginOptions)
-  // }
-
-  // ///////////////////////////////////////////////////////////////////////
-
-  if (!options.methods[name]) {
-    options.methods[name] = makeMethod(vueApp, name, options)
+  if (!componentOptions.methods[name]) {
+    componentOptions.methods[name] = makeMethod(vueApp, name, componentOptions)
   }
 }
 
 // TODO (S.Panfilov) any
-function makeMethod(vueApp: Vue, configName: string, options: any): (config: any) => any { // TODO (S.Panfilov) any
-  // TODO (S.Panfilov) any
+function makeMethod(vueApp: Vue, configName: string, componentOptions: ComponentOptions<Vue>): (config: any) => any {
+// TODO (S.Panfilov) any
   return (config: any) => {
-    // TODO (S.Panfilov) Object assign
     const newConfig = {
       ...VueNotifications.config,
-      ...options[VueNotifications.propertyName][configName],
+      // TODO (S.Panfilov)  ts ignore
+      // @ts-ignore
+      ...componentOptions[VueNotifications.propertyName][configName],
       ...config
     }
 
@@ -87,8 +74,7 @@ function makeMethod(vueApp: Vue, configName: string, options: any): (config: any
   }
 }
 
-// TODO (S.Panfilov) any
-function initVueNotificationPlugin(vueApp: Vue, notifications: any): void {
+function initVueNotificationPlugin(vueApp: Vue, notifications: NotificationsObject): void {
   if (!notifications) return
   Object.keys(notifications).forEach(name => setMethod(vueApp, name, vueApp.$options))
   vueApp.$emit('vue-notifications-initiated')
@@ -114,17 +100,18 @@ function unlinkVueNotificationPlugin(vueApp: Vue, notifications: any): void {
 function makeMixin(): Mixin {
 
   return {
-    // TODO (S.Panfilov) I'm not sure nw how to solve issue with "this" properly
+    // TODO (S.Panfilov) I'm not sure now how to solve issue with "this" properly
     // tslint:disable-next-line:object-literal-shorthand
-    beforeCreate: function() {
+    beforeCreate: function(): void {
       // TODO (S.Panfilov) ts-ignore
       // @ts-ignore
-      const notificationsField = this.$options[VueNotifications.propertyName]
+      const notificationsField: NotificationsObject = this.$options[VueNotifications.propertyName]
       // TODO (S.Panfilov) ts-ignore
       // @ts-ignore
-      initVueNotificationPlugin(this, notificationsField)
+      if (notificationsField) initVueNotificationPlugin(this, notificationsField)
     },
-    beforeDestroy: () => {
+    // tslint:disable-next-line:object-literal-shorthand
+    beforeDestroy: function(): void {
       // TODO (S.Panfilov) ts-ignore
       // @ts-ignore
       const notificationsField = this.$options[VueNotifications.propertyName]
@@ -163,16 +150,17 @@ const VueNotifications: VueNotificationsPlugin = {
   setPluginOptions(pluginOptions: ComponentOptions<Vue>): void {
     this.pluginOptions = pluginOptions
   }
-
-  //TODO (S.Panfilov) add ability to access this.notifications.someError.message
-  //TODO (S.Panfilov) add "noCall:true" property
 }
 
-// export interface Message {
-//   type: string,
-//   message: string,
-//   title: string
-// }
+export interface NotificationsObject {
+  readonly [key: string]: MessageData
+}
+
+export interface MessageData {
+  type: string,
+  message: string,
+  title: string
+}
 
 // TODO (S.Panfilov)  any
 export interface VueNotificationsPlugin extends PluginObject<any> {
