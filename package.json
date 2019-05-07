@@ -2,9 +2,8 @@
   "name": "vue-notifications",
   "version": "1.0.0",
   "description": "Vuejs notifications",
-  "main": "dist/main.js",
-  "typings": "build/main/index.d.ts",
-  "module": "build/module/index.js",
+  "main": "dist/vue-notifications.js",
+  "typings": "dist/vue-notifications.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "run-s build test:*",
@@ -17,8 +16,7 @@
     "cov:check": "nyc report && nyc check-coverage --lines 100 --functions 100 --branches 100",
     "doc": "run-s doc:html && opn build/docs/index.html",
     "doc:html": "typedoc src/ --target ES6 --mode file --out build/docs",
-    "doc:json": "typedoc src/ --target ES6 --mode file --json build/docs/typedoc.json",
-    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('vuestart must be installed with Yarn: https://yarnpkg.com/')\""
+    "doc:json": "typedoc src/ --target ES6 --mode file --json build/docs/typedoc.json"
   },
   "engines": {
     "node": ">=8.9"
