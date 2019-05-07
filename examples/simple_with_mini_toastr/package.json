@@ -2,6 +2,7 @@
   "name": "simple_with_mini_toastr",
   "version": "1.0.0",
   "author": "Sergei Panfilov <se-panfilov@ya.ru> (https://se-panfilov.github.io)",
+  "license": "MIT",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -11,7 +12,7 @@
     "core-js": "^2.6.5",
     "mini-toastr": "0.8.1",
     "vue": "^2.6.10",
-    "vue-notifications": "0.9.0"
+    "vue-notifications": "1.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",
