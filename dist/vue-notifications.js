@@ -5,108 +5,6 @@ var MESSAGE_TYPE;
   MESSAGE_TYPE['info'] = 'info'
   MESSAGE_TYPE['success'] = 'success'
 })(MESSAGE_TYPE || (MESSAGE_TYPE = {}))
-
-function getValues (config, vueApp) {
-  // TODO (S.Panfilov) any
-  const result = {}
-  Object.keys(config).forEach((field) => {
-    if (field === 'cb') {
-      // TODO (S.Panfilov) tslint ignore
-      // @ts-ignore
-      result[field] = config[field].bind(vueApp)
-    } else {
-      // TODO (S.Panfilov) tslint ignore
-      // @ts-ignore
-      result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
-    }
-  })
-  return result
-}
-
-function showMessage (config, vueApp) {
-  const valuesObj = getValues(config, vueApp)
-  // TODO (S.Panfilov) any
-  const isMethodOverridden = VueNotifications.pluginOptions[valuesObj.type]
-  // TODO (S.Panfilov) any
-  const method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : console.log
-  method(valuesObj, vueApp)
-  if (config.cb)
-    config.cb()
-}
-// TODO (S.Panfilov) do we need this method?
-// TODO (S.Panfilov) any
-// function addMethods(targetObj: any, typesObj: any, vueConstructor: VueConstructor): void {
-//   // TODO (S.Panfilov) any
-//   Object.keys(typesObj).forEach((v: any) => {
-//     // TODO (S.Panfilov) any
-//     targetObj[typesObj[v]] = (config: any) => {
-//       config.type = typesObj[v]
-//       return showMessage(config, vueConstructor as any)
-//     }
-//   })
-// }
-function setMethod (vueApp, name, componentOptions) {
-  if (!componentOptions.methods)
-    componentOptions.methods = {}
-  if (!componentOptions.methods[name]) {
-    componentOptions.methods[name] = makeMethod(vueApp, name, componentOptions)
-  }
-}
-
-function makeMethod (vueApp, methodName, componentOptions) {
-  return (config) => {
-    const newConfig = Object.assign({}, VueNotifications.config, componentOptions[VueNotifications.propertyName][methodName], config)
-    showMessage(newConfig, vueApp)
-  }
-}
-
-function initVueNotificationPlugin (vueApp, notifications) {
-  if (!notifications)
-    return
-  Object.keys(notifications).forEach(name => setMethod(vueApp, name, vueApp.$options))
-  vueApp.$emit('vue-notifications-initiated')
-}
-// TODO (S.Panfilov) any
-function unlinkVueNotificationPlugin (vueApp, notifications) {
-  if (!notifications)
-    return
-  const { methods } = vueApp.$options
-  if (!methods)
-    return
-  Object.keys(notifications).forEach(name => {
-    if (methods[name]) {
-      // TODO (S.Panfilov) this is not allowed, let's see if we can live without this string
-      methods[name] = undefined
-      delete methods[name]
-    }
-  })
-  vueApp.$emit('vue-notifications-unlinked')
-}
-
-function makeMixin () {
-  return {
-    // TODO (S.Panfilov) I'm not sure now how to solve issue with "this" properly
-    // tslint:disable-next-line:object-literal-shorthand
-    beforeCreate: function() {
-      // TODO (S.Panfilov) ts-ignore
-      // @ts-ignore
-      const notificationsField = this.$options[VueNotifications.propertyName]
-      // TODO (S.Panfilov) ts-ignore
-      // @ts-ignore
-      if (notificationsField)
-        initVueNotificationPlugin(this, notificationsField)
-    },
-    // tslint:disable-next-line:object-literal-shorthand
-    beforeDestroy: function() {
-      // TODO (S.Panfilov) ts-ignore
-      // @ts-ignore
-      const notificationsField = this.$options[VueNotifications.propertyName]
-      // TODO (S.Panfilov) ts-ignore
-      // @ts-ignore
-      unlinkVueNotificationPlugin(this, notificationsField)
-    }
-  }
-}
 const VueNotifications = {
   types: {
     error: MESSAGE_TYPE.error,
@@ -134,7 +32,98 @@ const VueNotifications = {
   setPluginOptions (pluginOptions) {
     this.pluginOptions = pluginOptions
   }
-};
+}
+
+function getValues (config, vueApp) {
+  let result = { type: MESSAGE_TYPE.info }
+  Object.keys(config).forEach((field) => {
+    if (field === 'cb') {
+      // result[field] = (<any>config[field]).bind(vueApp)
+      result = Object.assign({}, result, { [field]: config[field].bind(vueApp) })
+    } else {
+      // result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
+      result = Object.assign({}, result, { [field]: (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field] })
+    }
+  })
+  return result
+}
+
+function showMessage (config, vueApp) {
+  const valuesObj = getValues(config, vueApp)
+  const isMethodOverridden = VueNotifications.pluginOptions[valuesObj.type]
+  const method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : console.log
+  method(valuesObj, vueApp)
+  if (config.cb)
+    config.cb()
+}
+// TODO (S.Panfilov) do we need this method?
+// TODO (S.Panfilov) any
+// function addMethods(targetObj: any, typesObj: any, vueConstructor: VueConstructor): void {
+//   // TODO (S.Panfilov) any
+//   Object.keys(typesObj).forEach((v: any) => {
+//     // TODO (S.Panfilov) any
+//     targetObj[typesObj[v]] = (config: any) => {
+//       config.type = typesObj[v]
+//       return showMessage(config, vueConstructor as any)
+//     }
+//   })
+// }
+function setMethod (vueApp, name, componentOptions) {
+  let { methods } = componentOptions
+  if (!methods)
+    methods = {}
+  if (!methods[name]) {
+    methods[name] = makeMethod(vueApp, name, componentOptions)
+  } else {
+    console.warn(`VueNotifications: trying to create method which is already exist: ${name}`)
+  }
+}
+
+function makeMethod (vueApp, methodName, componentOptions) {
+  return (config) => {
+    // TODO (S.Panfilov) 'componentOptions' is an extended 'ComponentOptions' with our 'VueNotifications.propertyName'
+    const pluginOptions = componentOptions[VueNotifications.propertyName]
+    const methodConfig = pluginOptions ? pluginOptions[methodName] : {}
+    const newConfig = Object.assign({}, VueNotifications.config, methodConfig, config)
+    showMessage(newConfig, vueApp)
+  }
+}
+
+function initVueNotificationPlugin (vueApp, notifications) {
+  if (!notifications)
+    return
+  Object.keys(notifications).forEach(name => setMethod(vueApp, name, vueApp.$options))
+  vueApp.$emit('vue-notifications-initiated')
+}
+
+function unlinkVueNotificationPlugin (vueApp, notifications) {
+  if (!notifications)
+    return
+  const { methods } = vueApp.$options
+  if (!methods)
+    return
+  Object.keys(notifications).forEach(name => {
+    if (methods[name]) {
+      methods[name] = undefined
+      delete methods[name]
+    }
+  })
+  vueApp.$emit('vue-notifications-unlinked')
+}
+
+function makeMixin () {
+  return {
+    beforeCreate () {
+      const notificationsField = this.$options[VueNotifications.propertyName]
+      if (notificationsField)
+        initVueNotificationPlugin(this, notificationsField)
+    },
+    beforeDestroy: function() {
+      const notificationsField = this.$options[VueNotifications.propertyName]
+      unlinkVueNotificationPlugin(this, notificationsField)
+    }
+  }
+}
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VueNotifications)
 }
