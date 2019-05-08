@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "run-s build test:*",
-    "test:lint": "tslint --project . && prettier \"src/**/*.ts\" --list-different",
+    "lint": "tslint --project .",
     "test:unit": "nyc --silent ava",
     "watch": "run-s clean build && run-p \"build -- -w\" \"test:unit -- --watch\"",
     "cov": "run-s build test:unit cov:html && opn coverage/index.html",
@@ -52,7 +52,7 @@
     "trash-cli": "1.4.0",
     "tslint": "5.10.0",
     "tslint-config-prettier": "1.13.0",
-    "tslint-immutable": "4.5.4",
+    "tslint-immutable": "5.5.2",
     "typedoc": "0.11.1",
     "typescript": "2.9.1",
     "vue": "2.6.10"
