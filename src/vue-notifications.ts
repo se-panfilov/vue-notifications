@@ -2,7 +2,7 @@ import { ComponentOptions, PluginObject, VueConstructor } from 'vue'
 // tslint:disable-next-line:no-submodule-imports
 import { Vue } from 'vue/types/vue'
 
-enum MESSAGE_TYPE {
+enum DEFAULT_MESSAGE_TYPES {
   error = 'error',
   warn = 'warn',
   info = 'info',
@@ -11,43 +11,38 @@ enum MESSAGE_TYPE {
 
 const VueNotifications: VueNotificationsPlugin = {
   types: {
-    error: MESSAGE_TYPE.error,
-    warn: MESSAGE_TYPE.warn,
-    info: MESSAGE_TYPE.info,
-    success: MESSAGE_TYPE.success
+    error: DEFAULT_MESSAGE_TYPES.error,
+    warn: DEFAULT_MESSAGE_TYPES.warn,
+    info: DEFAULT_MESSAGE_TYPES.info,
+    success: DEFAULT_MESSAGE_TYPES.success
   },
   propertyName: 'notifications',
   config: {
-    type: MESSAGE_TYPE.info,
+    type: DEFAULT_MESSAGE_TYPES.info,
     timeout: 3000
   },
   pluginOptions: {},
   installed: false,
-  install(vueConstructor: VueConstructor, pluginOptions: VueNotificationsPluginOptions): void {
+  install(vueConstructor: VueConstructor, pluginOptions: ComponentOptions<Vue>): void {
     if (this.installed) throw console.error('VueNotifications: plugin already installed')
     const mixin = makeMixin()
     vueConstructor.mixin(mixin)
 
     this.setPluginOptions(pluginOptions)
-    // TODO (S.Panfilov) do we need addMethods method?
-    // addMethods(this, this.types, vueConstructor)
-
     this.installed = true
   },
-  setPluginOptions(pluginOptions: VueNotificationsPluginOptions): void {
+  setPluginOptions(pluginOptions: ComponentOptions<Vue>): void {
     this.pluginOptions = pluginOptions
   }
 }
 
 function getValues(config: MessageData, vueApp: Vue): MessageData {
-  let result: MessageData = { type: MESSAGE_TYPE.info }
+  let result: MessageData = { type: DEFAULT_MESSAGE_TYPES.info }
 
   Object.keys(config).forEach((field: string) => {
     if (field === 'cb') {
-      // result[field] = (<any>config[field]).bind(vueApp)
       result = { ...result, [field]: (<any>config[field]).bind(vueApp) }
     } else {
-      // result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
       result = {
         ...result,
         [field]: (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
@@ -60,25 +55,12 @@ function getValues(config: MessageData, vueApp: Vue): MessageData {
 
 function showMessage(config: MessageData, vueApp: Vue): void {
   const valuesObj: MessageData = getValues(config, vueApp)
-  const isMethodOverridden: boolean = VueNotifications.pluginOptions[valuesObj.type]
-  const method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : console.log
+  const isMethodOverridden: boolean = (<any>VueNotifications).pluginOptions[valuesObj.type]
+  const method = isMethodOverridden ? (<any>VueNotifications).pluginOptions[valuesObj.type] : console.log
   method(valuesObj, vueApp)
 
   if (config.cb) config.cb()
 }
-
-// TODO (S.Panfilov) do we need this method?
-// TODO (S.Panfilov) any
-// function addMethods(targetObj: any, typesObj: any, vueConstructor: VueConstructor): void {
-//   // TODO (S.Panfilov) any
-//   Object.keys(typesObj).forEach((v: any) => {
-//     // TODO (S.Panfilov) any
-//     targetObj[typesObj[v]] = (config: any) => {
-//       config.type = typesObj[v]
-//       return showMessage(config, vueConstructor as any)
-//     }
-//   })
-// }
 
 function setMethod(vueApp: Vue, name: string, componentOptions: ComponentOptions<Vue>): void {
   let { methods } = componentOptions
@@ -147,7 +129,7 @@ export interface NotificationsObject {
 }
 
 export interface MessageData {
-  type: MESSAGE_TYPE | string,
+  type: DEFAULT_MESSAGE_TYPES | string,
   timeout?: number,
   message?: string,
   title?: string
@@ -157,22 +139,15 @@ export interface MessageData {
 }
 
 export interface VueNotificationsPlugin extends PluginObject<any> {
-  types: MessageTypes,
+  types: {
+    [key: string]: DEFAULT_MESSAGE_TYPES | string
+  },
   propertyName: string,
   config: MessageData,
-  pluginOptions: VueNotificationsPluginOptions,
+  pluginOptions: ComponentOptions<Vue>,
   installed: boolean,
   install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void,
   setPluginOptions: (options: ComponentOptions<Vue>) => void
-}
-
-export interface VueNotificationsPluginOptions {
-  // TODO (S.Panfilov) any
-  [key: string]: any
-}
-
-export interface MessageTypes {
-  readonly [key: string]: MESSAGE_TYPE | string
 }
 
 interface Mixin {

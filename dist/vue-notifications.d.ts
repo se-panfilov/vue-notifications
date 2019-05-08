@@ -1,7 +1,7 @@
 import { ComponentOptions, PluginObject, VueConstructor } from 'vue'
 import { Vue } from 'vue/types/vue'
 
-declare enum MESSAGE_TYPE {
+declare enum DEFAULT_MESSAGE_TYPES {
   error = 'error',
   warn = 'warn',
   info = 'info',
@@ -13,7 +13,7 @@ export interface NotificationsObject {
   readonly [key: string]: MessageData;
 }
 export interface MessageData {
-  type: MESSAGE_TYPE | string;
+  type: DEFAULT_MESSAGE_TYPES | string;
   timeout?: number;
   message?: string;
   title?: string;
@@ -22,19 +22,15 @@ export interface MessageData {
   [key: string]: any;
 }
 export interface VueNotificationsPlugin extends PluginObject<any> {
-  types: MessageTypes;
+  types: {
+    [key: string]: DEFAULT_MESSAGE_TYPES | string;
+  };
   propertyName: string;
   config: MessageData;
-  pluginOptions: VueNotificationsPluginOptions;
+  pluginOptions: ComponentOptions<Vue>;
   installed: boolean;
   install: (vue: VueConstructor, pluginOptions: ComponentOptions<Vue>) => void;
   setPluginOptions: (options: ComponentOptions<Vue>) => void;
-}
-export interface VueNotificationsPluginOptions {
-  [key: string]: any;
-}
-export interface MessageTypes {
-  readonly [key: string]: MESSAGE_TYPE | string;
 }
 
 export default VueNotifications

@@ -1,20 +1,20 @@
-var MESSAGE_TYPE;
-(function(MESSAGE_TYPE) {
-  MESSAGE_TYPE['error'] = 'error'
-  MESSAGE_TYPE['warn'] = 'warn'
-  MESSAGE_TYPE['info'] = 'info'
-  MESSAGE_TYPE['success'] = 'success'
-})(MESSAGE_TYPE || (MESSAGE_TYPE = {}))
+var DEFAULT_MESSAGE_TYPES;
+(function(DEFAULT_MESSAGE_TYPES) {
+  DEFAULT_MESSAGE_TYPES['error'] = 'error'
+  DEFAULT_MESSAGE_TYPES['warn'] = 'warn'
+  DEFAULT_MESSAGE_TYPES['info'] = 'info'
+  DEFAULT_MESSAGE_TYPES['success'] = 'success'
+})(DEFAULT_MESSAGE_TYPES || (DEFAULT_MESSAGE_TYPES = {}))
 const VueNotifications = {
   types: {
-    error: MESSAGE_TYPE.error,
-    warn: MESSAGE_TYPE.warn,
-    info: MESSAGE_TYPE.info,
-    success: MESSAGE_TYPE.success
+    error: DEFAULT_MESSAGE_TYPES.error,
+    warn: DEFAULT_MESSAGE_TYPES.warn,
+    info: DEFAULT_MESSAGE_TYPES.info,
+    success: DEFAULT_MESSAGE_TYPES.success
   },
   propertyName: 'notifications',
   config: {
-    type: MESSAGE_TYPE.info,
+    type: DEFAULT_MESSAGE_TYPES.info,
     timeout: 3000
   },
   pluginOptions: {},
@@ -25,23 +25,19 @@ const VueNotifications = {
     const mixin = makeMixin()
     vueConstructor.mixin(mixin)
     this.setPluginOptions(pluginOptions)
-    // TODO (S.Panfilov) do we need addMethods method?
-    // addMethods(this, this.types, vueConstructor)
     this.installed = true
   },
   setPluginOptions (pluginOptions) {
     this.pluginOptions = pluginOptions
   }
-}
+};
 
 function getValues (config, vueApp) {
-  let result = { type: MESSAGE_TYPE.info }
+  let result = { type: DEFAULT_MESSAGE_TYPES.info }
   Object.keys(config).forEach((field) => {
     if (field === 'cb') {
-      // result[field] = (<any>config[field]).bind(vueApp)
       result = Object.assign({}, result, { [field]: config[field].bind(vueApp) })
     } else {
-      // result[field] = (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field]
       result = Object.assign({}, result, { [field]: (typeof config[field] === 'function') ? config[field].call(vueApp) : config[field] })
     }
   })
@@ -56,18 +52,7 @@ function showMessage (config, vueApp) {
   if (config.cb)
     config.cb()
 }
-// TODO (S.Panfilov) do we need this method?
-// TODO (S.Panfilov) any
-// function addMethods(targetObj: any, typesObj: any, vueConstructor: VueConstructor): void {
-//   // TODO (S.Panfilov) any
-//   Object.keys(typesObj).forEach((v: any) => {
-//     // TODO (S.Panfilov) any
-//     targetObj[typesObj[v]] = (config: any) => {
-//       config.type = typesObj[v]
-//       return showMessage(config, vueConstructor as any)
-//     }
-//   })
-// }
+
 function setMethod (vueApp, name, componentOptions) {
   let { methods } = componentOptions
   if (!methods)
