@@ -15,10 +15,13 @@
       <li>
         <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
       </li>
+      <li>
+        <button type="button" class="msg-buttons__btn" @click="makeRequest()">Demo ajax call</button>
+      </li>
+      <li>
+        <button type="button" class="msg-buttons__btn" @click="showDynamicMsg()">Show dynamic message</button>
+      </li>
     </ul>
-    <section>
-      <button type="button" class="msg-buttons__btn" @click="makeRequest()">Demo Ajax call</button>
-    </section>
   </div>
 </template>
 
@@ -47,12 +50,23 @@
         type: VueNotifications.types.error,
         title: 'Wow-wow',
         message: 'That\'s the error'
+      },
+      showDynamicMsg: {
+        type () {
+          const { info, success } = VueNotifications.types
+          return ((new Date()).getSeconds() % 2 === 0) ? info : success
+        },
+        title () {
+          return 'My title: ' + 1
+        },
+        message () {
+          return 'Current time is' + (new Date()).getTime()
+        }
       }
     },
     methods: {
       makeRequest (url) {
         return this.ajaxCall('whatever').then(response => {
-          // Some error message overridings
           if (response.loginError) return this.showErrorMsg({message: 'Login error'})
           if (!response.ok) return this.showErrorMsg({message: response.message})
 
@@ -62,8 +76,6 @@
       ajaxCall (url) {
         return new Promise((resolve, reject) => {
           resolve({loginError: true})
-          // resolve({ok: false})
-          // resolve({ok: true})
         })
       }
     }

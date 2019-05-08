@@ -17,6 +17,9 @@
             <li class="msg-buttons__list-item">
               <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
             </li>
+            <li>
+              <button type="button" class="msg-buttons__btn" @click="showDynamicMsg()">Show dynamic message</button>
+            </li>
           </ul>
 
           <ul class="showcase__actions-item showcase-lib">
@@ -143,6 +146,18 @@
         type: VueNotifications.types.error,
         title: 'Wow-wow',
         message: 'That\'s the error'
+      },
+      showDynamicMsg: {
+        type () {
+          const { info, success } = VueNotifications.types
+          return ((new Date()).getSeconds() % 2 === 0) ? info : success
+        },
+        title () {
+          return 'My title: ' + 1
+        },
+        message () {
+          return 'Current time is' + (new Date()).getTime()
+        }
       }
     },
     methods: {
@@ -219,18 +234,8 @@
     flex-grow: 1;
   }
 
-  .showcase__entry-try-live {
+  .-try-live {
     flex-basis: 280px;
-  }
-
-  .showcase__entry-setup {
-    flex-basis: 350px;
-    flex-grow: 2;
-  }
-
-  .showcase__entry-definition {
-    flex-basis: 300px;
-    flex-grow: 1.2;
   }
 
   .showcase__actions-item {
