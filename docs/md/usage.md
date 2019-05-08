@@ -60,7 +60,7 @@ As I said above, you can specify any of following properties
 | title | String | undefined | Notification's title \(can be empty\) |
 | messaeg | String | undefined | Notification's body message. Normally should be set up |
 | timeout | Number | 3000 | time before notifications gone |
-| cb | undefined | undefined | Callback function |
+| cb | Function | undefined | Callback function |
 
 But actually you can add your own properties as well, if you want. Why and how? You can check it in [Advanced Setup](/advanced-setup.md) section.
 

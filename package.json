@@ -10,15 +10,8 @@
     "minify": "terser ./dist/vue-notifications.js --output ./dist/vue-notifications.min.js --compress --source-map",
     "test": "run-s build test:*",
     "lint": "tslint --project .",
-    "test:unit": "nyc --silent ava",
-    "watch": "run-s clean build && run-p \"build -- -w\" \"test:unit -- --watch\"",
-    "cov": "run-s build test:unit cov:html && opn coverage/index.html",
-    "cov:html": "nyc report --reporter=html",
-    "cov:send": "nyc report --reporter=lcov > coverage.lcov && codecov",
-    "cov:check": "nyc report && nyc check-coverage --lines 100 --functions 100 --branches 100",
-    "doc": "run-s doc:html && opn build/docs/index.html",
-    "doc:html": "typedoc src/ --target ES6 --mode file --out build/docs",
-    "doc:json": "typedoc src/ --target ES6 --mode file --json build/docs/typedoc.json"
+    "docs": "rimraf ./docs/html/** && gitbook build ./docs/md/ ./docs/html",
+    "docs:to:gh": "rimraf ../dev-server/docs/** && cpx './docs/**' ../dev-server/docs"
   },
   "engines": {
     "node": ">=8.9"
@@ -46,22 +39,13 @@
   },
   "homepage": "https://github.com/se-panfilov/vue-notifications#readme",
   "devDependencies": {
-    "codecov": "^3.0.2",
-    "gh-pages": "1.2.0",
-    "nyc": "12.0.2",
-    "opn-cli": "3.1.0",
+    "cpx": "1.5.0",
+    "rimraf": "2.6.3",
     "terser": "3.17.0",
-    "trash-cli": "1.4.0",
     "tslint": "5.10.0",
     "tslint-config-prettier": "1.13.0",
     "tslint-immutable": "5.5.2",
-    "typedoc": "0.11.1",
     "typescript": "2.9.1",
     "vue": "2.6.10"
-  },
-  "nyc": {
-    "exclude": [
-      "**/*.spec.js"
-    ]
   }
 }
