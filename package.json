@@ -10,8 +10,7 @@
     "minify": "terser ./dist/vue-notifications.js --output ./dist/vue-notifications.min.js --compress --source-map",
     "test": "run-s build test:*",
     "lint": "tslint --project .",
-    "docs": "rimraf ./docs/html/** && gitbook build ./docs/md/ ./docs/html",
-    "docs:to:gh": "rimraf ../dev-server/docs/** && cpx './docs/**' ../dev-server/docs"
+    "docs": "rimraf ./docs/html/** && gitbook build ./docs/md/ ./docs/html"
   },
   "engines": {
     "node": ">=8.9"
@@ -40,6 +39,7 @@
   "homepage": "https://github.com/se-panfilov/vue-notifications#readme",
   "devDependencies": {
     "cpx": "1.5.0",
+    "gitbook-cli": "2.3.2",
     "rimraf": "2.6.3",
     "terser": "3.17.0",
     "tslint": "5.10.0",
