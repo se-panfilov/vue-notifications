@@ -1,9 +1,7 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
+import App from './App.vue'
 import VueNotifications from 'vue-notifications'
-import VueToasted from 'vue-toasted'// https://github.com/shakee93/vue-toasted
+import VueToasted from 'vue-toasted' // https://github.com/shakee93/vue-toasted
 
 Vue.config.productionTip = false
 
@@ -24,7 +22,5 @@ Vue.use(VueNotifications, options)
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  template: '<App/>',
-  components: { App }
-})
+  render: h => h(App)
+}).$mount('#app')
