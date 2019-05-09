@@ -1,5 +1,4 @@
 .babelrc
-.eslintrc
 .bithoundrc
 .eslintignore
 .gitattributes
@@ -12,11 +11,18 @@ node_modules/
 .editorconfig
 .nvmrc
 .travis.yml
-bower.json
-gulpfile.js
 .idea
 TODO.md
 yarn.lock
 package-lock.json
 vue-not
 examples
+src
+test
+tsconfig.json
+tsconfig.module.json
+tslint.json
+.github
+**/*.spec.*
+coverage
+.nyc_output

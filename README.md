@@ -4,7 +4,6 @@
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE)
 [![Known Vulnerabilities](https://snyk.io/test/github/se-panfilov/vue-notifications/badge.svg?targetFile=examples%2Fsimple_with_swal%2Fpackage.json)](https://snyk.io/test/github/se-panfilov/vue-notifications?targetFile=examples%2Fsimple_with_swal%2Fpackage.json)
 [![NPM](https://nodei.co/npm/vue-notifications.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/vue-notifications/)
-[![JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 [![Package Quality](http://npm.packagequality.com/badge/vue-notifications.png)](http://packagequality.com/#?package=vue-notifications)
 
 | [SITE](https://se-panfilov.github.io/vue-notifications/) | [DOCS](https://se-panfilov.github.io/vue-notifications/docs/html/index.html) | [EXAMPLES](https://github.com/se-panfilov/vue-notifications/tree/master/examples) | [GITHUB](https://github.com/se-panfilov/vue-notifications) | [LICENSE](https://github.com/se-panfilov/vue-notifications/blob/master/LICENSE) |
@@ -270,7 +269,7 @@ As I said above, you can specify any of following properties
 | title | String | undefined | Notification's title \(can be empty\) |
 | message | String | undefined | Notification's body message. Normally should be set up |
 | timeout | Number | 3000 | time before notifications gone |
-| cb | undefined | undefined | Callback function |
+| cb | Function | undefined | Callback function |
 
 But actually you can add your own properties as well, if you want. Why and how? You can check it in [Advanced Setup](https://se-panfilov.github.io/vue-notifications/docs/html/advanced-setup.html) section.
 

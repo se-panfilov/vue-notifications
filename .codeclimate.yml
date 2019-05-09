@@ -4,19 +4,19 @@ engines:
     enabled: false
     config:
       languages:
-      - javascript
-  eslint:
-    enabled: true
-    channel: "eslint-3"
+      - typescript
   fixme:
     enabled: true
 ratings:
   paths:
-  - "**.js"
+  - "**.ts"
 exclude_paths:
 - dist/
 - test/
 - build/
 - docs/
 - examples/
-- gulpfile.js
+plugins:
+  tslint:
+    enabled: true
+    config: tslint.json
