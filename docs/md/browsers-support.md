@@ -1,7 +1,5 @@
 # Browsers Support
 
-All `ES5-compatable` browsers are supported \(i.g. starting from `IE11`\).  
-For more information, please chech [ECMAScript 5 compliant browsers](http://caniuse.com/#feat=es5)
+Version v1.0.0 and after guarantees only a support of evergreen browsers.
 
-If you don't give a fuck about browsers support, it would be better to use `ES6-version`
-
+Versions below v1.0.0 supports all `ES5-compatable` browsers \(i.g. starting from `IE11`\).
