@@ -5,83 +5,54 @@
       <img src="../assets/logo.png">
       <h2><a href="https://vuejs.org">vue.js</a> agnostic library for non-blocking notifications</h2>
       <p>
-        <span class="highlighted-text">VueNotifications</span> connects your app with notification UI library. <br />
-        That's also means you can have any look and feel of notifications you want to! <br />
+        <span class="highlighted-text">VueNotifications</span> connects your app with notification UI library. <br/>
+        That's also means you can have any look and feel of notifications you want to! <br/>
         And it would be easy to replace it =)
       </p>
     </section>
 
-    <hr />
-
-    <h2>Showcase: See it in action</h2>
-    <div>
-      <span>You have to do 3 things</span>
-      <ol>
-        <li>Config <span class="highlighted-text">VueNotifications</span> to work with third-party lib you want (you may
-          try this one: <a
-            href="https://github.com/se-panfilov/mini-toastr">mini-toastr</a>)
+    <section class="showcase__actions">
+      <ul class="showcase__actions-item msg-buttons">
+        <li class="msg-buttons__list-item">
+          <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
         </li>
-        <li>Add notifications to any component at your choice</li>
-        <li>Enjoy!</li>
-      </ol>
+        <li class="msg-buttons__list-item">
+          <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
+        </li>
+        <li class="msg-buttons__list-item">
+          <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
+        </li>
+        <li class="msg-buttons__list-item">
+          <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
+        </li>
+        <li>
+          <button type="button" class="msg-buttons__btn" @click="showDynamicMsg()">Show dynamic message</button>
+        </li>
+      </ul>
 
-      <span>Examples below</span>
-    </div>
-
-    <section class="showcase">
-
-      <section class="showcase__entry -try-live">
-        <h3 class="showcase__header">Try it live</h3>
-        <p>We have 4 predefined types of messages:
-          <span class="highlighted-text">error</span>,
-          <span class="highlighted-text">success</span>,
-          <span class="highlighted-text">warn</span> and
-          <span class="highlighted-text">info</span>,
-          but you can specify your owns</p>
-
-        <section class="showcase__actions">
-          <ul class="showcase__actions-item msg-buttons">
-            <li class="msg-buttons__list-item">
-              <button type="button" class="msg-buttons__btn -success" @click="showSuccessMsg()">Success</button>
-            </li>
-            <li class="msg-buttons__list-item">
-              <button type="button" class="msg-buttons__btn -info" @click="showInfoMsg()">Info</button>
-            </li>
-            <li class="msg-buttons__list-item">
-              <button type="button" class="msg-buttons__btn -warn" @click="showWarnMsg()">Warning</button>
-            </li>
-            <li class="msg-buttons__list-item">
-              <button type="button" class="msg-buttons__btn -error" @click="showErrorMsg()">Error</button>
-            </li>
-          </ul>
-
-          <ul class="showcase__actions-item showcase-lib">
-            <li v-for="(value, key) in libs"
-                class="showcase-lib__items"
-                @change="setCurrentLib(key)">
-              <label>
-                <input type="radio" :checked="currentLib === value" :value="key" name="lib" />
-                <span v-text="value"></span>
-                <span class="showcase-lib__third-party-home-ling">
+      <ul class="showcase__actions-item showcase-lib">
+        <li v-for="(value, key) in libs"
+            class="showcase-lib__items"
+            @change="setCurrentLib(key)">
+          <label>
+            <input type="radio" :checked="currentLib === value" :value="key" name="lib"/>
+            <span v-text="value"></span>
+            <span class="showcase-lib__third-party-home-ling">
                   <a v-bind:href="ExampleSetup[key].home" v-bind:title="'go to ' + value + ' home'" target="_blank">
                     <i class="fa fa-home" aria-hidden="true"></i>
                   </a>
                 </span>
-              </label>
+          </label>
 
-            </li>
-          </ul>
-        </section>
+        </li>
+      </ul>
+    </section>
 
-        <p>You can easily replace any <span class="highlighted-text">UI third-party</span> that draws notifications for
-          you. And here you can switch between
-          any of them easily.
-          <br /><br /> <strong>P.S.</strong> Pay attention: Initial config will be changed.<br />
-          But Notification definition will be the same.</p>
-      </section>
+    <section class="showcase">
 
       <section class="showcase__entry -setup">
-        <h3 class="showcase__header">Config VueNotifications</h3>
+        <h3 class="showcase__header">Config VueNotifications (single place in whole app that will changed if you'd
+          replace 3rd-party notifications lib)</h3>
         <div class="code-samples__sample -func">
           <pre id="toast_func">
             <code id="toast_func_code" class="javascript" v-text="ExampleSetup[currentLib].code"></code>
@@ -90,7 +61,7 @@
       </section>
 
       <section class="showcase__entry -definition">
-        <h3 class="showcase__header">Define your notifications</h3>
+        <h3 class="showcase__header">In your components (this part will never change)</h3>
         <pre>
           <code class="javascript" v-text="ExampleConfig.config"></code>
         </pre>
@@ -98,56 +69,7 @@
 
     </section>
 
-    <hr />
-
-    <section class="getting-started">
-      <h1>Getting started</h1>
-
-      <ol>
-        <li>
-          <h3>Install</h3>
-          <pre>
-            <code class="shell">npm i vue-notifications --save</code>
-          </pre>
-          <p>check the documentation for other options:
-            <a href="https://se-panfilov.github.io/vue-notifications/docs/html/installation.html">Installation</a></p>
-
-          <p>
-            And install UI third-party library, for example <a href="https://github.com/se-panfilov/mini-toastr">miniToastr</a>
-            (<span class="highlighted-text">npm i mini-toastr --save</span>).
-          </p>
-          <p>But you are free to use any other, like the libs above (VueToasted, iziToast, etc).</p>
-        </li>
-        <li>
-          <h3>Setup & config</h3>
-          <p>Check the one of examples above (in "Showcase" section), or check the docs:
-            <a href="https://se-panfilov.github.io/vue-notifications/docs/html/getting-started.html">Getting Started</a>
-          </p>
-          <p>It's gonna be something like this:</p>
-          <pre>
-            <code class="javascript" v-text="ExampleSetup.miniToastr.code"></code>
-          </pre>
-        </li>
-        <li>
-          <h3>Add actual notifications to any component:</h3>
-          <pre>
-            <code class="javascript" v-text="ExampleConfig.config"></code>
-          </pre>
-          <p>Now you can call any of this configs like a common vue method: via <span
-            class="highlighted-text">this</span>, like
-            <span class="highlighted-text">this.showSuccessMsg()</span>, <span class="highlighted-text">this.showInfoMsg()</span>
-            and etc.
-            Don't forget that you can override them, like <span class="highlighted-text">this.showWarnMsg({message:
-              'Brand new message'})</span>
-          </p>
-          <p>Check the docs for more info: <a
-            href="https://se-panfilov.github.io/vue-notifications/docs/html/usage.html">Usage</a></p>
-        </li>
-      </ol>
-
-    </section>
-
-    <hr />
+    <hr/>
 
     <section class="misc">
       <a class="misc__item" href="https://github.com/se-panfilov/vue-notifications">
@@ -166,7 +88,7 @@
         <i class="fa fa-balance-scale" aria-hidden="true"></i>
         MIT Licence
       </a>
-      <br />
+      <br/>
       <a class="misc__item" href="https://github.com/se-panfilov/vue-notifications/releases">
         <i class="fa fa-rocket" aria-hidden="true"></i>
         Release notes
@@ -182,7 +104,7 @@
         <i class="fa fa-bolt" aria-hidden="true"></i>
         Issues
       </a>
-      <br />
+      <br/>
       Author: <a href="https://se-panfilov.github.io/">
       <i class="fa fa-globe" aria-hidden="true"></i>
       Sergei Panfilov</a> |
@@ -201,30 +123,25 @@
   import 'highlight.js/styles/atom-one-light.css'
   import ExampleSetup from '../misc/example_setup'
   import ExampleConfig from '../misc/example_config'
-
   //Third-party UI libs
   import VueEasyToast from 'vue-easy-toast' // https://github.com/noru/vue-easy-toast
   import miniToastr from 'mini-toastr' // https://github.com/se-panfilov/mini-toastr
   import VueToasted from 'vue-toasted' // https://github.com/shakee93/vue-toasted
-
   //toastr
   import 'jquery' // required by 'toastr'
   import toastr from 'toastr' // https://github.com/CodeSeven/toastr
   import 'toastr/build/toastr.min.css'
-  //end toastr
-
   //iziToast
   import iziToast from 'izitoast' // https://github.com/dolce/iziToast
   import 'izitoast/dist/css/iziToast.min.css'
-  //end iziToast
-
   //noty
   import Noty from 'noty' // https://github.com/needim/noty
   import 'noty/lib/noty.css'
-  //end noty
-
   //sweetalert
   import swal from 'sweetalert' // https://github.com/t4t5/sweetalert
+  //end toastr
+  //end iziToast
+  //end noty
 
   HighlightJS.registerLanguage('javascript', JsLang)
   HighlightJS.initHighlightingOnLoad()
@@ -244,35 +161,36 @@
   }
 
   const TOASTS = {
-    [UI_LIBS.miniToastr] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.miniToastr] ({ title, message, type, timeout, cb }) {
       return miniToastr[type](message, title, timeout, cb)
     },
-    [UI_LIBS.VueToasted] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.VueToasted] ({ title, message, type, timeout, cb }) {
       if (type === VueNotifications.types.warn) type = 'show'
-      return Vue.toasted[type](message, {duration: timeout})
+      return Vue.toasted[type](message, { duration: timeout })
     },
-    [UI_LIBS.VueEasyToast] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.VueEasyToast] ({ title, message, type, timeout, cb }) {
       let className = 'et-info'
-      if (type === VueNotifications.types.warn) className = 'et-warn'
-      else if (type === VueNotifications.types.error) className = 'et-alert'
+      if (type === VueNotifications.types.warn) {
+        className = 'et-warn'
+      } else if (type === VueNotifications.types.error) className = 'et-alert'
 
-      return Vue.toast(message, {duration: timeout, className})
+      return Vue.toast(message, { duration: timeout, className })
     },
-    [UI_LIBS.toastr] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.toastr] ({ title, message, type, timeout, cb }) {
       // this shit requires jquery, lol
       if (type === VueNotifications.types.warn) type = 'warning'
-      return toastr[type](message, title, {timeOut: timeout})
+      return toastr[type](message, title, { timeOut: timeout })
     },
-    [UI_LIBS.iziToast] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.iziToast] ({ title, message, type, timeout, cb }) {
       if (type === VueNotifications.types.warn) type = 'warning'
-      return iziToast[type]({title, message, timeout})
+      return iziToast[type]({ title, message, timeout })
     },
-    [UI_LIBS.Noty] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.Noty] ({ title, message, type, timeout, cb }) {
       if (type === VueNotifications.types.warn) type = 'warning'
 
-      return new Noty({text: message, timeout, type}).show()
+      return new Noty({ text: message, timeout, type }).show()
     },
-    [UI_LIBS.swal] ({title, message, type, timeout, cb}) {
+    [UI_LIBS.swal] ({ title, message, type, timeout, cb }) {
       if (type === VueNotifications.types.warn) type = 'warning'
       return swal(title, message, type)
     }
@@ -313,6 +231,18 @@
         type: VueNotifications.types.error,
         title: 'Wow-wow',
         message: 'That\'s the error'
+      },
+      showDynamicMsg: {
+        type () {
+          const { info, success } = VueNotifications.types
+          return ((new Date()).getSeconds() % 2 === 0) ? info : success
+        },
+        title () {
+          return 'My title: ' + 1
+        },
+        message () {
+          return 'Current time is' + (new Date()).getTime()
+        }
       }
     },
     methods: {
@@ -356,6 +286,7 @@
 
   .overview
     text-align center
+    margin 45px
 
   ul
     padding 0
@@ -371,6 +302,7 @@
     list-style-type none
     padding 0
     margin 10px
+
     &__btn
       display inline-block
       margin 5px 10px
@@ -383,6 +315,7 @@
       transition background .4s ease
       cursor pointer
       min-width 85px
+
       &:hover
         background-color lighten(primary_color, 5)
 
@@ -390,22 +323,29 @@
     justify-content space-around
     flex-direction row
     display flex
+
     &__entry
       flex-basis: 350px
       background-color #fafafa
       min-width 1px
       flex-grow 1
+      padding 0 60px
+
       &.-try-live
         flex-basis: 280px
+
       &.-setup
         flex-basis: 350px
-        flex-grow 2
+
       &.-definition
         flex-basis: 300px
-        flex-grow 1.2
+
+    &__actions
+      margin 55px
+
     &__actions-item
-      display inline-block
-      max-width 50%
+      display flex
+      justify-content center
 
   .showcase-lib
     &__third-party-home-ling
@@ -415,6 +355,7 @@
     text-align center
     padding 15px 25%
     font-size 14px
+
     &__item
       text-decoration none
       padding 5px
