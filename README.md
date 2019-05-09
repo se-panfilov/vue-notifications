@@ -62,18 +62,15 @@ That's mean that if at some step you would be fucked up with your UI library, `v
 
 Check the Docs: [Installation](https://se-panfilov.github.io/vue-notifications/docs/html/installation.html)
 
-via npm:
-
 ```shell
 npm i vue-notifications --save
 ```
 
-via bower:
+or 
 
-```sh
-bower i vue-notifications --save
+```shell
+yarn add vue-notifications
 ```
-or download [latest release][1]
 
 include in project:
 
@@ -277,10 +274,9 @@ But actually you can add your own properties as well, if you want. Why and how? 
 
 Check the Docs: [Browsers support](https://se-panfilov.github.io/vue-notifications/docs/html/browsers-support.html)
 
-All `ES5-compatable` browsers are supported \(i.g. starting from `IE11`\).
-For more information, please chech [ECMAScript 5 compliant browsers](http://caniuse.com/#feat=es5)
+Version v1.0.0 and after guarantees only a support of evergreen browsers.
 
-If you don't give a fuck about browsers support, it would be better to use `ES6-version`
+Versions below v1.0.0 supports all `ES5-compatable` browsers \(i.g. starting from `IE11`\).
 
 ## License
 
@@ -306,6 +302,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-[1]: https://github.com/se-panfilov/vue-notifications/releases
-[2]: https://github.com/se-panfilov/mini-toastr
-[3]: http://caniuse.com/#feat=es5
+[1]: https://github.com/se-panfilov/mini-toastr

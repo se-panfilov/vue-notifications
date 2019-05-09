@@ -1,16 +1,22 @@
 # Installation
 
-### NPM
+##Latest version
+
+For latest versions you can install it only via npm: 
 
 ```
 npm i vue-notifications --save
 ```
 
-### Yarn
+or
 
 ```
 yarn add vue-notifications
 ```
+
+##Legacy version
+
+For legacy versions (below v1.0.0) cdn and bower is also available:
 
 ### CDN
 
@@ -36,7 +42,7 @@ bower i vue-notifications --save
 
 [https://github.com/se-panfilov/vue-notifications/releases](https://github.com/se-panfilov/vue-notifications/releases)
 
-### Dev Build {#dev-build}
+## Dev Build {#dev-build}
 
 You will have to clone directly from GitHub and build`vue-notifications`yourself if you want to use the latest dev build.
 
