@@ -6,21 +6,21 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "rimraf ../static/** && vue-cli-service build && cpx './dist/**' '../'",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "core-js": "^2.6.5",
-    "vue": "^2.6.10",
-    "vue-router": "^3.0.3",
     "izitoast": "1.1.5",
     "jquery": "3.2.1",
     "mini-toastr": "0.7.2",
     "noty": "3.1.3",
     "sweetalert": "2.0.3",
     "toastr": "2.1.2",
+    "vue": "^2.6.10",
     "vue-easy-toast": "1.0.2",
     "vue-notifications": "0.9.0",
+    "vue-router": "^3.0.3",
     "vue-toasted": "1.1.18"
   },
   "devDependencies": {
@@ -33,6 +33,7 @@
     "eslint-plugin-vue": "^5.0.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "cpx": "^1.5.0"
   }
 }
