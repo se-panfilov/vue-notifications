@@ -22,12 +22,12 @@
 </template>
 
 <script>
-  export default {
-    name: 'header',
-    data () {
-      return {}
-    }
+export default {
+  name: 'header',
+  data () {
+    return {}
   }
+}
 </script>
 
 <style lang="stylus" type="text/stylus" scoped>
