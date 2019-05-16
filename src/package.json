@@ -19,7 +19,7 @@
     "toastr": "2.1.2",
     "vue": "^2.6.10",
     "vue-easy-toast": "1.0.2",
-    "vue-notifications": "0.9.0",
+    "vue-notifications": "1.0.0",
     "vue-router": "^3.0.3",
     "vue-toasted": "1.1.18"
   },
