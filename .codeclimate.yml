@@ -1,12 +1,4 @@
 ---
-engines:
-  duplication:
-    enabled: false
-    config:
-      languages:
-      - typescript
-  fixme:
-    enabled: true
 ratings:
   paths:
   - "**.ts"
