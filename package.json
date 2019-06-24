@@ -19,6 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/se-panfilov/vue-notifications.git"
   },
+  "homepage": "https://se-panfilov.github.io/vue-notifications",
   "keywords": [
     "vue",
     "toastr",
