@@ -1,6 +1,6 @@
 {
   "name": "vue-notifications",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Sergei Panfilov <se-panfilov@ya.ru> (https://se-panfilov.github.io)",
   "description": "Vuejs notifications",
   "main": "dist/vue-notifications.js",
