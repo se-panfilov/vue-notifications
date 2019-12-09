@@ -50,9 +50,11 @@ function showMessage(config, vueApp) {
     const valuesObj = getValues(config, vueApp);
     const isMethodOverridden = VueNotifications.pluginOptions[valuesObj.type];
     const method = isMethodOverridden ? VueNotifications.pluginOptions[valuesObj.type] : console.log;
-    method(valuesObj, vueApp);
+    const reference = method(valuesObj, vueApp);
     if (config.cb)
         config.cb();
+  
+    return reference;
 }
 function setMethod(vueApp, name, componentOptions) {
     let { methods } = componentOptions;
@@ -75,7 +77,7 @@ function makeMethod(vueApp, methodName, componentOptions) {
             ...methodConfig,
             ...config
         };
-        showMessage(newConfig, vueApp);
+        return showMessage(newConfig, vueApp);
     };
 }
 function initVueNotificationPlugin(vueApp, notifications) {
