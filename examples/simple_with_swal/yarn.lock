@@ -3009,8 +3009,8 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
 
 highlight.js@^9.6.0:
-  version "9.15.6"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.15.6.tgz#72d4d8d779ec066af9a17cb14360c3def0aa57c4"
+  version "9.18.5"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.18.5.tgz#d18a359867f378c138d6819edfc2a8acd5f29825"
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -6136,8 +6136,8 @@ vue-loader@^15.7.0:
     vue-style-loader "^4.1.0"
 
 vue-notifications@1.0.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/vue-notifications/-/vue-notifications-0.9.0.tgz#7d25e19a5e4872442e3527f252007d538af4ba6e"
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vue-notifications/-/vue-notifications-1.0.0.tgz#7389f39aa339835d840b6feaca509fbbdb9633bb"
 
 vue-style-loader@^4.1.0:
   version "4.1.2"
