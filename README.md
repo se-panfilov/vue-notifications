@@ -1,3 +1,7 @@
+# Deprecated / Unmaintained
+This project is no longer actively maintained. It may still work, but use it at your own risk.
+Please consider forking it if you need continued support.
+
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0995faa412214bf2bbc114882f9ea1a4)](https://www.codacy.com/app/se-panfilov/vue-notifications?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=se-panfilov/vue-notifications&amp;utm_campaign=Badge_Grade)
 [![](https://api.codeclimate.com/v1/badges/a4d945aeb21c32fc4bdf/maintainability)](https://codeclimate.com/github/se-panfilov/vue-notifications/maintainability)
 [![Build Status](https://travis-ci.org/se-panfilov/vue-notifications.svg?branch=master)](https://travis-ci.org/se-panfilov/vue-notifications)
